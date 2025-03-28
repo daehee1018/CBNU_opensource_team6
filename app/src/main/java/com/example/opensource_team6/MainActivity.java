@@ -21,17 +21,17 @@ public class MainActivity extends AppCompatActivity {
 
         btnInputFood.setOnClickListener(v -> {
             // 예: 음식 입력 액티비티로 이동
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class)); // 수정 필요 
         });
 
         btnViewFood.setOnClickListener(v -> {
             // 예: 음식 리스트 액티비티로 이동
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class)); //수정 필요
         });
 
         btnRecommendSupplements.setOnClickListener(v -> {
             // 예: 추천 화면으로 이동
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class)); //수정 필요
         });
     }
 }
