@@ -1,37 +1,36 @@
 package com.example.opensource_team6;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.opensource_team6.R;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button btnInputFood, btnViewFood, btnRecommendSupplements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // ✅ 레이아웃 연결
 
-        btnInputFood = findViewById(R.id.btnInputFood);
-        btnViewFood = findViewById(R.id.btnViewFood);
-        btnRecommendSupplements = findViewById(R.id.btnRecommendSupplements);
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
 
-        btnInputFood.setOnClickListener(v -> {
-            // 예: 음식 입력 액티비티로 이동
-            startActivity(new Intent(this, MainActivity.class)); // 수정 필요 
-        });
-
-        btnViewFood.setOnClickListener(v -> {
-            // 예: 음식 리스트 액티비티로 이동
-            startActivity(new Intent(this, MainActivity.class)); //수정 필요
-        });
-
-        btnRecommendSupplements.setOnClickListener(v -> {
-            // 예: 추천 화면으로 이동
-            startActivity(new Intent(this, MainActivity.class)); //수정 필요
+            if (id == R.id.nav_home) {
+                Toast.makeText(this, "Home 클릭됨", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (id == R.id.nav_diary) {
+                Toast.makeText(this, "Diary 클릭됨", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (id == R.id.nav_scan) {
+                Toast.makeText(this, "Scan 클릭됨", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (id == R.id.nav_profile) {
+                Toast.makeText(this, "Profile 클릭됨", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
         });
     }
 }
