@@ -3,17 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@android:drawable/ic_menu_view"
-        android:title="Home" />
+        android:title="홈" />
     <item
         android:id="@+id/nav_diary"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Diary" />
+        android:title="오늘 식단" />
     <item
         android:id="@+id/nav_scan"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="Scan" />
+        android:title="식단 사진" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="Profile" />
+        android:title="오늘 식단" />
 </menu>

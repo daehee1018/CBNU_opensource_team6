@@ -127,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+        //메인 검색 자동완성
+        AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.setAdapter(adapter);
+        searchEditText.setThreshold(1);
     }
+
 
     private void loadFoodData() {
         try {

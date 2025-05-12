@@ -42,7 +42,7 @@
                         android:src="@android:drawable/ic_menu_search"
                         android:contentDescription="검색" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/searchEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
