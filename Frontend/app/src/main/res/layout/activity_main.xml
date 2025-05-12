@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <!-- 스크롤 가능한 본문 -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
@@ -54,20 +54,21 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 달력 텍스트 -->
-            <TextView
-                android:id="@+id/calendarTitle"
+            <LinearLayout
+                android:id="@+id/CalenderView"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="2025년 4월 9일"
-                android:textSize="18sp"
-                android:background="#CBE6FF"
-                android:textColor="#000000"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginTop="16dp"/>
-
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <CalendarView
+                    android:id="@+id/calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusedMonthDateColor="#000000"
+                    android:selectedWeekBackgroundColor="#E9EFEC"
+                    android:unfocusedMonthDateColor="#CFCACA"
+                    android:background="#F5F5F5"/>
+            </LinearLayout>
             <!-- 식사 버튼 -->
             <LinearLayout
                 android:id="@+id/mealButtons"
@@ -77,7 +78,7 @@
                 android:gravity="center"
                 android:layout_marginTop="16dp">
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnBreakfast"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -88,7 +89,7 @@
                     app:backgroundTint="#E9EFEC"
                     android:layout_marginEnd="4dp"/>
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnLunch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -100,7 +101,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"/>
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnDinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,7 +157,7 @@
 
             <!-- 경고 카드 -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/warningCard"
+                android:id="@+id/warningCardCarb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -183,6 +184,70 @@
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:text="탄수화물 1000g\n탄수화물 섭취량이 너무 많아요!"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/warningCardFat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_input_add"
+                        android:tint="#4CAF50"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="지방 16g\n지방 섭취량이 적당해요!"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/warningCardProtein"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_dialog_alert"
+                        android:tint="#FF3B30"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="단백질 1000g\n헬창!"
                         android:textColor="#000000"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -215,22 +280,15 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="L 찰쌀밥 2000g"
+                    android:text="L 우엑 2000g"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:padding="4dp"/>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-    <AutoCompleteTextView
-        android:id="@+id/foodInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="음식을 검색하세요"
-        android:inputType="text"
-        android:padding="12dp"
-        android:background="@drawable/edit_text_background" />
+
 
     <!-- 하단 네비게이션 바 (고정) -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

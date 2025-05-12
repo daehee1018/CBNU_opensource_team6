@@ -3,6 +3,7 @@ package com.example.opensource_team6;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +45,13 @@ public class MainActivity extends AppCompatActivity {
         final float[] totalCarbs = {0};
         final float[] totalProtein = {0};
         final float[] totalFat = {0};
-
+        Button btnBreakfast = findViewById(R.id.btnBreakfast);
+        btnBreakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "아침 클릭됨", Toast.LENGTH_SHORT).show();
+            }
+        });
         addFoodBtn.setOnClickListener(v -> {
             String foodName = foodInput.getText().toString().trim();
             String amountStr = foodAmount.getText().toString().trim();
