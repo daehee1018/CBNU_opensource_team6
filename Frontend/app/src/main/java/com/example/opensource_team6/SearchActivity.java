@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.List;
+import android.content.Intent;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -71,8 +72,10 @@ public class SearchActivity extends AppCompatActivity {
                 updateRecentSearchUI();
             }
 
-            // 실제 검색 화면으로 이동하고 싶다면 여기에 Intent 사용
-            Toast.makeText(this, "‘" + query + "’ 검색됨 (TODO: 결과 화면)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
+            intent.putExtra("search_keyword", query); // 검색어 전달
+            startActivity(intent);
+
         });
     }
 
