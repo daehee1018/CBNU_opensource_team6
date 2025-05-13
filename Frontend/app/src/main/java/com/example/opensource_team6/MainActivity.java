@@ -140,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Home 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_diary) {
-                Toast.makeText(this, "오늘 식단 클릭됨", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, TodayMealActivity.class);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.nav_scan) {
                 Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();

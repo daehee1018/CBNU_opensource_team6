@@ -24,6 +24,8 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".FoodDetailActivity" />
+        <activity android:name=".TodayMealActivity" />
+
 
 
 
