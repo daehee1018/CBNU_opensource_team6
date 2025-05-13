@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.LinearLayout;
+import android.content.Intent;
+
 
 
 import com.example.opensource_team6.model.Food;
@@ -110,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
             foodInput.setText("");
             foodAmount.setText("");
         });
+        AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.setFocusable(false); // 키보드 안뜨게
+        searchEditText.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
+        });
+
 
         List<String> foodNames = new ArrayList<>();
         for (Food item : foodList) {
@@ -119,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, foodNames);
         foodInput.setAdapter(adapter);
 
-        AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
+        searchEditText = findViewById(R.id.searchEditText);
         searchEditText.setAdapter(adapter);
         searchEditText.setThreshold(1);
 
@@ -145,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     private void loadFoodData() {
         try {
             AssetManager assetManager = getAssets();
@@ -158,5 +168,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "음식 데이터를 불러오지 못했습니다.", Toast.LENGTH_LONG).show();
         }
     }
+
 
 }
