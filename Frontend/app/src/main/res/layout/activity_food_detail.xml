@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:background="#F8F8F8">
+
+        <LinearLayout
+            android:id="@+id/foodDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 음식 이미지 (예: 샐러드 사진) -->
+            <ImageView
+                android:id="@+id/foodImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sample" />
+
+            <!-- 음식 이름 및 칼로리 -->
+            <TextView
+                android:id="@+id/foodName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="샘플"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:paddingTop="12dp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/foodKcal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="80 kcal"
+                android:textSize="16sp"
+                android:textColor="#888888" />
+
+            <!-- 등록 버튼 -->
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="식단 등록하기"
+                android:layout_marginTop="12dp" />
+
+            <!-- 영양 정보 -->
+            <TextView
+                android:text="탄수화물 18g"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:background="#DDDDDD"
+                android:padding="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="단백질 3g"
+                android:textSize="16sp"
+                android:background="#DDDDDD"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:text="지방 3g"
+                android:textSize="16sp"
+                android:background="#DDDDDD"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

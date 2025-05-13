@@ -1,5 +1,6 @@
 package com.example.opensource_team6;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         TextView resultText = findViewById(R.id.resultTextView);
         LinearLayout resultContainer = findViewById(R.id.resultContainer);
+
         // 검색어 받기
         String keyword = getIntent().getStringExtra("search_keyword");
         resultText.setText("‘" + keyword + "’에 대한 검색 결과:");
@@ -44,29 +46,37 @@ public class SearchResultActivity extends AppCompatActivity {
             return;
         }
 
-        // 검색어 기반 필터링
-        List<Food> filteredList = new ArrayList<>();
-        for (Food food : foodList) {
-            if (food.getName().toLowerCase().contains(keyword.toLowerCase())) {
-                filteredList.add(food);
+        // 검색어 필터링 후 리스트에 항목 추가
+        boolean hasResult = false;
+        for (Food item : foodList) {
+            if (item.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                hasResult = true;
+
+                TextView textView = new TextView(this);
+                textView.setText(item.getName() + " - " + item.getKcal() + " kcal");
+                textView.setPadding(20, 20, 20, 20);
+                textView.setTextSize(16);
+                textView.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+                textView.setOnClickListener(v -> {
+                    Intent intent = new Intent(SearchResultActivity.this, FoodDetailActivity.class);
+                    intent.putExtra("food_name", item.getName());
+                    intent.putExtra("food_kcal", item.getKcal());
+                    intent.putExtra("food_carbs", item.getCarbs());
+                    intent.putExtra("food_protein", item.getProtein());
+                    intent.putExtra("food_fat", item.getFat());
+                    startActivity(intent);
+                });
+
+                resultContainer.addView(textView);
             }
         }
 
-        // 결과 출력
-        if (filteredList.isEmpty()) {
+        if (!hasResult) {
             TextView item = new TextView(this);
             item.setText("검색 결과가 없습니다.");
             item.setTextSize(16);
             item.setPadding(8, 8, 8, 8);
             resultContainer.addView(item);
-        } else {
-            for (Food food : filteredList) {
-                TextView item = new TextView(this);
-                item.setText(food.getName() + " - " + food.getKcal() + " kcal");
-                item.setTextSize(16);
-                item.setPadding(8, 8, 8, 8);
-                resultContainer.addView(item);
-            }
         }
     }
 }
