@@ -20,6 +20,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.LinearLayout;
+
 
 import com.example.opensource_team6.model.Food;
 
@@ -33,25 +35,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadFoodData(); // ✅ JSON 파일에서 음식 리스트 로딩
-        // onCreate 내부에 추가
+        loadFoodData();
+
         AutoCompleteTextView foodInput = findViewById(R.id.foodInput);
         EditText foodAmount = findViewById(R.id.foodAmount);
         Button addFoodBtn = findViewById(R.id.addFoodBtn);
         TextView resultText = findViewById(R.id.resultText);
 
-// 누적된 섭취 영양소를 저장할 변수
+        LinearLayout groupBreakfast = findViewById(R.id.groupBreakfast);
+        LinearLayout groupLunch = findViewById(R.id.groupLunch);
+        LinearLayout groupDinner = findViewById(R.id.groupDinner);
+
+        Button btnBreakfast = findViewById(R.id.btnBreakfast);
+        Button btnLunch = findViewById(R.id.btnLunch);
+        Button btnDinner = findViewById(R.id.btnDinner);
+
+        btnBreakfast.setOnClickListener(v -> {
+            groupBreakfast.setVisibility(View.VISIBLE);
+            groupLunch.setVisibility(View.GONE);
+            groupDinner.setVisibility(View.GONE);
+        });
+
+        btnLunch.setOnClickListener(v -> {
+            groupBreakfast.setVisibility(View.GONE);
+            groupLunch.setVisibility(View.VISIBLE);
+            groupDinner.setVisibility(View.GONE);
+        });
+
+        btnDinner.setOnClickListener(v -> {
+            groupBreakfast.setVisibility(View.GONE);
+            groupLunch.setVisibility(View.GONE);
+            groupDinner.setVisibility(View.VISIBLE);
+        });
+
         final float[] totalKcal = {0};
         final float[] totalCarbs = {0};
         final float[] totalProtein = {0};
         final float[] totalFat = {0};
-        Button btnBreakfast = findViewById(R.id.btnBreakfast);
-        btnBreakfast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "아침 클릭됨", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         addFoodBtn.setOnClickListener(v -> {
             String foodName = foodInput.getText().toString().trim();
             String amountStr = foodAmount.getText().toString().trim();
@@ -62,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             float amount = Float.parseFloat(amountStr);
-
-            // 음식 찾기
             Food matched = null;
             for (Food item : foodList) {
                 if (item.getName().contains(foodName)) {
@@ -77,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            float baseWeight = matched.getWeight(); // g
+            float baseWeight = matched.getWeight();
             totalKcal[0] += matched.getKcal() / baseWeight * amount;
             totalCarbs[0] += matched.getCarbs() / baseWeight * amount;
             totalProtein[0] += matched.getProtein() / baseWeight * amount;
@@ -92,21 +111,17 @@ public class MainActivity extends AppCompatActivity {
             foodAmount.setText("");
         });
 
-        // 음식 이름 리스트 생성
         List<String> foodNames = new ArrayList<>();
         for (Food item : foodList) {
             foodNames.add(item.getName());
         }
 
-        // 어댑터 설정
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_dropdown_item_1line, foodNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, foodNames);
         foodInput.setAdapter(adapter);
-        if (foodList != null) {
-            for (Food item : foodList) {
-                Log.d("Food", item.getName() + " / " + item.getKcal() + " kcal");
-            }
-        }
+
+        AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.setAdapter(adapter);
+        searchEditText.setThreshold(1);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -116,24 +131,20 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Home 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_diary) {
-                Toast.makeText(this, "Diary 클릭됨", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "오늘 식단 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_scan) {
-                Toast.makeText(this, "Scan 클릭됨", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_profile) {
-                Toast.makeText(this, "Profile 클릭됨", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "프로필 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             }
+
             return false;
         });
-        //메인 검색 자동완성
-        AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
-        searchEditText.setAdapter(adapter);
-        searchEditText.setThreshold(1);
+
     }
-
-
     private void loadFoodData() {
         try {
             AssetManager assetManager = getAssets();
@@ -147,4 +158,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "음식 데이터를 불러오지 못했습니다.", Toast.LENGTH_LONG).show();
         }
     }
+
 }

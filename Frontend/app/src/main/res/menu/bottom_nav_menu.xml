@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_menu_view"
+        android:icon="@android:drawable/ic_menu_manage"
         android:title="홈" />
+
     <item
         android:id="@+id/nav_diary"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="오늘 식단" />
+
     <item
         android:id="@+id/nav_scan"
         android:icon="@android:drawable/ic_menu_camera"
         android:title="식단 사진" />
+
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="오늘 식단" />
+        android:title="프로필" />
+
 </menu>
