@@ -13,6 +13,10 @@ spring:
       format_sql: true
       ddl-auto: update
 
+jwt:
+  secret: my-super-secret-key
+  expiration: 3600000  # 1시간 (밀리초)
+
 logging:
   level:
     org.hibernate.SQL: debug # jpa나 hibernate가 생성하는 로그가 보임 (로그를 통해서 보임)

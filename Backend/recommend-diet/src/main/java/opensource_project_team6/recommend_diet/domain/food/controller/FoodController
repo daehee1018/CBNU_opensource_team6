@@ -1,0 +1,28 @@
+package opensource_project_team6.recommend_diet.domain.food.controller;
+
+import opensource_project_team6.recommend_diet.domain.food.entity.Food;
+import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/foods")
+public class FoodController {
+
+    private final FoodRepository foodRepository;
+
+    public FoodController(FoodRepository foodRepository) {
+        this.foodRepository = foodRepository;
+    }
+
+    @GetMapping
+    public List<Food> getAllFoods() {
+        return foodRepository.findAll();
+    }
+
+    @PostMapping
+    public Food addFood(@RequestBody Food food) {
+        return foodRepository.save(food);
+    }
+}

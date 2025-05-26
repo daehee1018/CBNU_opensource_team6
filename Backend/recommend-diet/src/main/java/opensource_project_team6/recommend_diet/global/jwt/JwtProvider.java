@@ -24,11 +24,10 @@ public class JwtProvider {
 
     // 환경변수에서 가져온 비밀키
     // 토큰이 위조되지 않았는지 확인하기 위해 필요
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
-    // 토큰 만료 시간(단위는 밀리초)
-    @Value("${JWT_EXPIRATION}")
+    @Value("${jwt.expiration}")
     private long expiration;
 
     /*

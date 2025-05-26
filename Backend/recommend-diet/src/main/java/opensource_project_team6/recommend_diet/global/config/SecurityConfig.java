@@ -47,8 +47,8 @@ public class SecurityConfig {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/api/auth/**").permitAll() // 회원가입, 로그인은 인증 불필요
-                                .anyRequest().authenticated() // 나머지 요청은 인증 필요
-                        //.anyRequest().permitAll() 모든 요청 허용
+                                //.anyRequest().authenticated() // 나머지 요청은 인증 필요
+                                .anyRequest().permitAll() // 모든 요청 허용, DB POST, GET이용
                 )
                 .formLogin(login -> login.disable()) // 로그인 폼 비활성화 (나중에 지워줘야 할 코드)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
