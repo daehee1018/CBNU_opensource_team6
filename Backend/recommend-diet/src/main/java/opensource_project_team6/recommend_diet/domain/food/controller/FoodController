@@ -3,7 +3,8 @@ package opensource_project_team6.recommend_diet.domain.food.controller;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
 import org.springframework.web.bind.annotation.*;
-
+import opensource_project_team6.recommend_diet.domain.food.dto.FoodRequestDto;
+import opensource_project_team6.recommend_diet.domain.food.dto.FoodResponseDto;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,16 @@ public class FoodController {
     }
 
     @PostMapping
-    public Food addFood(@RequestBody Food food) {
-        return foodRepository.save(food);
+    public FoodResponseDto addFood(@RequestBody FoodRequestDto dto) {
+        Food food = new Food();
+        food.setName(dto.getName());
+        food.setImageUrl(dto.getImageUrl());
+        food.setCalories(dto.getCalories());
+        food.setCarbohydrate(dto.getCarbohydrate());
+        food.setProtein(dto.getProtein());
+        food.setFat(dto.getFat());
+
+        Food saved = foodRepository.save(food);
+        return FoodResponseDto.from(saved);
     }
 }
