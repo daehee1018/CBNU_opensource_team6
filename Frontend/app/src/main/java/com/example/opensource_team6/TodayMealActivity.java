@@ -1,5 +1,6 @@
 package com.example.opensource_team6;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CalendarView;
 import android.widget.TextView;
@@ -14,13 +15,17 @@ public class TodayMealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_meal);
-
-        calendarView = findViewById(R.id.calendarView);
-        mealInfo = findViewById(R.id.mealInfo);
+        CalendarView calendarView = findViewById(R.id.calendarView);
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String date = year + "년 " + (month + 1) + "월 " + dayOfMonth + "일";
-            mealInfo.setText(date + " 식단 정보 없음 (샘플 텍스트)");
+            String dateString = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+
+            Intent intent = new Intent(TodayMealActivity.this, MealRecordDetailActivity.class);
+            intent.putExtra("selectedDate", dateString); // 필요 시 날짜 전달
+            startActivity(intent);
         });
+
+
+
     }
 }

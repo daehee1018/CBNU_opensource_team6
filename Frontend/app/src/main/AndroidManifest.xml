@@ -43,6 +43,13 @@
             android:name=".TodayMealActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".MealRecordDetailActivity" />
+        <activity android:name=".RecommendationResultActivity" />
+
+
+
+
     </application>
 
 </manifest>

@@ -14,6 +14,15 @@ public class FoodDao {
         NutritionDBHelper dbHelper = new NutritionDBHelper(context);
         this.db = dbHelper.openDatabase();
     }
+    public List<String> getAllFoodNames() {
+        List<String> names = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT name FROM nutrition", null);
+        while (cursor.moveToNext()) {
+            names.add(cursor.getString(0));
+        }
+        cursor.close();
+        return names;
+    }
 
     public List<Food> searchFoodByName(String keyword) {
         List<Food> results = new ArrayList<>();
