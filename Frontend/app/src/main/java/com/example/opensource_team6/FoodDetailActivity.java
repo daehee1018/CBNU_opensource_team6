@@ -1,32 +1,15 @@
 package com.example.opensource_team6;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.content.Intent;
 
-
-
-import com.example.opensource_team6.model.Food;
 public class FoodDetailActivity extends AppCompatActivity {
 
     private TextView foodName, foodKcal;

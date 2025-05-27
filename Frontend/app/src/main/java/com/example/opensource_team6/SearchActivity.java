@@ -1,25 +1,19 @@
 package com.example.opensource_team6;
 
-import com.example.opensource_team6.model.Food;
+import com.example.opensource_team6.data.Food;
+import com.example.opensource_team6.data.FoodDao;
+
 import android.os.Bundle;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.content.Intent;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.List;
-import android.content.Intent;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -36,16 +30,9 @@ public class SearchActivity extends AppCompatActivity {
         Button btnSearch = findViewById(R.id.btnSearch);
         recentSearchContainer = findViewById(R.id.recentSearchContainer);
 
-        // JSON 데이터 로드
-        try {
-            InputStream is = getAssets().open("food_db.json");
-            InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-            Type listType = new TypeToken<List<Food>>() {}.getType();
-            foodList = new Gson().fromJson(reader, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "데이터 로드 실패", Toast.LENGTH_SHORT).show();
-        }
+        // SQLite DB에서 음식 데이터 불러오기
+        FoodDao dao = new FoodDao(this);
+        foodList = dao.searchFoodByName(""); // 전체 음식 불러오기
 
         // 자동완성용 이름 리스트
         List<String> foodNames = new ArrayList<>();
@@ -58,7 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         searchEditText.setAdapter(adapter);
         searchEditText.setThreshold(1);
 
-        // 검색 버튼 클릭 → 최근 검색 저장 + 결과 화면 이동 (임시로 토스트 처리)
+        // 검색 버튼 클릭 → 최근 검색 저장 + 결과 화면 이동
         btnSearch.setOnClickListener(v -> {
             String query = searchEditText.getText().toString().trim();
             if (query.isEmpty()) {
@@ -75,7 +62,6 @@ public class SearchActivity extends AppCompatActivity {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra("search_keyword", query); // 검색어 전달
             startActivity(intent);
-
         });
     }
 

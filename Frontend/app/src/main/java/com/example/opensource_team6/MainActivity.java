@@ -1,32 +1,22 @@
 package com.example.opensource_team6;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 import android.content.Intent;
 
-
-
-import com.example.opensource_team6.model.Food;
-
+import com.example.opensource_team6.data.Food;
+import com.example.opensource_team6.data.FoodDao;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        loadFoodData();
 
         AutoCompleteTextView foodInput = findViewById(R.id.foodInput);
         EditText foodAmount = findViewById(R.id.foodAmount);
@@ -75,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
         final float[] totalProtein = {0};
         final float[] totalFat = {0};
 
+        // SQLite DB에서 데이터 가져오기
+        FoodDao dao = new FoodDao(this);
+        foodList = dao.searchFoodByName(""); // 전체 데이터 불러오기용
+
         addFoodBtn.setOnClickListener(v -> {
             String foodName = foodInput.getText().toString().trim();
             String amountStr = foodAmount.getText().toString().trim();
@@ -98,9 +90,19 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            float baseWeight = matched.getWeight();
-            totalKcal[0] += matched.getKcal() / baseWeight * amount;
-            totalCarbs[0] += matched.getCarbs() / baseWeight * amount;
+            double baseWeight = matched.getWeight();
+            if (baseWeight == 0) {
+                Toast.makeText(this, "해당 음식의 기준량이 없습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            totalKcal[0] += matched.getEnergy() / baseWeight * amount;
+            totalCarbs[0] += matched.getCarbohydrate() / baseWeight * amount;
+            totalProtein[0] += matched.getProtein() / baseWeight * amount;
+            totalFat[0] += matched.getFat() / baseWeight * amount;
+
+            totalKcal[0] += matched.getEnergy() / baseWeight * amount;
+            totalCarbs[0] += matched.getCarbohydrate() / baseWeight * amount;
             totalProtein[0] += matched.getProtein() / baseWeight * amount;
             totalFat[0] += matched.getFat() / baseWeight * amount;
 
@@ -112,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
             foodInput.setText("");
             foodAmount.setText("");
         });
+
         AutoCompleteTextView searchEditText = findViewById(R.id.searchEditText);
-        searchEditText.setFocusable(false); // 키보드 안뜨게
+        searchEditText.setFocusable(false);
         searchEditText.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         });
-
 
         List<String> foodNames = new ArrayList<>();
         for (Food item : foodList) {
@@ -153,22 +155,5 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
-
     }
-
-    private void loadFoodData() {
-        try {
-            AssetManager assetManager = getAssets();
-            InputStream is = assetManager.open("food_db.json");
-            InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-
-            Type listType = new TypeToken<List<Food>>() {}.getType();
-            foodList = new Gson().fromJson(reader, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "음식 데이터를 불러오지 못했습니다.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-
 }

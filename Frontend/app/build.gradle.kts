@@ -15,7 +15,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    aaptOptions {
+        noCompress("tflite", "json")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -36,9 +38,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("org.tensorflow:tensorflow-lite:+")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.room:room-runtime:2.6.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }
