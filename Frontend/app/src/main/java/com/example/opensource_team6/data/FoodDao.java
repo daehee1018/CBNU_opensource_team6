@@ -14,6 +14,7 @@ public class FoodDao {
         NutritionDBHelper dbHelper = new NutritionDBHelper(context);
         this.db = dbHelper.openDatabase();
     }
+
     public List<String> getAllFoodNames() {
         List<String> names = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT name FROM nutrition", null);
@@ -33,25 +34,20 @@ public class FoodDao {
         while (cursor.moveToNext()) {
             Food food = new Food();
             food.setName(cursor.getString(cursor.getColumnIndex("name")));
-            food.setData_type(cursor.getString(cursor.getColumnIndex("data_type")));
-            food.setOrigin(cursor.getString(cursor.getColumnIndex("origin")));
             food.setCategory(cursor.getString(cursor.getColumnIndex("category")));
             food.setRep_name(cursor.getString(cursor.getColumnIndex("rep_name")));
+            food.setSubcategory(cursor.getString(cursor.getColumnIndex("subcategory")));
             food.setStandard_amount(cursor.getDouble(cursor.getColumnIndex("standard_amount")));
             food.setEnergy(cursor.getDouble(cursor.getColumnIndex("energy")));
             food.setProtein(cursor.getDouble(cursor.getColumnIndex("protein")));
             food.setFat(cursor.getDouble(cursor.getColumnIndex("fat")));
             food.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex("carbohydrate")));
             food.setSugar(cursor.getDouble(cursor.getColumnIndex("sugar")));
-            food.setFiber(cursor.getDouble(cursor.getColumnIndex("fiber")));
-            food.setCalcium(cursor.getDouble(cursor.getColumnIndex("calcium")));
-            food.setPotassium(cursor.getDouble(cursor.getColumnIndex("potassium")));
             food.setSodium(cursor.getDouble(cursor.getColumnIndex("sodium")));
             food.setCholesterol(cursor.getDouble(cursor.getColumnIndex("cholesterol")));
             food.setSaturated_fat(cursor.getDouble(cursor.getColumnIndex("saturated_fat")));
-            food.setTrans_fat(cursor.getDouble(cursor.getColumnIndex("trans_fat")));
 
-            // 기준량을 기본 weight로 설정
+            // 기준량을 weight으로 설정
             food.setWeight(food.getStandard_amount());
 
             results.add(food);

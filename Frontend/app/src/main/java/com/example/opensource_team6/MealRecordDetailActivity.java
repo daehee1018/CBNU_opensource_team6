@@ -1,3 +1,4 @@
+// MealRecordDetailActivity.java
 package com.example.opensource_team6;
 
 import android.content.Intent;
@@ -28,7 +29,6 @@ public class MealRecordDetailActivity extends AppCompatActivity {
     private Button btnAddFood, btnFinish;
     private Spinner mealSpinner;
     private ListView addedFoodList;
-    private TextView vectorTextView;
 
     private List<Food> foodList;
     private List<Food> addedFoods = new ArrayList<>();
@@ -50,7 +50,6 @@ public class MealRecordDetailActivity extends AppCompatActivity {
         btnFinish = findViewById(R.id.btnFinish);
         mealSpinner = findViewById(R.id.meal_spinner);
         addedFoodList = findViewById(R.id.addedFoodList);
-        vectorTextView = findViewById(R.id.vectorTextView);
 
         FoodDao dao = new FoodDao(this);
         foodList = dao.searchFoodByName("");
@@ -96,9 +95,9 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             }
 
             double amount = Double.parseDouble(amountStr);
-            double weight = matched.getWeight();
+            double weight = matched.getStandard_amount();
             if (weight <= 0) {
-                Toast.makeText(this, "해당 음식의 무게 정보가 올바르지 않습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "해당 음식의 기준량 정보가 올바르지 않습니다", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -112,14 +111,10 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             entry.setProtein(matched.getProtein() * ratio);
             entry.setFat(matched.getFat() * ratio);
             entry.setSugar(matched.getSugar() * ratio);
-            entry.setFiber(matched.getFiber() * ratio);
-            entry.setCalcium(matched.getCalcium() * ratio);
-            entry.setPotassium(matched.getPotassium() * ratio);
             entry.setSodium(matched.getSodium() * ratio);
             entry.setCholesterol(matched.getCholesterol() * ratio);
             entry.setSaturated_fat(matched.getSaturated_fat() * ratio);
-            entry.setTrans_fat(matched.getTrans_fat() * ratio);
-            entry.setStandard_amount(matched.getStandard_amount());
+            entry.setStandard_amount(weight);
 
             if (!mealMap.containsKey(selectedMeal)) mealMap.put(selectedMeal, new ArrayList<>());
             List<Food> mealFoods = mealMap.get(selectedMeal);
@@ -140,20 +135,11 @@ public class MealRecordDetailActivity extends AppCompatActivity {
 
         btnFinish.setOnClickListener(v -> {
             double[] total = computeTotalVector();
-            float[] recommended = new float[]{2500, 310, 55, 70, 100, 25, 700, 3500, 2000, 300, 20, 2};
-            float[] inputVector = new float[12];
-            for (int i = 0; i < 12; i++) {
-                if (recommended[i] == 0) {
-                    inputVector[i] = 0;
-                } else {
-                    float deficit = Math.max(recommended[i] - (float) total[i], 0);
-                    inputVector[i] = deficit / recommended[i];  // ⚠️ 정규화된 결핍 비율
-                }
+            float[] recommended = new float[]{2500, 310, 55, 70, 100, 2000, 300, 20};
+            float[] inputVector = new float[8];
+            for (int i = 0; i < 8; i++) {
+                inputVector[i] = recommended[i] == 0 ? 0 : Math.max(recommended[i] - (float) total[i], 0) / recommended[i];
             }
-
-
-            Log.d("VECTOR_INPUT", "총합 벡터: " + Arrays.toString(total));
-            Log.d("VECTOR_INPUT", "입력 벡터: " + Arrays.toString(inputVector));
 
             float[] output = runTFLiteModel(inputVector);
             if (output == null) {
@@ -169,36 +155,36 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RecommendationResultActivity.class);
             intent.putExtra("recommendationVector", Arrays.toString(output));
             intent.putExtra("currentMeal", String.join(", ", completedMeals));
-            intent.putExtra("totalVector", Arrays.toString(total));       // 총합 벡터
-            intent.putExtra("deficitVector", Arrays.toString(inputVector)); // 결핍 벡터
-
+            intent.putExtra("totalVector", Arrays.toString(total));
+            intent.putExtra("deficitVector", Arrays.toString(inputVector));
             startActivity(intent);
         });
     }
 
-    // ✅ 총합 벡터 계산 함수
     private double[] computeTotalVector() {
-        double[] total = new double[12];
+        double[] total = new double[8];
         for (List<Food> mealFoods : mealMap.values()) {
             for (Food f : mealFoods) {
-                total[0] += f.getEnergy();        total[1] += f.getCarbohydrate();  total[2] += f.getProtein();
-                total[3] += f.getFat();           total[4] += f.getSugar();         total[5] += f.getFiber();
-                total[6] += f.getCalcium();       total[7] += f.getPotassium();     total[8] += f.getSodium();
-                total[9] += f.getCholesterol();   total[10] += f.getSaturated_fat(); total[11] += f.getTrans_fat();
+                total[0] += f.getEnergy();
+                total[1] += f.getCarbohydrate();
+                total[2] += f.getProtein();
+                total[3] += f.getFat();
+                total[4] += f.getSugar();
+                total[5] += f.getSodium();
+                total[6] += f.getCholesterol();
+                total[7] += f.getSaturated_fat();
             }
         }
         return total;
     }
 
-    // ✅ TFLite 모델 실행 함수
     private float[] runTFLiteModel(float[] inputVector) {
         try {
             Interpreter tflite = new Interpreter(loadModelFile("nutrition_autoencoder.tflite"));
-            float[][] input = new float[1][12];
-            float[][] output = new float[1][12];
-            input[0] = inputVector;  // ✅ 추가하세요
+            float[][] input = new float[1][8];
+            float[][] output = new float[1][8];
+            input[0] = inputVector;
             tflite.run(input, output);
-
             return output[0];
         } catch (Exception e) {
             e.printStackTrace();
