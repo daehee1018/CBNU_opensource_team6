@@ -38,8 +38,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = User.builder()
-                .lastName(request.lastName())
-                .firstName(request.firstName())
+                .name(request.name())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .birthDate(request.birthDate())

@@ -5,27 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ba6959b-b2e9-437a-8416-123b9032cb66" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/LoginResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/SignupRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/config/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/jwt/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/jwt/JwtProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/Gender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/HealthConcern.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/Interest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/dto/UserInfoRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/dto/UserInfoResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/entity/UserInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/repository/UserInfoRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.13/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.13/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/SignupRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/SignupRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/impl/AuthServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,15 +36,57 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Record" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Jhwan02&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/Foods_DB" />
+                    <option name="lastUsedInstant" value="1748416945" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/oauth-login-system" />
+                    <option name="lastUsedInstant" value="1748414894" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="Backend" />
+                    <option name="lastUsedInstant" value="1748414893" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$/../.." />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/daehee1018/CBNU_opensource_team6.git&quot;,
+    &quot;accountId&quot;: &quot;fe37f9bd-2290-491d-bd33-9831916b37ea&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
@@ -68,10 +106,10 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.RecommendDietApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Backend&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/Foods__DB&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/신종환/Desktop/myProjects/goormthonUniv/goormthon/4th-Study1-BE/Week5&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/신종환/Desktop/myProjects/BE&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -124,7 +162,19 @@
       <workItem from="1747166091822" duration="4157000" />
       <workItem from="1747170404714" duration="3799000" />
       <workItem from="1747339790309" duration="975000" />
-      <workItem from="1747340785508" duration="6206000" />
+      <workItem from="1747340785508" duration="13763000" />
+      <workItem from="1747415540802" duration="2000" />
+      <workItem from="1747416011282" duration="138000" />
+      <workItem from="1747420659001" duration="2265000" />
+      <workItem from="1747464299295" duration="769000" />
+      <workItem from="1747471435218" duration="28000" />
+      <workItem from="1747805609672" duration="4305000" />
+      <workItem from="1747918109877" duration="535000" />
+      <workItem from="1747959317307" duration="2548000" />
+      <workItem from="1748265916385" duration="1302000" />
+      <workItem from="1748374746192" duration="371000" />
+      <workItem from="1748409067136" duration="4681000" />
+      <workItem from="1748417105368" duration="7000" />
     </task>
     <servers />
   </component>

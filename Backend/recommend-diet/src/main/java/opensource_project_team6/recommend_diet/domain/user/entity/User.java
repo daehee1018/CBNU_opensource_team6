@@ -5,9 +5,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import opensource_project_team6.recommend_diet.domain.userInfo.entity.UserInfo;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,11 +18,11 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String lastName; // 성
+    @OneToOne(mappedBy ="user")
+    private UserInfo userInfo;
 
     @Column(nullable = false)
-    private String firstName; // 이름
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email; // 이메일(로그인 ID)
@@ -32,10 +32,29 @@ public class User {
 
     @Column(nullable = false)
     private LocalDate birthDate; // 생년월일
+
+    @Column(nullable = false)
+    private Double height;
+
+    @Column(nullable = false)
+    private Double weight;
+
+    @Column(nullable = false)
+    private Double targetWeight;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private Interest interest;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "healte_concern")
+    private HealthConcern healthConcern;
+
     @Builder
-    public User(String lastName, String firstName, String email, String password, LocalDate birthDate) {
-        this.lastName = lastName;
-        this.firstName = firstName;
+    public User(String name, String email, String password, LocalDate birthDate) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
