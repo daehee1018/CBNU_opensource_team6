@@ -12,7 +12,9 @@ import com.example.opensource_team6.data.FoodDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RecommendationResultActivity extends AppCompatActivity {
 
@@ -23,25 +25,29 @@ public class RecommendationResultActivity extends AppCompatActivity {
 
         TextView resultText = findViewById(R.id.recommendationText);
 
-        // 전달된 벡터 및 식사 유형
         String vector = getIntent().getStringExtra("recommendationVector");
         String mealType = getIntent().getStringExtra("currentMeal");
+        String completed = getIntent().getStringExtra("completedMeals");
+        String outputVector = getIntent().getStringExtra("recommendationVector");
+        String totalVector = getIntent().getStringExtra("totalVector");
+        String deficitVector = getIntent().getStringExtra("deficitVector");
 
-        if (vector == null || mealType == null) {
-            Toast.makeText(this, "입력 정보 부족", Toast.LENGTH_SHORT).show();
+        if (deficitVector == null || deficitVector.isEmpty() || mealType == null || mealType.isEmpty()) {
+            Toast.makeText(this, "입력 정보 부족: 벡터 또는 식사 정보 없음", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
-        // ✅ 추천 결과 문자열 작성
+        String nextMeal = getNextMealSuggestion(completed);
+
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(mealType).append(" 외 추천 식사]\n\n");
-        sb.append("입력 벡터:\n").append(vector).append("\n\n");
+        sb.append("🔹 총합 벡터 (섭취량):\n").append(totalVector).append("\n\n");
+        sb.append("🔸 결핍 벡터 (입력값):\n").append(deficitVector).append("\n\n");
+        sb.append("✅ 출력 벡터 (모델 결과):\n").append(outputVector).append("\n\n");
 
-        // 다음 식사 시간 예측
-        String nextMeal = getNextMealSuggestion(mealType);
         sb.append("👉 다음 추천 식사 시간: ").append(nextMeal).append("\n\n");
 
-        // 추천 음식 계산
         String[] foodList = recommendFoodBasedOnVector(vector);
         sb.append("추천 음식:\n");
         for (String food : foodList) {
@@ -51,62 +57,105 @@ public class RecommendationResultActivity extends AppCompatActivity {
         resultText.setText(sb.toString());
     }
 
-    // ✅ 다음 식사 시간 추천 (예: 조식 → 중식)
     private String getNextMealSuggestion(String completedMeals) {
         String[] all = {"조식", "중식", "석식", "야식"};
-        List<String> done = List.of(completedMeals.split(",\\s*"));
+
+        if (completedMeals == null || completedMeals.trim().isEmpty()) return "중식";
+
+        String[] meals = completedMeals.split(",\\s*");
+        List<String> done = List.of(meals);
+
         for (String meal : all) {
             if (!done.contains(meal)) return meal;
         }
         return "모두 완료됨";
     }
 
-    // ✅ Autoencoder 벡터 기반 음식 추천
     private String[] recommendFoodBasedOnVector(String vectorString) {
+        // 정규화 범위 설정 (학습에 사용한 범위와 동일해야 함)
+        float[] minValues = new float[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        float[] maxValues = new float[]{2500, 310, 55, 70, 100, 25, 700, 3500, 2000, 300, 20, 2};
+
+        // 1. 문자열 → float[] 변환
         String[] parts = vectorString.replace("[", "").replace("]", "").split(",");
-        float[] target = new float[parts.length];
+        float[] targetRaw = new float[parts.length];
         for (int i = 0; i < parts.length; i++) {
-            target[i] = Float.parseFloat(parts[i].trim());
+            targetRaw[i] = Float.parseFloat(parts[i].trim());
         }
 
+        // 2. MinMax 정규화
+        float[] target = new float[targetRaw.length];
+        for (int i = 0; i < targetRaw.length; i++) {
+            if (maxValues[i] - minValues[i] == 0) {
+                target[i] = 0; // division by zero 방지
+            } else {
+                target[i] = (targetRaw[i] - minValues[i]) / (maxValues[i] - minValues[i]);
+            }
+        }
+
+        // 3. 음식 DB 불러오기
         FoodDao dao = new FoodDao(this);
-        List<Food> allFoods = dao.searchFoodByName(""); // 전체 음식
+        List<Food> allFoods = dao.searchFoodByName("");
 
         List<FoodDistance> distances = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+
         for (Food food : allFoods) {
-            float[] foodVector = new float[]{
+            if (seen.contains(food.getName())) continue;
+            seen.add(food.getName());
+
+            float[] foodVectorRaw = new float[]{
                     (float) food.getEnergy(), (float) food.getCarbohydrate(), (float) food.getProtein(),
                     (float) food.getFat(), (float) food.getSugar(), (float) food.getFiber(),
                     (float) food.getCalcium(), (float) food.getPotassium(), (float) food.getSodium(),
                     (float) food.getCholesterol(), (float) food.getSaturated_fat(), (float) food.getTrans_fat()
             };
 
-            float dist = 0;
-            for (int i = 0; i < target.length; i++) {
-                dist += Math.pow(target[i] - foodVector[i], 2);
+            float[] foodVector = new float[foodVectorRaw.length];
+            for (int i = 0; i < foodVectorRaw.length; i++) {
+                if (maxValues[i] - minValues[i] == 0) {
+                    foodVector[i] = 0;
+                } else {
+                    foodVector[i] = (foodVectorRaw[i] - minValues[i]) / (maxValues[i] - minValues[i]);
+                }
             }
 
-            distances.add(new FoodDistance(food.getName(), dist));
+            float distance = cosineDistance(target, foodVector);
+            distances.add(new FoodDistance(food.getName(), (int) food.getWeight(), distance));
         }
 
         Collections.sort(distances);
-
+        
         int count = Math.min(10, distances.size());
         String[] top10 = new String[count];
         for (int i = 0; i < count; i++) {
-            top10[i] = distances.get(i).name;
+            FoodDistance fd = distances.get(i);
+            top10[i] = fd.name + " (" + fd.gram + "g)";
         }
 
         return top10;
     }
 
-    // ⬇️ 음식과 거리 비교 클래스
+
+    private float cosineDistance(float[] a, float[] b) {
+        float dot = 0, normA = 0, normB = 0;
+        for (int i = 0; i < a.length; i++) {
+            dot += a[i] * b[i];
+            normA += a[i] * a[i];
+            normB += b[i] * b[i];
+        }
+        if (normA == 0 || normB == 0) return Float.MAX_VALUE;
+        return 1 - (dot / ((float) Math.sqrt(normA) * (float) Math.sqrt(normB)));
+    }
+
     private static class FoodDistance implements Comparable<FoodDistance> {
         String name;
+        int gram;
         float distance;
 
-        FoodDistance(String name, float distance) {
+        FoodDistance(String name, int gram, float distance) {
             this.name = name;
+            this.gram = gram;
             this.distance = distance;
         }
 
