@@ -1,4 +1,4 @@
-package com.example.opensource_team6.Login.model;
+package com.example.opensource_team6.login.model;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

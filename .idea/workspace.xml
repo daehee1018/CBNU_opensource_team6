@@ -87,14 +87,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05fd54d1-81b2-4dc5-8869-c731243ed9b4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_calendar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_visibility_off.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/rounded_blue_button.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/register/SignupStep1Activity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/register/SignupStep2Activity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/LoadingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/LoadingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/LoginDataSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/LoginDataSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/LoginRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/LoginRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/model/LoggedInUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/model/LoggedInUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoggedInUserView.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoggedInUserView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginFormState.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoginFormState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoginResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoginViewModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginViewModelFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/login/ui/LoginViewModelFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,9 +139,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="valueResourceFile" />
-        <option value="Class" />
         <option value="resourceFile" />
         <option value="layoutResourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -170,6 +178,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "front",

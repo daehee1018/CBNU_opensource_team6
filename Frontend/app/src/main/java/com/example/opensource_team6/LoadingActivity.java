@@ -3,10 +3,9 @@ package com.example.opensource_team6;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.example.opensource_team6.Login.ui.LoginActivity;
+import com.example.opensource_team6.login.ui.LoginActivity;
 
 public class LoadingActivity extends Activity {
 

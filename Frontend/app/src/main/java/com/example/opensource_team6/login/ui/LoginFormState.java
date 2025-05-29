@@ -1,4 +1,4 @@
-package com.example.opensource_team6.Login.ui;
+package com.example.opensource_team6.login.ui;
 
 import androidx.annotation.Nullable;
 

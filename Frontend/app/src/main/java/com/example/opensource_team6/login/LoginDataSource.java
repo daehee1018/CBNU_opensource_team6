@@ -1,6 +1,6 @@
-package com.example.opensource_team6.Login;
+package com.example.opensource_team6.login;
 
-import com.example.opensource_team6.Login.model.LoggedInUser;
+import com.example.opensource_team6.login.model.LoggedInUser;
 
 import java.io.IOException;
 
