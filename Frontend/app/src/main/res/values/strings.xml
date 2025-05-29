@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">opensource_team6</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">이메일</string>
+    <string name="prompt_password">비밀번호</string>
+    <string name="prompt_firstname">성</string>
+    <string name="prompt_lastname">이름</string>
+    <string name="action_sign_in">회원가입 및 로그인</string>
+    <string name="action_sign_in_short">로그인</string>
+    <string name="welcome">"로그인이 완료되었습니다."</string>
+    <string name="invalid_username">유효하지 않은 아이디입니다.</string>
+    <string name="invalid_password">비밀번호는 5자리 보다 길어야합니다.</string>
+    <string name="login_failed">"로그인 실패"</string>
+    <string-array name="meal_options">
+        <item>조식</item>
+        <item>중식</item>
+        <item>석식</item>
+        <item>야식</item>
+    </string-array>
 </resources>
