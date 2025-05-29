@@ -27,7 +27,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email; // 이메일(로그인 ID)
 
-
     private String password; // 일반 회원가입 시 이용 구글 이용 시 null
 
     @Column(nullable = false)
