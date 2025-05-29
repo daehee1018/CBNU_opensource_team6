@@ -2,8 +2,11 @@ package opensource_project_team6.recommend_diet.global.config;
 
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.global.jwt.JwtAuthenticationFilter;
+import opensource_project_team6.recommend_diet.global.oauth.GoogleOAuth2SuccessHandler;
+import opensource_project_team6.recommend_diet.global.util.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomUserDetailsService userDetailsService;
+    private final GoogleOAuth2SuccessHandler googleOAuth2SuccessHandler;
 
     /*
     * 사용자 비밀번호를 안전하게 암호화하기 위하여
@@ -46,12 +51,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // JWT는 CSRF 필요 없으므로 꺼주기
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/api/auth/**").permitAll() // 회원가입, 로그인은 인증 불필요
+                                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                                .requestMatchers("/","/oauth2/**").permitAll() // 회원가입, 로그인은 인증 불필요
                                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                         //.anyRequest().permitAll() 모든 요청 허용
                 )
                 .formLogin(login -> login.disable()) // 로그인 폼 비활성화 (나중에 지워줘야 할 코드)
+                .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(googleOAuth2SuccessHandler)
+                )
                 .build();
     }
 }

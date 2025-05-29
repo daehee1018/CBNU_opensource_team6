@@ -36,12 +36,13 @@ public class JwtProvider {
     * @param username 사용자 이름 또는 식별자
     * @return 서명된 JWT 문자열
     * */
-    public String generateToken(String username){
+    public String generateToken(String username, boolean isProfileComplete) {
         Date now = new Date(); // 현재 시간
         Date expiry = new Date(now.getTime() + expiration); // 만료 시간
 
         return Jwts.builder()
                 .setSubject(username) // 토큰의 주체(보통 사용자 식별자)
+                .claim("profileComplete", String.valueOf(isProfileComplete)) // 프론트에서 토큰을 파싱해서 isProfilecomplete값 확인
 //                .claim("role", role) 사용자 권한에 따라 요청을 제안하고 싶은 경우
                 .setIssuedAt(now) // 발급 시간
                 .setExpiration(expiry) // 만료 시간
