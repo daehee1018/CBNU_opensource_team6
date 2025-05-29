@@ -1,6 +1,7 @@
 package com.example.opensource_team6.data;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -9,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NutritionDBHelper extends SQLiteOpenHelper {
@@ -46,6 +49,34 @@ public class NutritionDBHelper extends SQLiteOpenHelper {
             }
         }
     }*/
+    // NutritionDBHelper.java
+    public List<String> getAllCategories() {
+        SQLiteDatabase db = openDatabase();
+        List<String> categories = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT category FROM nutrition", null);
+        while (cursor.moveToNext()) {
+            categories.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        return categories;
+    }
+
+    public List<String> getSubcategoriesByCategory(String category) {
+        SQLiteDatabase db = openDatabase();
+        List<String> subcategories = new ArrayList<>();
+        Cursor cursor = db.rawQuery(
+                "SELECT DISTINCT subcategory FROM nutrition WHERE category = ?",
+                new String[]{category}
+        );
+        while (cursor.moveToNext()) {
+            subcategories.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        return subcategories;
+    }
+
     private void copyDatabase() {
         File dbPath = context.getDatabasePath(DB_NAME);
 

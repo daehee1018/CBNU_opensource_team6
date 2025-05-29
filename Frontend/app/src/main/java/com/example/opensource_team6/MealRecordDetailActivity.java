@@ -35,9 +35,14 @@ public class MealRecordDetailActivity extends AppCompatActivity {
     private ArrayAdapter<String> listAdapter;
     private List<String> addedFoodDisplayList = new ArrayList<>();
     private String selectedMeal;
-
-    private static final String[] MEAL_TYPES = {"조식", "중식", "석식", "야식"};
+    private static final String[] MEAL_TYPES = {"조식", "중식", "석식"};
+    private static final String NIGHT_MEAL = "야식";
     private Map<String, List<Food>> mealMap = new HashMap<>();
+
+    // min-max 값 (Python 훈련 코드에서 추출하여 하드코딩 또는 npy 로딩)
+    private final float[] min = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+    private final float[] max = {595.f, 104.f, 41.55f, 60.25f,  70.f, 7402.f, 686.62f, 25.6f};
+    private final float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2000f, 300f, 20f};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,6 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 selectedMeal = MEAL_TYPES[pos];
                 prefs.edit().putBoolean(selectedMeal, true).apply();
-                Log.d("MealRecord", "선택된 식사: " + selectedMeal);
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -134,11 +138,23 @@ public class MealRecordDetailActivity extends AppCompatActivity {
         });
 
         btnFinish.setOnClickListener(v -> {
+            // 현재까지 섭취한 영양소 총합
             double[] total = computeTotalVector();
-            float[] recommended = new float[]{2500, 310, 55, 70, 100, 2000, 300, 20};
+
+            // 완료된 식사 수
+            List<String> completedMeals = new ArrayList<>();
+            for (String meal : MEAL_TYPES) {
+                if (prefs.getBoolean(meal, false)) completedMeals.add(meal);
+            }
+            int remainingMeals = 3 - completedMeals.size();
+            if (remainingMeals <= 0) remainingMeals = 1;
+
+            // 결핍 벡터 계산 → 정규화
             float[] inputVector = new float[8];
             for (int i = 0; i < 8; i++) {
-                inputVector[i] = recommended[i] == 0 ? 0 : Math.max(recommended[i] - (float) total[i], 0) / recommended[i];
+                float deficit = Math.max(recommended[i] - (float) total[i], 0f);
+                float avgDeficit = deficit / remainingMeals;
+                inputVector[i] = (avgDeficit - min[i]) / (max[i] - min[i]);
             }
 
             float[] output = runTFLiteModel(inputVector);
@@ -147,9 +163,13 @@ public class MealRecordDetailActivity extends AppCompatActivity {
                 return;
             }
 
-            List<String> completedMeals = new ArrayList<>();
-            for (String meal : MEAL_TYPES) {
-                if (prefs.getBoolean(meal, false)) completedMeals.add(meal);
+            boolean suggestNightMeal = completedMeals.contains("조식") &&
+                    completedMeals.contains("중식") &&
+                    completedMeals.contains("석식");
+
+            if (!suggestNightMeal) {
+                Toast.makeText(this, "야식 추천은 조/중/석식 입력 후 가능합니다", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             Intent intent = new Intent(this, RecommendationResultActivity.class);
@@ -157,6 +177,7 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             intent.putExtra("currentMeal", String.join(", ", completedMeals));
             intent.putExtra("totalVector", Arrays.toString(total));
             intent.putExtra("deficitVector", Arrays.toString(inputVector));
+            intent.putExtra("suggestedMeal", NIGHT_MEAL);
             startActivity(intent);
         });
     }

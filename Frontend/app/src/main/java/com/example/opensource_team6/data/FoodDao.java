@@ -1,5 +1,6 @@
 package com.example.opensource_team6.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,6 +26,7 @@ public class FoodDao {
         return names;
     }
 
+    @SuppressLint("Range")
     public List<Food> searchFoodByName(String keyword) {
         List<Food> results = new ArrayList<>();
 
