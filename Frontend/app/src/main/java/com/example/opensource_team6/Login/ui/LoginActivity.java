@@ -1,139 +1,105 @@
 package com.example.opensource_team6.Login.ui;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.opensource_team6.MainActivity;
 import com.example.opensource_team6.R;
-import com.example.opensource_team6.databinding.ActivityLoginBinding;
-import android.content.Intent;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
-    private ActivityLoginBinding binding;
+    private EditText inputEmail, inputPassword;
+    private Button loginButton;
+    private CheckBox keepLogin;
+    private TextView findPassword, register;
+    private ImageButton googleLogin;
+    private ImageView togglePassword;
+
+    private boolean passwordVisible = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        // 연결
+        inputEmail = findViewById(R.id.input_email);
+        inputPassword = findViewById(R.id.input_password);
+        loginButton = findViewById(R.id.login);
+        keepLogin = findViewById(R.id.keep_login);
+        findPassword = findViewById(R.id.find_password);
+        register = findViewById(R.id.register);
+        googleLogin = findViewById(R.id.google_login);
+        togglePassword = findViewById(R.id.toggle_password_visibility);
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        // 로그인 버튼 클릭 시
+        loginButton.setOnClickListener(v -> {
+            String email = inputEmail.getText().toString();
+            String password = inputPassword.getText().toString();
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
-
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "이메일과 비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // 임시 로그인 처리 (정상 로그인 시 MainActivity로 이동)
+            Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-
-                    // 로그인 성공 시 MainActivity로 이동
-                    Intent intent = new Intent(LoginActivity.this, com.example.opensource_team6.MainActivity.class);
-                    startActivity(intent);
-
-                    // 현재 LoginActivity는 종료
-                    finish();
-                }
-                setResult(Activity.RESULT_OK);
+        // 비밀번호 보기 토글
+        togglePassword.setOnClickListener(v -> {
+            passwordVisible = !passwordVisible;
+            if (passwordVisible) {
+                inputPassword.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                togglePassword.setImageResource(R.drawable.ic_visibility); // 보이면 가리는 아이콘
+            } else {
+                inputPassword.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                togglePassword.setImageResource(R.drawable.ic_visibility); // 안 보이면 보는 아이콘
             }
+            inputPassword.setSelection(inputPassword.getText().length()); // 커서 유지
         });
 
-        TextWatcher afterTextChangedListener = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
-            }
+        // 회원가입 버튼
+        register.setOnClickListener(v -> {
+            Toast.makeText(this, "회원가입 화면으로 이동 예정", Toast.LENGTH_SHORT).show();
+            // startActivity(new Intent(this, RegisterActivity.class));
+        });
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
-            }
+        // 비밀번호 찾기
+        findPassword.setOnClickListener(v -> {
+            Toast.makeText(this, "비밀번호 찾기 기능은 아직 준비 중입니다.", Toast.LENGTH_SHORT).show();
+        });
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+        // 구글 로그인 버튼 클릭
+        googleLogin.setOnClickListener(v -> {
+            Toast.makeText(this, "구글 로그인은 추후 연동됩니다.", Toast.LENGTH_SHORT).show();
+        });
+
+        // 텍스트 변경 감지 (예시)
+        TextWatcher watcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                loginButton.setEnabled(!inputEmail.getText().toString().isEmpty()
+                        && !inputPassword.getText().toString().isEmpty());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        });
+        inputEmail.addTextChangedListener(watcher);
+        inputPassword.addTextChangedListener(watcher);
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
-
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    private void showLoginFailed(@StringRes int messageResId) {
+        Toast.makeText(this, getString(messageResId), Toast.LENGTH_SHORT).show();
     }
 }
