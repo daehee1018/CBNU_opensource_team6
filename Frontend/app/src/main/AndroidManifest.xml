@@ -53,8 +53,9 @@
 
         <activity android:name=".register.SignupStep2Activity" />
 
+        <activity android:name=".profile.ProfileFragment" />
 
-
+        <activity android:name=".today.TodayFragment" />
 
     </application>
 

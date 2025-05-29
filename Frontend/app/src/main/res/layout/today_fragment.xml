@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/todayDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2024년 6월 1일 (토)"
+            android:textSize="20sp"
+            android:textColor="#2E2E2E"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+    </LinearLayout>
+
+    <!-- 콘텐츠 영역 -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <!-- 비어있을 때 표시되는 뷰 -->
+    <LinearLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_no_data" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 식사 데이터가 존재하지 않습니다!"
+            android:textColor="#666666"
+            android:textSize="16sp" />
+    </LinearLayout>
+</FrameLayout>
