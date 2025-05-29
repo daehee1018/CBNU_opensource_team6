@@ -11,4 +11,10 @@
     <string name="invalid_username">유효하지 않은 아이디입니다.</string>
     <string name="invalid_password">비밀번호는 5자리 보다 길어야합니다.</string>
     <string name="login_failed">"로그인 실패"</string>
+    <string-array name="meal_options">
+        <item>조식</item>
+        <item>중식</item>
+        <item>석식</item>
+        <item>야식</item>
+    </string-array>
 </resources>

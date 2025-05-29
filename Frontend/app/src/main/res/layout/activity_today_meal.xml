@@ -30,6 +30,7 @@
             android:text="날짜 선택 시 식단 정보 표시"
             android:textSize="16sp"
             android:paddingTop="16dp" />
+
     </LinearLayout>
 
 

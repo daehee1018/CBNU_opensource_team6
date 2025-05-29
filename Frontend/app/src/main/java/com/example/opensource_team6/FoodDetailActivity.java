@@ -27,7 +27,14 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodImage = findViewById(R.id.foodImage);
         btnRegister = findViewById(R.id.btnRegister);
         LinearLayout foodDetail = findViewById(R.id.foodDetail);
+        TextView title = findViewById(R.id.detailDateTitle); // 레이아웃에 추가 필요
 
+        String selectedDate = intent.getStringExtra("selected_date");
+
+        if (selectedDate != null) {
+            title.setText(selectedDate + " 식단 기록");
+            // TODO: 해당 날짜의 식단 DB에서 불러오기
+        }
 
         String name = intent.getStringExtra("food_name");
         float kcal = intent.getFloatExtra("food_kcal", 0);

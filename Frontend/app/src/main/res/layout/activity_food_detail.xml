@@ -49,7 +49,14 @@
                 android:layout_height="wrap_content"
                 android:text="식단 등록하기"
                 android:layout_marginTop="12dp" />
-
+                <TextView
+                    android:id="@+id/detailDateTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="날짜 식단 기록"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="16dp" />
             <!-- 영양 정보 -->
             <TextView
                 android:text="탄수화물 18g"
