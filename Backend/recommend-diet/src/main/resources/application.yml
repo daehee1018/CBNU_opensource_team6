@@ -7,7 +7,7 @@ spring:
   security:
     oauth2:
       client:
-        registraction:
+        registration:
           google:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
@@ -15,12 +15,12 @@ spring:
             #redirect-uri: ${REDIRECT_URL}
             redirect-uri: ${REDIRECT_URI}
             authorization-grant-type: authorization_code
-          provider:
-            google:
-              authorization-uri: https://accounts.google.com/o/oauth2/auth
-              token-uri: https://oauth2.googleapis.com/token
-              user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
-              user-name-attribute: sub
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            user-name-attribute: sub
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
@@ -28,7 +28,7 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: update
+      ddl-auto: create
 
 logging:
   level:
