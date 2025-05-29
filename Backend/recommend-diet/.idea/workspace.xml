@@ -4,24 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ba6959b-b2e9-437a-8416-123b9032cb66" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/Gender.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/HealthConcern.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/Interest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/dto/UserInfoRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/dto/UserInfoResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/entity/UserInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/userInfo/repository/UserInfoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5ba6959b-b2e9-437a-8416-123b9032cb66" name="변경" comment="FEAT: 구글 소셜 로그인 로직 추가">
       <change beforePath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.13/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/SignupRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/dto/SignupRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/domain/user/service/impl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/jwt/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/opensource_project_team6/recommend_diet/global/jwt/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +30,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Record" />
         <option value="Class" />
-        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -106,7 +99,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.RecommendDietApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/Foods__DB&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/oauth-login-system&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/신종환/Desktop/myProjects/BE&quot;,
@@ -127,11 +120,24 @@
   <component name="RunManager">
     <configuration name="RecommendDietApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <envs>
+        <env name="CLIENT_ID" value="475529016293-b4svgr2qaupk9087ncqa70jucdnjmc67.apps.googleusercontent.com" />
+        <env name="CLIENT_SECRET" value="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" />
         <env name="JWT_EXPIRATION" value="3600000" />
         <env name="JWT_SECRET" value="e8f5b0e287a44a05a2741c4b7e3f59d849bc679d46b5dcd5b92fa87c5c6e5af1" />
+        <env name="REDIRECT_URI" value="http://localhost:8080/login/oauth2/code/google" />
       </envs>
       <module name="recommend-diet.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="opensource_project_team6.recommend_diet.RecommendDietApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -175,7 +181,73 @@
       <workItem from="1748374746192" duration="371000" />
       <workItem from="1748409067136" duration="4681000" />
       <workItem from="1748417105368" duration="7000" />
+      <workItem from="1748532416765" duration="9535000" />
     </task>
+    <task id="LOCAL-00001" summary="FEAT: CustomUserDetail 및 UserPrincipal를 통한 사용자 인증 로직 추가">
+      <option name="closed" value="true" />
+      <created>1748533220006</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1748533220006</updated>
+    </task>
+    <task id="LOCAL-00002" summary="FEAT: CustomUserDetail 및 UserPrincipal를 통한 사용자 인증 로직 추가">
+      <option name="closed" value="true" />
+      <created>1748533485148</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1748533485148</updated>
+    </task>
+    <task id="LOCAL-00003" summary="FEAT: 소셜 로그인 시 추가 입력 정보 dto 생성 및 회원가입 dto 생성">
+      <option name="closed" value="true" />
+      <created>1748534404996</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1748534404996</updated>
+    </task>
+    <task id="LOCAL-00004" summary="FEAT: User 엔티티 생성">
+      <option name="closed" value="true" />
+      <created>1748534420937</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1748534420937</updated>
+    </task>
+    <task id="LOCAL-00005" summary="FEAT: 구글 로그인 성공 시 처리해주는 GoogleOAuth2SuccessHandler 생성">
+      <option name="closed" value="true" />
+      <created>1748538371588</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538371588</updated>
+    </task>
+    <task id="LOCAL-00006" summary="FEAT: User 엔티티 생성">
+      <option name="closed" value="true" />
+      <created>1748538387726</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538387726</updated>
+    </task>
+    <task id="LOCAL-00007" summary="FEAT: 소셜 로그인 관련 의존성 추가 및 구글 OAuth2 기본 설정 추가">
+      <option name="closed" value="true" />
+      <created>1748538440957</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538440957</updated>
+    </task>
+    <task id="LOCAL-00008" summary="FEAT: 구글 소셜 로그인 로직 추가">
+      <option name="closed" value="true" />
+      <created>1748538463842</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538463842</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +266,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="FEAT: CustomUserDetail 및 UserPrincipal를 통한 사용자 인증 로직 추가" />
+    <MESSAGE value="FEAT: 소셜 로그인 시 추가 입력 정보 dto 생성 및 회원가입 dto 생성" />
+    <MESSAGE value="FEAT: 구글 로그인 성공 시 처리해주는 GoogleOAuth2SuccessHandler 생성" />
+    <MESSAGE value="FEAT: User 엔티티 생성" />
+    <MESSAGE value="FEAT: 소셜 로그인 관련 의존성 추가 및 구글 OAuth2 기본 설정 추가" />
+    <MESSAGE value="FEAT: 구글 소셜 로그인 로직 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 구글 소셜 로그인 로직 추가" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
