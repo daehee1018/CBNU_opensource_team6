@@ -8,8 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.opensource_team6.home.HomeFragment;
-import com.example.opensource_team6.profile.profileFragment;
+import com.example.opensource_team6.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.opensource_team6.today.TodayFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,13 +33,12 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 selected = new HomeFragment();
             } else if (id == R.id.nav_diary) {
-                startActivity(new Intent(this, TodayMealActivity.class));
-                return true;
+                selected = new TodayFragment();
             } else if (id == R.id.nav_scan) {
                 Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_profile) {
-                selected = new profileFragment();
+                selected = new ProfileFragment();
             }
 
             if (selected != null) {
