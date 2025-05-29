@@ -20,12 +20,27 @@
           <theme>@style/Theme.Opensource_team6</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_calendar.xml">
+        <config>
+          <theme>@style/Theme.Opensource_team6</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_visibility.xml">
         <config>
           <theme>@style/Theme.Opensource_team6</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_visibility_off.xml">
+        <config>
+          <theme>@style/Theme.Opensource_team6</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/drawable/rounded_black_button.xml">
+        <config>
+          <theme>@style/Theme.Opensource_team6</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/drawable/rounded_blue_button.xml">
         <config>
           <theme>@style/Theme.Opensource_team6</theme>
         </config>
@@ -41,6 +56,16 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_main.xml">
+        <config>
+          <theme>@style/Theme.Opensource_team6</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step1.xml">
+        <config>
+          <theme>@style/Theme.Opensource_team6</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step2.xml">
         <config>
           <theme>@style/Theme.Opensource_team6</theme>
         </config>
@@ -62,22 +87,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05fd54d1-81b2-4dc5-8869-c731243ed9b4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/assets/nutrition_autoencoder.tflite" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/MealRecordDetailActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/RecommendationResultActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_meal_record_detail.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_recommendation_result.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_calendar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/ic_visibility_off.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/drawable/rounded_blue_button.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_signup_step2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/assets/nutrition_data.db" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/assets/nutrition_data.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/assets/scaler.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/FoodDetailActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/FoodDetailActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/TodayMealActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/TodayMealActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/Food.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/Food.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/FoodDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/FoodDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/NutritionDBHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/data/NutritionDBHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_food_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_food_detail.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_today_meal.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/layout/activity_today_meal.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/java/com/example/opensource_team6/Login/ui/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Frontend/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -115,9 +131,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="valueResourceFile" />
-        <option value="layoutResourceFile" />
         <option value="Class" />
         <option value="resourceFile" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -156,7 +172,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Merging front",
+    "git-widget-placeholder": "front",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Code/opensource_team6/Frontend/app/src/main/res/drawable",

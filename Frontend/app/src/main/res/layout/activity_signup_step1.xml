@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 뒤로가기 버튼 -->
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:contentDescription="뒤로가기" />
+
+        <!-- 제목 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="24dp" />
+
+        <!-- 부제목 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계정을 만들어 건강해지세요!"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp" />
+
+        <!-- 이름 -->
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="이름"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp"
+            android:layout_marginTop="24dp" />
+
+        <!-- 이메일 -->
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="이메일"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp"
+            android:layout_marginTop="12dp" />
+
+        <!-- 생년월일 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/edit_birth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="생년월일"
+                android:focusable="false"
+                android:clickable="true"
+                android:background="@drawable/edit_text_background"
+                android:paddingHorizontal="12dp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_calendar"
+                android:contentDescription="달력 아이콘" />
+        </RelativeLayout>
+
+        <!-- 비밀번호 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:background="@drawable/edit_text_background"
+                android:paddingHorizontal="12dp" />
+
+            <ImageView
+                android:id="@+id/toggle_password"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_visibility"
+                android:contentDescription="비밀번호 보기" />
+        </RelativeLayout>
+
+        <!-- 비밀번호 확인 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/edit_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword"
+                android:background="@drawable/edit_text_background"
+                android:paddingHorizontal="12dp" />
+
+            <ImageView
+                android:id="@+id/toggle_password_confirm"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_visibility"
+                android:contentDescription="비밀번호 보기" />
+        </RelativeLayout>
+
+        <!-- 다음 버튼 -->
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="다음"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_blue_button" />
+    </LinearLayout>
+</ScrollView>

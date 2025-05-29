@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             passwordVisible = !passwordVisible;
             if (passwordVisible) {
                 inputPassword.setInputType(EditorInfo.TYPE_CLASS_TEXT);
-                togglePassword.setImageResource(R.drawable.ic_visibility); // 보이면 가리는 아이콘
+                togglePassword.setImageResource(R.drawable.ic_visibility_off); // 보이면 가리는 아이콘
             } else {
                 inputPassword.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
                 togglePassword.setImageResource(R.drawable.ic_visibility); // 안 보이면 보는 아이콘
