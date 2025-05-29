@@ -41,8 +41,10 @@ public class MealRecordDetailActivity extends AppCompatActivity {
 
     // min-max 값 (Python 훈련 코드에서 추출하여 하드코딩 또는 npy 로딩)
     private final float[] min = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
-    private final float[] max = {595.f, 104.f, 41.55f, 60.25f,  70.f, 7402.f, 686.62f, 25.6f};
-    private final float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2000f, 300f, 20f};
+    private final float[] max = {595f, 104f, 41.55f, 60.25f, 70f, 7.402f, 0.68662f, 25.6f};
+    private final float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2f, 0.3f, 20f};
+
+// sodium, cholesterol → mg → g로 바뀐 상태
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,13 +151,15 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             int remainingMeals = 3 - completedMeals.size();
             if (remainingMeals <= 0) remainingMeals = 1;
 
-            // 결핍 벡터 계산 → 정규화
+            // 결핍 벡터 계산 → 정규화 (0~1로 클리핑)
             float[] inputVector = new float[8];
             for (int i = 0; i < 8; i++) {
                 float deficit = Math.max(recommended[i] - (float) total[i], 0f);
                 float avgDeficit = deficit / remainingMeals;
-                inputVector[i] = (avgDeficit - min[i]) / (max[i] - min[i]);
+                float raw = (avgDeficit - min[i]) / (max[i] - min[i]);
+                inputVector[i] = Math.min(1f, Math.max(0f, raw));  // ✅ 클리핑
             }
+
 
             float[] output = runTFLiteModel(inputVector);
             if (output == null) {
@@ -179,6 +183,22 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             intent.putExtra("deficitVector", Arrays.toString(inputVector));
             intent.putExtra("suggestedMeal", NIGHT_MEAL);
             startActivity(intent);
+
+            float[] output_ = runTFLiteModel(inputVector);
+            if (output_ == null) {
+                Toast.makeText(this, "모델 실행 실패", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+// ✅ 역정규화된 벡터 출력 (g 단위)
+            float[] denormalizedOutput = new float[8];
+            for (int i = 0; i < 8; i++) {
+                denormalizedOutput[i] = output[i] * (max[i] - min[i]) + min[i];
+            }
+            Log.d("DEBUG", "입력 벡터 (정규화): " + Arrays.toString(inputVector));
+            Log.d("DEBUG", "모델 출력 벡터 (정규화): " + Arrays.toString(output));
+            Log.d("DEBUG", "역정규화된 출력 벡터 (g 단위): " + Arrays.toString(denormalizedOutput));
+
         });
     }
 
@@ -191,8 +211,8 @@ public class MealRecordDetailActivity extends AppCompatActivity {
                 total[2] += f.getProtein();
                 total[3] += f.getFat();
                 total[4] += f.getSugar();
-                total[5] += f.getSodium();
-                total[6] += f.getCholesterol();
+                total[5] += f.getSodium()/1000.0;
+                total[6] += f.getCholesterol()/1000.0;
                 total[7] += f.getSaturated_fat();
             }
         }
@@ -212,6 +232,7 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             return null;
         }
     }
+
 
     private MappedByteBuffer loadModelFile(String filename) throws IOException {
         AssetFileDescriptor fd = getAssets().openFd(filename);

@@ -1,7 +1,6 @@
 package com.example.opensource_team6;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,13 +38,19 @@ public class RecommendationResultActivity extends AppCompatActivity {
         subcategorySpinner = findViewById(R.id.subcategorySpinner);
         dbHelper = new NutritionDBHelper(this);
 
+        // 인텐트에서 값 받기
         vector = getIntent().getStringExtra("recommendationVector");
         mealType = getIntent().getStringExtra("currentMeal");
         totalVector = getIntent().getStringExtra("totalVector");
         deficitVector = getIntent().getStringExtra("deficitVector");
 
-        if (vector == null || vector.isEmpty()) {
-            Toast.makeText(this, "추천 벡터가 없습니다", Toast.LENGTH_SHORT).show();
+        if (vector == null || totalVector == null || deficitVector == null ||
+                vector.isEmpty() || totalVector.isEmpty() || deficitVector.isEmpty()) {
+            Toast.makeText(this, "추천 결과 데이터가 부족합니다", Toast.LENGTH_LONG).show();
+            resultText.setText("추천 결과 데이터를 불러올 수 없습니다.\n\n" +
+                    "recommendationVector: " + vector + "\n" +
+                    "totalVector: " + totalVector + "\n" +
+                    "deficitVector: " + deficitVector);
             return;
         }
 
@@ -70,14 +75,14 @@ public class RecommendationResultActivity extends AppCompatActivity {
                 subcategoryAdapter.clear();
                 subcategoryAdapter.addAll(subcategories);
                 subcategoryAdapter.notifyDataSetChanged();
-                updateFilteredRecommendations(); // 필터링 추가 출력
+                updateFilteredRecommendations();
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                updateFilteredRecommendations(); // 필터링 추가 출력
+                updateFilteredRecommendations();
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -123,16 +128,16 @@ public class RecommendationResultActivity extends AppCompatActivity {
             }
         }
 
-        // ❗ 기존 텍스트에서 가져오지 말고 새로 시작
+
         StringBuilder sb = new StringBuilder();
+        sb.append("[").append(mealType).append(" 외 추천 식사]\n\n");
+        sb.append("🔹 총합 벡터:\n").append(totalVector).append("\n\n");
+        sb.append("🔸 결핍 벡터:\n").append(deficitVector).append("\n\n");
+        sb.append("✅ 출력 벡터:\n").append(vector).append("\n\n");
 
-        // 기본 추천 출력 (상위 10개)
         sb.append("👉 기본 추천 음식 (상위 10개):\n");
-        for (String food : top10Foods) {
-            sb.append("- ").append(food).append("\n");
-        }
+        for (String food : top10Foods) sb.append("- ").append(food).append("\n");
 
-        // 필터링된 음식 결과 출력
         sb.append("\n🔍 필터링된 추천 음식:\n");
         if (filtered.isEmpty()) {
             sb.append("해당 범위에 음식이 없습니다.\n");
@@ -145,10 +150,9 @@ public class RecommendationResultActivity extends AppCompatActivity {
         resultText.setText(sb.toString());
     }
 
-
     private List<FoodDistance> getRecommendations(String vectorString) {
         float[] min = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
-        float[] max = new float[]{595f, 104f, 41.55f, 60.25f, 70f, 7402f, 686.62f, 25.6f};
+        float[] max = new float[]{595f, 104f, 41.55f, 60.25f, 70f, 7.402f, 0.68662f, 25.6f};
 
         String[] parts = vectorString.replace("[", "").replace("]", "").split(",");
         float[] target = new float[parts.length];
@@ -164,16 +168,21 @@ public class RecommendationResultActivity extends AppCompatActivity {
             seen.add(food.getName());
 
             float[] vec = new float[]{
-                    (float) food.getEnergy(), (float) food.getCarbohydrate(), (float) food.getProtein(),
-                    (float) food.getFat(), (float) food.getSugar(), (float) food.getSodium(),
-                    (float) food.getCholesterol(), (float) food.getSaturated_fat()
+                    (float) food.getEnergy(),
+                    (float) food.getCarbohydrate(),
+                    (float) food.getProtein(),
+                    (float) food.getFat(),
+                    (float) food.getSugar(),
+                    (float) food.getSodium() / 1000f,
+                    (float) food.getCholesterol() / 1000f,
+                    (float) food.getSaturated_fat()
             };
             float[] norm = new float[vec.length];
             for (int i = 0; i < vec.length; i++) {
                 norm[i] = (max[i] - min[i] == 0) ? 0 : (vec[i] - min[i]) / (max[i] - min[i]);
             }
 
-            float dist = euclideanDistance(target, norm);
+            float dist = weightedEuclideanDistance(target, norm);
             list.add(new FoodDistance(food.getName(), (int) food.getWeight(), dist, food));
         }
 
@@ -181,11 +190,12 @@ public class RecommendationResultActivity extends AppCompatActivity {
         return list;
     }
 
-    private float euclideanDistance(float[] a, float[] b) {
+    private float weightedEuclideanDistance(float[] a, float[] b) {
+        float[] weights = new float[]{1.0f, 1.2f, 1.5f, 1.5f, 1.0f, 1.3f, 1.2f, 1.0f};
         float sum = 0;
         for (int i = 0; i < a.length; i++) {
-            float d = a[i] - b[i];
-            sum += d * d;
+            float diff = a[i] - b[i];
+            sum += weights[i] * diff * diff;
         }
         return (float) Math.sqrt(sum);
     }
