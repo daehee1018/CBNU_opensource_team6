@@ -17,6 +17,7 @@ import android.content.Intent;
 
 import com.example.opensource_team6.data.Food;
 import com.example.opensource_team6.data.FoodDao;
+import com.example.opensource_team6.profile.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         searchEditText.setThreshold(1);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
@@ -149,7 +151,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;
             } else if (id == R.id.nav_profile) {
-                Toast.makeText(this, "프로필 클릭됨", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new profileFragment()) // 여기에 사용할 container ID
+                        .commit();
                 return true;
             }
 

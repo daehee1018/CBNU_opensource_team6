@@ -35,7 +35,7 @@ public class LoadingActivity extends Activity {
                 });
 
                 try {
-                    Thread.sleep(30);  // 로딩 속도
+                    Thread.sleep(15);  // 로딩 속도
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

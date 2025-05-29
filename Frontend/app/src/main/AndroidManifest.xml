@@ -53,8 +53,7 @@
 
         <activity android:name=".register.SignupStep2Activity" />
 
-
-
+        <activity android:name=".profile.profileFragment" />
 
     </application>
 
