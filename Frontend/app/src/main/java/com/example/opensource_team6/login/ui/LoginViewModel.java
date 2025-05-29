@@ -1,4 +1,4 @@
-package com.example.opensource_team6.Login.ui;
+package com.example.opensource_team6.login.ui;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.example.opensource_team6.Login.LoginRepository;
-import com.example.opensource_team6.Login.Result;
-import com.example.opensource_team6.Login.model.LoggedInUser;
+import com.example.opensource_team6.login.LoginRepository;
+import com.example.opensource_team6.login.Result;
+import com.example.opensource_team6.login.model.LoggedInUser;
 import com.example.opensource_team6.R;
 
 public class LoginViewModel extends ViewModel {

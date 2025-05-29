@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 뒤로가기 -->
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:contentDescription="뒤로가기" />
+
+        <!-- 제목 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 정보 입력"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="24dp" />
+
+        <!-- 부제목 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="식단 생성에 도움이 될 거예요!"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="4dp" />
+
+        <!-- 키 -->
+        <EditText
+            android:id="@+id/input_height"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:hint="키"
+            android:inputType="number"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp" />
+
+        <!-- 체중 -->
+        <EditText
+            android:id="@+id/input_weight"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:hint="체중"
+            android:inputType="number"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp" />
+
+        <!-- 성별 -->
+        <Spinner
+            android:id="@+id/spinner_gender"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="12dp" />
+
+        <!-- 목표 체중 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/input_target_weight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="목표 체중"
+                android:inputType="number"
+                android:background="@drawable/edit_text_background"
+                android:paddingHorizontal="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kg"
+                android:textColor="#999999"
+                android:textSize="14sp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp" />
+        </RelativeLayout>
+
+        <!-- 관심사 -->
+        <Spinner
+            android:id="@+id/spinner_interest"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="12dp" />
+
+        <!-- 건강고민 -->
+        <Spinner
+            android:id="@+id/spinner_health_concern"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/edit_text_background"
+            android:paddingStart="12dp" />
+
+        <!-- 건강 생성 버튼 -->
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="건강 생성하기"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_blue_button" />
+
+    </LinearLayout>
+</ScrollView>

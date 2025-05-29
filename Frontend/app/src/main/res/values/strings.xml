@@ -17,4 +17,27 @@
         <item>석식</item>
         <item>야식</item>
     </string-array>
+    <string-array name="gender_options">
+        <item>남성</item>
+        <item>여성</item>
+        <item>기타</item>
+        <item>선택 안 함</item>
+    </string-array>
+    <!-- 관심사 -->
+    <string-array name="interest_options">
+        <item>근육 증가</item>
+        <item>다이어트</item>
+        <item>식단 균형</item>
+        <item>채식 식단</item>
+        <item>기타</item>
+    </string-array>
+
+    <!-- 건강 고민 -->
+    <string-array name="health_concern_options">
+        <item>당뇨</item>
+        <item>고혈압</item>
+        <item>고지혈증</item>
+        <item>소화 문제</item>
+        <item>없음</item>
+    </string-array>
 </resources>

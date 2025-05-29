@@ -1,0 +1,14 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="#99BDEEFF" /> <!-- 비활성 색 -->
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#007BFF" /> <!-- 기본 파란색 -->
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+</selector>

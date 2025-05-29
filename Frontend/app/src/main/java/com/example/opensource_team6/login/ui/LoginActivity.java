@@ -1,12 +1,9 @@
-package com.example.opensource_team6.Login.ui;
+package com.example.opensource_team6.login.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.annotation.StringRes;
@@ -14,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.opensource_team6.MainActivity;
 import com.example.opensource_team6.R;
+import com.example.opensource_team6.register.*;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             passwordVisible = !passwordVisible;
             if (passwordVisible) {
                 inputPassword.setInputType(EditorInfo.TYPE_CLASS_TEXT);
-                togglePassword.setImageResource(R.drawable.ic_visibility); // 보이면 가리는 아이콘
+                togglePassword.setImageResource(R.drawable.ic_visibility_off); // 보이면 가리는 아이콘
             } else {
                 inputPassword.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
                 togglePassword.setImageResource(R.drawable.ic_visibility); // 안 보이면 보는 아이콘
@@ -72,9 +70,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // 회원가입 버튼
         register.setOnClickListener(v -> {
-            Toast.makeText(this, "회원가입 화면으로 이동 예정", Toast.LENGTH_SHORT).show();
-            // startActivity(new Intent(this, RegisterActivity.class));
+            Intent intent = new Intent(this, SignupStep1Activity.class);
+            startActivity(intent);
         });
+
 
         // 비밀번호 찾기
         findPassword.setOnClickListener(v -> {

@@ -1,11 +1,11 @@
-package com.example.opensource_team6.Login.ui;
+package com.example.opensource_team6.login.ui;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import com.example.opensource_team6.Login.LoginDataSource;
-import com.example.opensource_team6.Login.LoginRepository;
+import com.example.opensource_team6.login.LoginDataSource;
+import com.example.opensource_team6.login.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
