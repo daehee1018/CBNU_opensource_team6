@@ -52,4 +52,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation("com.android.volley:volley:1.2.1")
+
 }

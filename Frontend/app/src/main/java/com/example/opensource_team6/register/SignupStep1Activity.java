@@ -1,3 +1,4 @@
+// SignupStep1Activity.java
 package com.example.opensource_team6.register;
 
 import android.app.DatePickerDialog;
@@ -102,4 +103,4 @@ public class SignupStep1Activity extends AppCompatActivity {
         }
         editText.setSelection(editText.getText().length()); // 커서 유지
     }
-}
+} 

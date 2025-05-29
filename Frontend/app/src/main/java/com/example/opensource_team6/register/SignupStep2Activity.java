@@ -1,3 +1,4 @@
+// SignupStep2Activity.java
 package com.example.opensource_team6.register;
 
 import android.content.Intent;
@@ -6,8 +7,15 @@ import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.login.ui.LoginActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SignupStep2Activity extends AppCompatActivity {
 
@@ -36,6 +44,11 @@ public class SignupStep2Activity extends AppCompatActivity {
 
         // 생성 버튼 클릭 시
         createButton.setOnClickListener(v -> {
+            String name = getIntent().getStringExtra("name");
+            String email = getIntent().getStringExtra("email");
+            String birth = getIntent().getStringExtra("birth");
+            String password = getIntent().getStringExtra("password");
+
             String height = heightInput.getText().toString().trim();
             String weight = weightInput.getText().toString().trim();
             String target = targetWeightInput.getText().toString().trim();
@@ -48,14 +61,44 @@ public class SignupStep2Activity extends AppCompatActivity {
                 return;
             }
 
-            // 회원가입 완료 처리 (ex: 서버 전송)
-            Toast.makeText(this, "회원가입이 완료되었습니다!", Toast.LENGTH_LONG).show();
+            // JSON 데이터 구성
+            JSONObject requestData = new JSONObject();
+            try {
+                requestData.put("name", name);
+                requestData.put("email", email);
+                requestData.put("birth", birth);
+                requestData.put("password", password);
+                requestData.put("height", height);
+                requestData.put("weight", weight);
+                requestData.put("target_weight", target);
+                requestData.put("gender", gender);
+                requestData.put("interest", interest);
+                requestData.put("concern", concern);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
 
-            // 로그인 화면으로 이동
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            String url = "https://your-api-url.com/signup"; // 실제 엔드포인트로 변경 필요
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    requestData,
+                    response -> {
+                        Toast.makeText(this, "회원가입이 완료되었습니다!", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    },
+                    error -> {
+                        Toast.makeText(this, "에러 발생: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+            );
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(request);
         });
     }
 
