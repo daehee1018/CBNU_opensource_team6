@@ -18,10 +18,12 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
+workspace.xml
+fileHashes.lock
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
