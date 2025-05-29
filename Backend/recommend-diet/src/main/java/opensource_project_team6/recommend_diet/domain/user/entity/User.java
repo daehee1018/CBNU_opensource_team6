@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import opensource_project_team6.recommend_diet.domain.userInfo.entity.UserInfo;
 
 import java.time.LocalDate;
 
@@ -18,8 +17,7 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    /*@OneToOne(mappedBy ="user")
-    private UserInfo userInfo;*/
+
 
     @Column(nullable = false)
     private String name;
