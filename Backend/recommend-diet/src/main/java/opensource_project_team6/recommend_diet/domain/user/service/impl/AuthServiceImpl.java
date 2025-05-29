@@ -1,6 +1,8 @@
 package opensource_project_team6.recommend_diet.domain.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import opensource_project_team6.recommend_diet.domain.user.dto.AdditionalInfoRequest;
 import opensource_project_team6.recommend_diet.domain.user.dto.LoginRequest;
 import opensource_project_team6.recommend_diet.domain.user.dto.LoginResponse;
 import opensource_project_team6.recommend_diet.domain.user.dto.SignupRequest;
@@ -18,12 +20,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    //private final AuthenticationManager authenticationManager;
 
 
     @Override
@@ -42,8 +44,17 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .birthDate(request.birthDate())
+                .height(request.height())
+                .weight(request.weight())
+                .targetWeight(request.targetWeight())
+                .gender(request.gender())
+                .interest(request.interest())
+                .healthConcern(request.healthConcern())
+                .googleId(null)
+                .profileImage(null)
                 .build();
 
+        user.setIsProfileComplete(true);
         userRepository.save(user);
     }
 
@@ -64,8 +75,29 @@ public class AuthServiceImpl implements AuthService {
         }
 
         //인증 성공 시 JWT토큰 생성
-        String token = jwtProvider.generateToken(request.email());
+        String token = jwtProvider.generateToken(request.email(),user.isProfileComplete());
         return new LoginResponse(token);
+    }
+
+    @Override
+    public void updateAdditionalInfo(Long userId, AdditionalInfoRequest dto) {
+        log.info("[Service] updateAdditionalInfo 호출됨. userId: {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+
+        user.updateProfile(
+                dto.name(),
+                dto.birthDate(),
+                dto.height(),
+                dto.weight(),
+                dto.targetWeight(),
+                dto.gender(),
+                dto.interest(),
+                dto.healthConcern()
+        );
+
+        userRepository.save(user);
+        log.info("[Service] 사용자 정보 업데이트 완료. userId: {}", userId);
     }
 
     /*@Override
@@ -73,6 +105,5 @@ public class AuthServiceImpl implements AuthService {
         //토큰을 블랙리스트에 등록해 무효화
         blacklistService.blacklist(token);
     }*/
-
 
 }

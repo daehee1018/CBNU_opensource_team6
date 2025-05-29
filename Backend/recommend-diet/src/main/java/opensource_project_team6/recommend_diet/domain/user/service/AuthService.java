@@ -1,5 +1,6 @@
 package opensource_project_team6.recommend_diet.domain.user.service;
 
+import opensource_project_team6.recommend_diet.domain.user.dto.AdditionalInfoRequest;
 import opensource_project_team6.recommend_diet.domain.user.dto.LoginRequest;
 import opensource_project_team6.recommend_diet.domain.user.dto.LoginResponse;
 import opensource_project_team6.recommend_diet.domain.user.dto.SignupRequest;
@@ -28,6 +29,6 @@ public interface AuthService {
     * */
     /*void logout(String token);*/
 
-
+    void updateAdditionalInfo(Long userId, AdditionalInfoRequest dto);
 
 }
