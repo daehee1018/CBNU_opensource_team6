@@ -27,8 +27,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email; // 이메일(로그인 ID)
 
-    @Column(nullable = false)
-    private String password;
+
+    private String password; // 일반 회원가입 시 이용 구글 이용 시 null
 
     @Column(nullable = false)
     private LocalDate birthDate; // 생년월일
@@ -75,7 +75,7 @@ public class User {
     }
 
     @Builder
-    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, Gender gender, Interest interest, HealthConcern healthConcern) {
+    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, Gender gender, Interest interest, HealthConcern healthConcern, String googleId, String profileImage) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -86,5 +86,7 @@ public class User {
         this.gender = gender;
         this.interest = interest;
         this.healthConcern = healthConcern;
+        this.googleId = googleId;
+        this.profileImage = profileImage;
     }
 }
