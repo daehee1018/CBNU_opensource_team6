@@ -4,6 +4,23 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: jh327900@
+  security:
+    oauth2:
+      client:
+        registraction:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope: openid, email, profile
+            #redirect-uri: ${REDIRECT_URL}
+            redirect-uri: ${REDIRECT_URI}
+            authorization-grant-type: authorization_code
+          provider:
+            google:
+              authorization-uri: https://accounts.google.com/o/oauth2/auth
+              token-uri: https://oauth2.googleapis.com/token
+              user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+              user-name-attribute: sub
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
