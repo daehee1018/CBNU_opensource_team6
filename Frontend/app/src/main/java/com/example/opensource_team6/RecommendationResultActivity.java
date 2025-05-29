@@ -123,16 +123,28 @@ public class RecommendationResultActivity extends AppCompatActivity {
             }
         }
 
-        StringBuilder sb = new StringBuilder(resultText.getText()); // 기존 출력 유지
-        sb.append("\n\n🔍 필터링된 추천 음식:\n");
+        // ❗ 기존 텍스트에서 가져오지 말고 새로 시작
+        StringBuilder sb = new StringBuilder();
+
+        // 기본 추천 출력 (상위 10개)
+        sb.append("👉 기본 추천 음식 (상위 10개):\n");
+        for (String food : top10Foods) {
+            sb.append("- ").append(food).append("\n");
+        }
+
+        // 필터링된 음식 결과 출력
+        sb.append("\n🔍 필터링된 추천 음식:\n");
         if (filtered.isEmpty()) {
             sb.append("해당 범위에 음식이 없습니다.\n");
         } else {
-            for (String line : filtered) sb.append("- ").append(line).append("\n");
+            for (String line : filtered) {
+                sb.append("- ").append(line).append("\n");
+            }
         }
 
-        resultText.setText(sb.toString()); // 덧붙여 출력
+        resultText.setText(sb.toString());
     }
+
 
     private List<FoodDistance> getRecommendations(String vectorString) {
         float[] min = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
