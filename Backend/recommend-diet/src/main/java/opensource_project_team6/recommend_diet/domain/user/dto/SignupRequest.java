@@ -1,5 +1,9 @@
 package opensource_project_team6.recommend_diet.domain.user.dto;
 
+import opensource_project_team6.recommend_diet.domain.user.entity.Gender;
+import opensource_project_team6.recommend_diet.domain.user.entity.HealthConcern;
+import opensource_project_team6.recommend_diet.domain.user.entity.Interest;
+
 import java.time.LocalDate;
 
 public record SignupRequest(
@@ -10,6 +14,9 @@ public record SignupRequest(
         LocalDate birthDate,      // 생년월일
         Double height,
         Double weight,
-        Double targetWeight
+        Double targetWeight,
+        Gender gender,              // 성별
+        Interest interest,          // 관심사
+        HealthConcern healthConcern // 건강 고민
 
 ) {}
