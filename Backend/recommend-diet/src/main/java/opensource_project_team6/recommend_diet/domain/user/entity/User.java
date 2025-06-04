@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import opensource_project_team6.recommend_diet.domain.userInfo.entity.UserInfo;
 
 import java.time.LocalDate;
 

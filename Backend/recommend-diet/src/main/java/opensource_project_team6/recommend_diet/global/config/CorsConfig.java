@@ -21,7 +21,7 @@ public class CorsConfig {
                                 "http://localhost:3000", // 프론트 개발 서버 주소
                                 "http://10.0.2.2:8080" // Android Emulator에서 localhost를 가리키는 주소
                         )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH") // 허용할 HTTP 메서드
                         .allowedHeaders("*") // 요청에 포함될 수 있는 모든 헤더 허용
                         .allowCredentials(true); // 인증정보(쿠키, 헤더 등) 허용
             }
