@@ -25,4 +25,4 @@
 - `GET /api/food/{id}` 음식 상세 조회
 - `GET /api/food/today` 오늘의 추천 식단
 - `/oauth2/authorization/google` 구글 로그인 시작
-   - 로그인 성공 시 `opensource-team6://oauth` 스킴으로 토큰을 전달합니다.
+- 로그인 성공 시 `opensource-team6://oauth` 스킴으로 토큰을 전달합니다.
