@@ -1,6 +1,7 @@
 package com.example.opensource_team6.login.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.opensource_team6.MainActivity;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.register.*;
+import com.example.opensource_team6.network.ApiConfig;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -82,7 +84,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // 구글 로그인 버튼 클릭
         googleLogin.setOnClickListener(v -> {
-            Toast.makeText(this, "구글 로그인은 추후 연동됩니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiConfig.GOOGLE_LOGIN_URL));
+            startActivity(intent);
         });
 
         // 텍스트 변경 감지 (예시)

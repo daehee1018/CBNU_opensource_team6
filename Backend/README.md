@@ -24,3 +24,4 @@
 - `GET /api/food/search?keyword=` 음식 검색
 - `GET /api/food/{id}` 음식 상세 조회
 - `GET /api/food/today` 오늘의 추천 식단
+- `/oauth2/authorization/google` 구글 로그인 시작
