@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.login.ui.LoginActivity;
+import com.example.opensource_team6.network.ApiConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,7 +80,7 @@ public class SignupStep2Activity extends AppCompatActivity {
                 return;
             }
 
-            String url = "https://your-api-url.com/signup"; // 실제 엔드포인트로 변경 필요
+            String url = ApiConfig.BASE_URL + "/api/auth/signup"; // 백엔드 엔드포인트
 
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST,

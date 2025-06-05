@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.opensource_team6.R;
+import com.example.opensource_team6.network.ApiConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,7 +54,7 @@ public class TodayFragment extends Fragment {
 
 
     private void fetchData() {
-        String url = "https://today-meals"; // <-- 실제 엔드포인트로 대체
+        String url = ApiConfig.BASE_URL + "/api/food/today"; // 오늘 식단 조회
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
 

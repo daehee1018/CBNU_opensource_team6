@@ -70,10 +70,10 @@ public class GoogleOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
           response.sendRedirect("http://localhost:3000/oauth2/success");
         * */
 
-        // json으로 응답 프론트에서 토큰을 꺼내어서 localStorage에 저장
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"token\": \"" + token + "\"}");
-        response.getWriter().flush();
+        // 안드로이드 앱에서 처리할 수 있도록 커스텀 스킴으로 리다이렉트
+        String redirectUrl = "opensource-team6://oauth?token=" + token +
+                "&complete=" + isProfileComplete;
+        response.sendRedirect(redirectUrl);
 
         log.info("✅ [구글 로그인] JWT 발급 완료 - 토큰 값: {}", token);
     }
