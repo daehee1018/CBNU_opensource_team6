@@ -10,10 +10,9 @@
 ### 실행 방법
 
 1. Android Studio에서 `Frontend` 폴더를 열어 프로젝트를 로드합니다.
-2. 코드 내에 있는 백엔드 API 주소를 실제 서버 주소로 수정합니다. 수정이 필요한 주요 파일은 다음과 같습니다.
+2. 백엔드 주소는 `ApiConfig` 클래스의 `BASE_URL` 값을 수정해 설정합니다.
 
-   - `app/src/main/java/com/example/opensource_team6/register/SignupStep2Activity.java`
-   - `app/src/main/java/com/example/opensource_team6/today/TodayFragment.java`
+   - `app/src/main/java/com/example/opensource_team6/network/ApiConfig.java`
 
-   로컬 백엔드에 접속할 경우 `http://10.0.2.2:8080`과 같이 작성하면 됩니다.
+   기본 값은 `http://10.0.2.2:8080`이며, 실제 배포 서버 주소로 변경할 수 있습니다.
 3. 에뮬레이터 또는 연결된 기기에서 **Run**을 눌러 앱을 빌드하고 실행합니다.

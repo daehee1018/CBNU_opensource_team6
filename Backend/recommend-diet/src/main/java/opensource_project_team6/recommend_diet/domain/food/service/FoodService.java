@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.food.dto.FoodDTO;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +35,22 @@ public class FoodService {
     public FoodDTO getFoodById(Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(this::convertToDTO).orElse(null);
+    }
+
+    /**
+     * 오늘의 추천 식단 (임시 데이터)
+     */
+    public Map<String, List<FoodDTO>> getTodayFoods() {
+        List<Food> foods = foodRepository.findAll(PageRequest.of(0, 9)).getContent();
+        List<FoodDTO> dtos = foods.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        Map<String, List<FoodDTO>> result = new HashMap<>();
+        result.put("breakfast", dtos.subList(0, Math.min(3, dtos.size())));
+        result.put("lunch", dtos.subList(Math.min(3, dtos.size()), Math.min(6, dtos.size())));
+        result.put("dinner", dtos.subList(Math.min(6, dtos.size()), dtos.size()));
+        return result;
     }
 
     private FoodDTO convertToDTO(Food food) {

@@ -75,4 +75,13 @@ public class FoodController {
             return ResponseEntity.internalServerError().body(error);
         }
     }
+
+    /**
+     * 오늘의 추천 식단 조회
+     */
+    @GetMapping("/today")
+    public ResponseEntity<?> getTodayFoods() {
+        Map<String, List<FoodDTO>> meals = foodService.getTodayFoods();
+        return ResponseEntity.ok(meals);
+    }
 }

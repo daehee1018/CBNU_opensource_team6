@@ -23,12 +23,11 @@
 ### 2. 프론트엔드(Android) 실행 방법
 
 1. Android Studio에서 `Frontend` 디렉터리를 엽니다.
-2. 초기 상태의 코드에는 백엔드 주소가 비어 있으므로 다음 파일들의 URL을 실제 백엔드 주소로 변경합니다.
+2. 백엔드 서버 주소는 `ApiConfig` 클래스에서 설정합니다.
 
-   - `app/src/main/java/com/example/opensource_team6/register/SignupStep2Activity.java`
-   - `app/src/main/java/com/example/opensource_team6/today/TodayFragment.java`
+   - `app/src/main/java/com/example/opensource_team6/network/ApiConfig.java`
 
-   예시 주소: `http://10.0.2.2:8080` (에뮬레이터에서 로컬 백엔드에 접속할 때 사용)
+   기본 값은 `http://10.0.2.2:8080`으로, 필요에 따라 실제 서버 주소로 변경합니다.
 3. 에뮬레이터나 실제 기기에서 앱을 실행합니다.
 
 ### 3. 백엔드와 프론트엔드 연동

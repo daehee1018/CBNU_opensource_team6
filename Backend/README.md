@@ -16,3 +16,11 @@
    ```
 
 2. 서버가 8080 포트에서 실행되며, 필요 시 `application.yml`에서 포트를 변경할 수 있습니다.
+
+### 주요 API
+
+- `POST /api/auth/signup` 회원가입
+- `POST /api/auth/login` 로그인
+- `GET /api/food/search?keyword=` 음식 검색
+- `GET /api/food/{id}` 음식 상세 조회
+- `GET /api/food/today` 오늘의 추천 식단
