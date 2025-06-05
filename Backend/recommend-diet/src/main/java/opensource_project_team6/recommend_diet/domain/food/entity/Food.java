@@ -21,7 +21,7 @@ public class Food {
     private String standardAmount;
     private String imageUrl;
 
-    private Integer energy;
+    private Integer energy; //칼로리
     private Double protein;
     private Double fat;
     private Double carbohydrate;
