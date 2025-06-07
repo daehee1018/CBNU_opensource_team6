@@ -33,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 selected = new HomeFragment();
             } else if (id == R.id.nav_diary) {
-                selected = new TodayFragment();
+                //selected = new TodayFragment();
+                Intent intent = new Intent(this, MealRecordDetailActivity.class);
+                startActivity(intent);
+                return true;
             } else if (id == R.id.nav_scan) {
                 Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();
                 return true;

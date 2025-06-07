@@ -241,3 +241,4 @@ public class MealRecordDetailActivity extends AppCompatActivity {
         return channel.map(FileChannel.MapMode.READ_ONLY, fd.getStartOffset(), fd.getDeclaredLength());
     }
 }
+
