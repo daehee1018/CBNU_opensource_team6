@@ -47,7 +47,7 @@ public class User {
     private Interest interest;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "healte_concern")
+    @Column(name = "health_concern")
     private HealthConcern healthConcern;
 
     private String googleId; // 구글 식별자 코드
