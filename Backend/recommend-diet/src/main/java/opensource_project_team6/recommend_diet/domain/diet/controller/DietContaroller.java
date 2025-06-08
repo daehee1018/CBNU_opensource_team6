@@ -59,4 +59,20 @@ public class DietContaroller {
         response.put("data", result);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<?> getTotalNutrientsByDate(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                     @RequestParam("date") String dateStr) {
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        LocalDate date = LocalDate.parse(dateStr);
+        Map<String, Object> result = dietService.getTotalNutrientsByDate(user, date);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 200);
+        response.put("message", "총 섭취 영양소 조회 성공");
+        response.put("data", result);
+        return ResponseEntity.ok(response);
+    }
 }
