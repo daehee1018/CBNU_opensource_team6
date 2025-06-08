@@ -2,6 +2,7 @@ package opensource_project_team6.recommend_diet.domain.food.service;
 
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.food.dto.FoodDTO;
+import opensource_project_team6.recommend_diet.domain.food.dto.FoodSimpleDTO;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +24,14 @@ public class FoodService {
     /**
      * 음식 키워드 검색
      */
-    public List<FoodDTO> searchFoods(String keyword) {
+    public List<FoodSimpleDTO> searchFoods(String keyword) {
         return foodRepository.findByNameContaining(keyword).stream()
-                .map(this::convertToDTO)
+                .map(food -> FoodSimpleDTO.builder()
+                        .id(food.getId())
+                        .name(food.getName())
+                        .imageUrl(food.getImageUrl())
+                        .energy(food.getEnergy())
+                        .build())
                 .collect(Collectors.toList());
     }
 

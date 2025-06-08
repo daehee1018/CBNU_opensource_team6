@@ -2,6 +2,7 @@ package opensource_project_team6.recommend_diet.domain.food.controller;
 
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.food.dto.FoodDTO;
+import opensource_project_team6.recommend_diet.domain.food.dto.FoodSimpleDTO;
 import opensource_project_team6.recommend_diet.domain.food.service.FoodService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,27 +26,19 @@ public class FoodController {
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchFoods(@RequestParam String keyword) {
-        try {
-            List<FoodDTO> result = foodService.searchFoods(keyword);
-            Map<String, Object> response = new HashMap<>();
+        List<FoodSimpleDTO> result = foodService.searchFoods(keyword);
+        Map<String, Object> response = new HashMap<>();
 
-            if (result.isEmpty()) {
-                response.put("status", 404);
-                response.put("message", "검색 결과가 없습니다.");
-                return ResponseEntity.status(404).body(response);
-            }
-
-            response.put("status", 200);
-            response.put("message", "음식 검색 성공");
-            response.put("data", result);
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("status", 500);
-            error.put("message", "음식 검색 중 오류가 발생했습니다.");
-            return ResponseEntity.internalServerError().body(error);
+        if (result.isEmpty()) {
+            response.put("status", 404);
+            response.put("message", "검색 결과가 없습니다.");
+            return ResponseEntity.status(404).body(response);
         }
+
+        response.put("status", 200);
+        response.put("message", "음식 검색 성공");
+        response.put("data", result);
+        return ResponseEntity.ok(response);
     }
 
     /**
