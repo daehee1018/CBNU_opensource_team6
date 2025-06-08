@@ -58,4 +58,37 @@ public class FoodDao {
         cursor.close();
         return results;
     }
+    @SuppressLint("Range")
+    public Food getFoodByName(String name) {
+        Food result = null;
+
+        String sql = "SELECT * FROM nutrition WHERE name = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{name});
+
+        if (cursor.moveToFirst()) {
+            Food food = new Food();
+            food.setName(cursor.getString(cursor.getColumnIndex("name")));
+            food.setCategory(cursor.getString(cursor.getColumnIndex("category")));
+            food.setRep_name(cursor.getString(cursor.getColumnIndex("rep_name")));
+            food.setSubcategory(cursor.getString(cursor.getColumnIndex("subcategory")));
+            food.setStandard_amount(cursor.getDouble(cursor.getColumnIndex("standard_amount")));
+            food.setEnergy(cursor.getDouble(cursor.getColumnIndex("energy")));
+            food.setProtein(cursor.getDouble(cursor.getColumnIndex("protein")));
+            food.setFat(cursor.getDouble(cursor.getColumnIndex("fat")));
+            food.setCarbohydrate(cursor.getDouble(cursor.getColumnIndex("carbohydrate")));
+            food.setSugar(cursor.getDouble(cursor.getColumnIndex("sugar")));
+            food.setSodium(cursor.getDouble(cursor.getColumnIndex("sodium")));
+            food.setCholesterol(cursor.getDouble(cursor.getColumnIndex("cholesterol")));
+            food.setSaturated_fat(cursor.getDouble(cursor.getColumnIndex("saturated_fat")));
+
+            // 기준량을 weight으로 설정
+            food.setWeight(food.getStandard_amount());
+
+            result = food;
+        }
+
+        cursor.close();
+        return result;
+    }
+
 }
