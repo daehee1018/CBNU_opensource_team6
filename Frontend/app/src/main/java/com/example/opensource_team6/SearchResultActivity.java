@@ -1,21 +1,22 @@
 package com.example.opensource_team6;
 
-import com.example.opensource_team6.data.FoodDao;
 import android.content.Intent;
-import android.content.res.AssetManager;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.example.opensource_team6.data.Food;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.opensource_team6.data.Food;
+import com.example.opensource_team6.data.FoodAdapter;
+import com.example.opensource_team6.data.FoodDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchResultActivity extends AppCompatActivity {
 
@@ -27,47 +28,53 @@ public class SearchResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_result);
 
         TextView resultText = findViewById(R.id.resultTextView);
-        LinearLayout resultContainer = findViewById(R.id.resultContainer);
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewResults);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2열 그리드
 
         // 검색어 받기
         String keyword = getIntent().getStringExtra("search_keyword");
         resultText.setText("‘" + keyword + "’에 대한 검색 결과:");
 
-
+        // DB 검색
         FoodDao dao = new FoodDao(this);
-        List<Food> foodList = dao.searchFoodByName(keyword);
+        List<Food> results = dao.searchFoodByName(keyword);
 
-        // 검색어 필터링 후 리스트에 항목 추가
-        boolean hasResult = false;
-        for (Food item : foodList) {
-            if (item.getName().toLowerCase().contains(keyword.toLowerCase())) {
-                hasResult = true;
-
-                TextView textView = new TextView(this);
-                textView.setText(item.getName() + " - " + item.getEnergy() + " kcal");
-                textView.setPadding(20, 20, 20, 20);
-                textView.setTextSize(16);
-                textView.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-                textView.setOnClickListener(v -> {
-                    Intent intent = new Intent(SearchResultActivity.this, FoodDetailActivity.class);
-                    intent.putExtra("food_name", item.getName());
-                    intent.putExtra("food_kcal", item.getEnergy());
-                    intent.putExtra("food_carbs", item.getCarbohydrate());
-                    intent.putExtra("food_protein", item.getProtein());
-                    intent.putExtra("food_fat", item.getFat());
-                    startActivity(intent);
-                });
-
-                resultContainer.addView(textView);
+        // 필터링
+        List<Food> filtered = new ArrayList<>();
+        for (Food food : results) {
+            if (food.getName().toLowerCase().contains(keyword.toLowerCase())) {
+                filtered.add(food);
             }
         }
+        recyclerView.addItemDecoration(new SpaceItemDecoration(8)); // 항목 간 간격 8dp
 
-        if (!hasResult) {
-            TextView item = new TextView(this);
-            item.setText("검색 결과가 없습니다.");
-            item.setTextSize(16);
-            item.setPadding(8, 8, 8, 8);
-            resultContainer.addView(item);
+
+        if (filtered.isEmpty()) {
+            Toast.makeText(this, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
+        }
+
+        // RecyclerView에 어댑터 연결
+        recyclerView.setAdapter(new FoodAdapter(this, filtered));
+
+    }
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+        private final int space;
+
+        public SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space / 2;
+            outRect.right = space / 2;
+            outRect.bottom = space;
+
+            // 첫 줄에는 위쪽 간격도 줌
+            if (parent.getChildAdapterPosition(view) < 2) {
+                outRect.top = space;
+            }
         }
     }
+
 }
