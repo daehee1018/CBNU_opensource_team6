@@ -15,4 +15,7 @@ public interface DietRepository extends JpaRepository<Diet, Long> {
     List<Diet> findWithFoodByUserAndDateAndMealTime(@Param("user") User user,
                                                     @Param("date") LocalDate date,
                                                     @Param("mealTime") MealTime mealTime);
+
+    @Query("SELECT d FROM Diet d JOIN FETCH d.food WHERE d.user = :user AND d.date = :date")
+    List<Diet> findAllWithFoodByUserAndDate(@Param("user") User user, @Param("date") LocalDate date);
 }
