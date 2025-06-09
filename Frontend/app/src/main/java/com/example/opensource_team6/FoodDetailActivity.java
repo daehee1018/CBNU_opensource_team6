@@ -1,56 +1,98 @@
 package com.example.opensource_team6;
 
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.LinearLayout;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.opensource_team6.data.Food;
+import com.example.opensource_team6.data.FoodDao;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
-    private TextView foodName, foodKcal;
-    private ImageView foodImage;
-    private Button btnRegister;
+    private TextView tvName, tvEnergy, tvCarbs, tvProtein, tvFat;
+    private EditText etAmount;
+    private Spinner spinnerMealType;
+    private Button btnAddToMeal;
+
+    private Food selectedFood;
+    private String mealType = "조식"; // 기본값
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
 
-        Intent intent = getIntent();
-        foodName = findViewById(R.id.foodName);
-        foodKcal = findViewById(R.id.foodKcal);
-        foodImage = findViewById(R.id.foodImage);
-        btnRegister = findViewById(R.id.btnRegister);
-        LinearLayout foodDetail = findViewById(R.id.foodDetail);
-        TextView title = findViewById(R.id.detailDateTitle); // 레이아웃에 추가 필요
+        // 뷰 초기화
+        tvName = findViewById(R.id.tvFoodName);
+        tvEnergy = findViewById(R.id.tvEnergy);
+        tvCarbs = findViewById(R.id.tvCarbs);
+        tvProtein = findViewById(R.id.tvProtein);
+        tvFat = findViewById(R.id.tvFat);
+        etAmount = findViewById(R.id.etAmount);
+        spinnerMealType = findViewById(R.id.spinnerMealType);
+        btnAddToMeal = findViewById(R.id.btnAddToMeal);
 
-        String selectedDate = intent.getStringExtra("selected_date");
+        // 스피너 설정
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.meal_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMealType.setAdapter(adapter);
+        spinnerMealType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mealType = parent.getItemAtPosition(position).toString();
+            }
 
-        if (selectedDate != null) {
-            title.setText(selectedDate + " 식단 기록");
-            // TODO: 해당 날짜의 식단 DB에서 불러오기
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        // 음식 정보 받기
+        String foodName = getIntent().getStringExtra("food_name");
+        if (foodName != null) {
+            FoodDao dao = new FoodDao(this);
+            selectedFood = dao.getFoodByName(foodName);
+            if (selectedFood != null) {
+                tvName.setText(selectedFood.getName());
+                tvEnergy.setText("에너지: " + selectedFood.getEnergy() + " kcal");
+                tvCarbs.setText("탄수화물: " + selectedFood.getCarbohydrate() + " g");
+                tvProtein.setText("단백질: " + selectedFood.getProtein() + " g");
+                tvFat.setText("지방: " + selectedFood.getFat() + " g");
+            }
         }
 
-        String name = intent.getStringExtra("food_name");
-        float kcal = intent.getFloatExtra("food_kcal", 0);
-        float carbs = intent.getFloatExtra("food_carbs", 0);
-        float protein = intent.getFloatExtra("food_protein", 0);
-        float fat = intent.getFloatExtra("food_fat", 0);
+        btnAddToMeal.setOnClickListener(v -> {
+            String amountStr = etAmount.getText().toString();
+            if (amountStr.isEmpty()) {
+                Toast.makeText(this, "섭취량을 입력하세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        foodName.setText(name);
-        foodKcal.setText(String.format("%.1f kcal", kcal));
+            float amount = Float.parseFloat(amountStr);
+            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String key = today + "_" + mealType;
 
-        // 나머지 텍스트뷰는 위 XML처럼 직접 작성 가능 (혹은 동적 생성도 가능)
+            String value = selectedFood.getName() + ":" + amount + "g";
 
-        btnRegister.setOnClickListener(v -> {
-            Toast.makeText(this, "식단에 추가되었습니다!", Toast.LENGTH_SHORT).show();
-            // 혹시 추가 기능 원하면 여기에 로직 작성
+            SharedPreferences prefs = getSharedPreferences("MealRecords", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            String existing = prefs.getString(key, "");
+            if (!existing.isEmpty()) {
+                value = existing + "," + value;
+            }
+            editor.putString(key, value);
+            editor.apply();
+
+            Toast.makeText(this, "식단에 추가되었습니다", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 }
-

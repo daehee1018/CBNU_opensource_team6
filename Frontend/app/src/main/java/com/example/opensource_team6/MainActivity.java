@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 selected = new HomeFragment();
             } else if (id == R.id.nav_diary) {
                 //selected = new TodayFragment();
-                Intent intent = new Intent(this, MealRecordDetailActivity.class);
+                Intent intent = new Intent(this, TodayMealActivity.class);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.nav_scan) {

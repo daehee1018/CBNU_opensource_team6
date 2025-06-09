@@ -1,3 +1,4 @@
+// RecommendationResultActivity.java
 package com.example.opensource_team6;
 
 import android.os.Bundle;
@@ -38,7 +39,6 @@ public class RecommendationResultActivity extends AppCompatActivity {
         subcategorySpinner = findViewById(R.id.subcategorySpinner);
         dbHelper = new NutritionDBHelper(this);
 
-        // 인텐트에서 값 받기
         vector = getIntent().getStringExtra("recommendationVector");
         mealType = getIntent().getStringExtra("currentMeal");
         totalVector = getIntent().getStringExtra("totalVector");
@@ -54,11 +54,10 @@ public class RecommendationResultActivity extends AppCompatActivity {
             return;
         }
 
-        // 추천 계산 및 상위 10개 저장
-        allRecommendations = getRecommendations(vector);
+
+        allRecommendations = getRecommendations(vector, deficitVector);
         updateTop10();
 
-        // Spinner 설정
         List<String> categories = dbHelper.getAllCategories();
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -87,7 +86,6 @@ public class RecommendationResultActivity extends AppCompatActivity {
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // 기본 추천 출력
         showDefaultRecommendations();
     }
 
@@ -96,7 +94,7 @@ public class RecommendationResultActivity extends AppCompatActivity {
         top10Foods = new String[count];
         for (int i = 0; i < count; i++) {
             FoodDistance fd = allRecommendations.get(i);
-            top10Foods[i] = fd.name + " (" + fd.gram + "g, 추천점수: " + String.format("%.2f", 1.0 - fd.distance) + ")";
+            top10Foods[i] = fd.name + " (" + fd.gram + "g, 추천점수: " + String.format("%.2f", fd.similarity) + ")";
         }
     }
 
@@ -124,7 +122,7 @@ public class RecommendationResultActivity extends AppCompatActivity {
             Food food = fd.food;
             if (food.getCategory().equals(selectedCategory) &&
                     food.getSubcategory().equals(selectedSubcategory)) {
-                filtered.add(fd.name + " (" + fd.gram + "g, 추천점수: " + String.format("%.2f", 1.0 - fd.distance) + ")");
+                filtered.add(fd.name + " (" + fd.gram + "g, 추천점수: " + String.format("%.2f", fd.similarity) + ")");
             }
         }
 
@@ -149,13 +147,12 @@ public class RecommendationResultActivity extends AppCompatActivity {
         resultText.setText(sb.toString());
     }
 
-    private List<FoodDistance> getRecommendations(String vectorString) {
+    private List<FoodDistance> getRecommendations(String vectorString, String deficitString) {
         float[] min = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
         float[] max = new float[]{595f, 104f, 41.55f, 60.25f, 70f, 7.402f, 0.68662f, 25.6f};
 
-        String[] parts = vectorString.replace("[", "").replace("]", "").split(",");
-        float[] target = new float[parts.length];
-        for (int i = 0; i < parts.length; i++) target[i] = Float.parseFloat(parts[i].trim());
+        float[] target = parseVector(vectorString);
+        float[] weight = parseVector(deficitString);
 
         FoodDao dao = new FoodDao(this);
         List<Food> allFoods = dao.searchFoodByName("");
@@ -171,30 +168,56 @@ public class RecommendationResultActivity extends AppCompatActivity {
                     (float) food.getCarbohydrate(),
                     (float) food.getProtein(),
                     (float) food.getFat(),
-                    (float) food.getSugar(), //뺄거면 빼기
-                    (float) food.getSodium() / 1000f, //뺄거면 빼기
-                    (float) food.getCholesterol() / 1000f, //뺼거면 뺴기
+                    (float) food.getSugar(),
+                    (float) food.getSodium() / 1000f,
+                    (float) food.getCholesterol() / 1000f,
                     (float) food.getSaturated_fat()
             };
+
+            double weightRatio = food.getWeight() <= 0 ? 1.0 : food.getWeight() / 100.0;
+            for (int i = 0; i < vec.length; i++) vec[i] *= weightRatio;
+
             float[] norm = new float[vec.length];
             for (int i = 0; i < vec.length; i++) {
                 norm[i] = (max[i] - min[i] == 0) ? 0 : (vec[i] - min[i]) / (max[i] - min[i]);
             }
 
-            float similarity = cosineSimilarity(target, norm);
-            list.add(new FoodDistance(food.getName(), (int) food.getWeight(), 1 - similarity, food));
+            float satisfaction = getSatisfactionScore(norm, weight);
+            float cosine = cosineSimilarityWithWeight(norm, target, weight);
+            float finalScore = (satisfaction + cosine) / 2f;
+
+            list.add(new FoodDistance(food.getName(), (int) food.getWeight(), finalScore, food));
         }
 
-        Collections.sort(list);
+        list.sort(Collections.reverseOrder());
         return list;
     }
 
-    private float cosineSimilarity(float[] a, float[] b) {
-        float dot = 0, normA = 0, normB = 0;
+    private float[] parseVector(String s) {
+        String[] parts = s.replace("[", "").replace("]", "").split(",");
+        float[] result = new float[parts.length];
+        for (int i = 0; i < parts.length; i++) result[i] = Float.parseFloat(parts[i].trim());
+        return result;
+    }
+
+    private float getSatisfactionScore(float[] foodVec, float[] deficitVec) {
+        float scoreSum = 0f;
+        int count = 0;
+        for (int i = 0; i < foodVec.length; i++) {
+            if (deficitVec[i] > 0f) {
+                scoreSum += Math.min(1f, foodVec[i] / deficitVec[i]);
+                count++;
+            }
+        }
+        return (count > 0) ? scoreSum / count : 0f;
+    }
+
+    private float cosineSimilarityWithWeight(float[] a, float[] b, float[] w) {
+        float dot = 0f, normA = 0f, normB = 0f;
         for (int i = 0; i < a.length; i++) {
-            dot += a[i] * b[i];
-            normA += a[i] * a[i];
-            normB += b[i] * b[i];
+            dot += w[i] * a[i] * b[i];
+            normA += w[i] * a[i] * a[i];
+            normB += w[i] * b[i] * b[i];
         }
         if (normA == 0 || normB == 0) return 0f;
         return dot / ((float) Math.sqrt(normA) * (float) Math.sqrt(normB));
@@ -203,19 +226,19 @@ public class RecommendationResultActivity extends AppCompatActivity {
     private static class FoodDistance implements Comparable<FoodDistance> {
         String name;
         int gram;
-        float distance; // 1 - similarity
+        float similarity;
         Food food;
 
-        FoodDistance(String name, int gram, float distance, Food food) {
+        FoodDistance(String name, int gram, float similarity, Food food) {
             this.name = name;
             this.gram = gram;
-            this.distance = distance;
+            this.similarity = similarity;
             this.food = food;
         }
 
         @Override
         public int compareTo(FoodDistance o) {
-            return Float.compare(this.distance, o.distance); // similarity 높은 순 정렬
+            return Float.compare(this.similarity, o.similarity);
         }
     }
 }

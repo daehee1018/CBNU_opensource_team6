@@ -139,11 +139,12 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             inputAmount.setText("");
         });
 
+
         btnFinish.setOnClickListener(v -> {
             // 현재까지 섭취한 영양소 총합
             double[] total = computeTotalVector();
 
-            // 완료된 식사 수
+            // 완료된 식사 수 계산
             List<String> completedMeals = new ArrayList<>();
             for (String meal : MEAL_TYPES) {
                 if (prefs.getBoolean(meal, false)) completedMeals.add(meal);
@@ -151,15 +152,20 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             int remainingMeals = 3 - completedMeals.size();
             if (remainingMeals <= 0) remainingMeals = 1;
 
-            // 결핍 벡터 계산 → 정규화 (0~1로 클리핑)
+            // ✅ 개선된 결핍 벡터 계산
             float[] inputVector = new float[8];
             for (int i = 0; i < 8; i++) {
                 float deficit = Math.max(recommended[i] - (float) total[i], 0f);
                 float avgDeficit = deficit / remainingMeals;
-                float raw = (avgDeficit - min[i]) / (max[i] - min[i]);
-                inputVector[i] = Math.min(1f, Math.max(0f, raw));  // ✅ 클리핑
+
+                inputVector[i] = (avgDeficit - min[i]) / (max[i] - min[i]);
+                inputVector[i] = Math.max(0f, Math.min(1f, inputVector[i])); // 안정성 보장
+
             }
 
+            // 디버깅 로그 출력
+            Log.d("DEBUG", "총합 벡터: " + Arrays.toString(total));
+            Log.d("DEBUG", "입력 벡터: " + Arrays.toString(inputVector));
 
             float[] output = runTFLiteModel(inputVector);
             if (output == null) {
@@ -176,6 +182,7 @@ public class MealRecordDetailActivity extends AppCompatActivity {
                 return;
             }
 
+            // 결과 전달
             Intent intent = new Intent(this, RecommendationResultActivity.class);
             intent.putExtra("recommendationVector", Arrays.toString(output));
             intent.putExtra("currentMeal", String.join(", ", completedMeals));
@@ -184,22 +191,15 @@ public class MealRecordDetailActivity extends AppCompatActivity {
             intent.putExtra("suggestedMeal", NIGHT_MEAL);
             startActivity(intent);
 
-            float[] output_ = runTFLiteModel(inputVector);
-            if (output_ == null) {
-                Toast.makeText(this, "모델 실행 실패", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-// ✅ 역정규화된 벡터 출력 (g 단위)
+            // 역정규화된 모델 출력 (g 단위)
             float[] denormalizedOutput = new float[8];
             for (int i = 0; i < 8; i++) {
                 denormalizedOutput[i] = output[i] * (max[i] - min[i]) + min[i];
             }
-            Log.d("DEBUG", "입력 벡터 (정규화): " + Arrays.toString(inputVector));
             Log.d("DEBUG", "모델 출력 벡터 (정규화): " + Arrays.toString(output));
             Log.d("DEBUG", "역정규화된 출력 벡터 (g 단위): " + Arrays.toString(denormalizedOutput));
-
         });
+
     }
 
     private double[] computeTotalVector() {
