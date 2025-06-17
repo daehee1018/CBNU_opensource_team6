@@ -12,7 +12,7 @@ public record AdditionalInfoRequest(
    Double height,
    Double weight,
    Double targetWeight,
-   Gender gender,
-   Interest interest,
-   HealthConcern healthConcern
+   String gender,
+   String interest,
+   String healthConcern
 ) {}

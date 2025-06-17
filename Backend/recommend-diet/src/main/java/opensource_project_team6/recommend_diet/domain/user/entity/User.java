@@ -40,15 +40,12 @@ public class User {
     @Column(nullable = false)
     private Double targetWeight;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String gender;
 
-    @Enumerated(EnumType.STRING)
-    private Interest interest;
+    private String interest;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "health_concern")
-    private HealthConcern healthConcern;
+    private String healthConcern;
 
     private String googleId; // 구글 식별자 코드
 
@@ -60,7 +57,7 @@ public class User {
         this.isProfileComplete = isProfileComplete;
     }
 
-    public void updateProfile(String name, LocalDate birthDate, Double height, Double weight, Double targetWeight, Gender gender, Interest interest, HealthConcern healthConcern) {
+    public void updateProfile(String name, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern) {
         if (name != null) this.name = name;
         if(birthDate != null) this.birthDate = birthDate;
         if(height != null) this.height = height;
@@ -73,7 +70,7 @@ public class User {
     }
 
     @Builder
-    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, Gender gender, Interest interest, HealthConcern healthConcern, String googleId, String profileImage) {
+    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern, String googleId, String profileImage) {
         this.name = name;
         this.email = email;
         this.password = password;

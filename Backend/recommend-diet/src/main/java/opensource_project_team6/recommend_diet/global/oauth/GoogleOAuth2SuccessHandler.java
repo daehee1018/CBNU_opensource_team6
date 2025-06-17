@@ -44,9 +44,9 @@ public class GoogleOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
                     .height(0.0)
                     .weight(0.0)
                     .targetWeight(0.0)
-                    .gender(Gender.NONE)
-                    .interest(Interest.ETC)
-                    .healthConcern(HealthConcern.NONE)
+                    .gender("")
+                    .interest("")
+                    .healthConcern("")
                     .googleId(googleId)
                     .profileImage(profileImage)
                     .build();

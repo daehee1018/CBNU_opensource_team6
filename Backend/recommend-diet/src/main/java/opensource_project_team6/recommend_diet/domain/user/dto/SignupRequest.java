@@ -14,8 +14,8 @@ public record SignupRequest(
         Double height,
         Double weight,
         Double targetWeight,
-        Gender gender,              // 성별
-        Interest interest,          // 관심사
-        HealthConcern healthConcern // 건강 고민
+        String gender,              // 성별
+        String interest,          // 관심사
+        String healthConcern // 건강 고민
 
 ) {}
