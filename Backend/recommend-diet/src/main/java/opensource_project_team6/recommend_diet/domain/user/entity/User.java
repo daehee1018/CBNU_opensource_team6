@@ -57,6 +57,10 @@ public class User {
         this.isProfileComplete = isProfileComplete;
     }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public void updateProfile(String name, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern) {
         if (name != null) this.name = name;
         if(birthDate != null) this.birthDate = birthDate;

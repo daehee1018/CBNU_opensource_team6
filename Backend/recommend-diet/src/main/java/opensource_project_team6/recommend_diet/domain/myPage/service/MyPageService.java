@@ -1,0 +1,43 @@
+package opensource_project_team6.recommend_diet.domain.myPage.service;
+
+import lombok.RequiredArgsConstructor;
+import opensource_project_team6.recommend_diet.domain.myPage.dto.MyPageResponse;
+import opensource_project_team6.recommend_diet.domain.user.entity.User;
+import opensource_project_team6.recommend_diet.domain.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.Period;
+
+@Service
+@RequiredArgsConstructor
+public class MyPageService {
+    private final UserRepository userRepository;
+
+    public MyPageResponse getMyPage(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("user not found"));
+
+        int age = Period.between(user.getBirthDate(), LocalDate.now()).getYears();
+
+        String imageUrl = user.getProfileImage();
+        if (imageUrl != null && !imageUrl.startsWith("http")) {
+            imageUrl = "/images/" + imageUrl; // 로컬 이미지라면 prefix 추가
+        }
+
+        return new MyPageResponse(
+                user.getName(),
+                user.getGender(),
+                user.getBirthDate(),
+                age,
+                imageUrl
+        );
+    }
+
+    public void uploadProfileImage(Long userId, String filename) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+        user.setProfileImage(filename);
+        userRepository.save(user);
+    }
+}
