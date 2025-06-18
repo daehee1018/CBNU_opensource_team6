@@ -30,12 +30,25 @@
    기본 값은 `http://10.0.2.2:8080`으로, 필요에 따라 실제 서버 주소로 변경합니다.
 3. 에뮬레이터나 실제 기기에서 앱을 실행합니다.
 
-### 3. 구글 로그인 연동
+### 3. 음식 데이터베이스 초기화
+
+`scripts/import_nutrition.py` 스크립트를 사용하면 안드로이드 앱에서 사용하던 `nutrition_data.db` 파일의 내용을
+MySQL의 `food` 테이블로 옮길 수 있습니다.
+
+```bash
+pip install -r scripts/requirements.txt
+python scripts/import_nutrition.py \
+    --db-host <MYSQL_HOST> --db-user <USER> --db-password <PASSWORD>
+```
+
+환경 변수 `NUTRITION_DB` 를 지정하면 다른 위치의 SQLite 파일을 사용할 수 있습니다.
+
+### 4. 구글 로그인 연동
 
 구글 로그인 버튼을 누르면 브라우저가 열리고 OAuth2 인증을 거친 뒤
 `opensource-team6://oauth` 주소로 리다이렉트됩니다. 앱은 이 주소를
 통해 전달된 JWT 토큰을 자동 저장하여 로그인 과정을 완료합니다.
 
-### 4. 백엔드와 프론트엔드 연동
+### 5. 백엔드와 프론트엔드 연동
 
 앱에서 구글 로그인 버튼을 누르면 브라우저가 열리면서 백엔드의 Google OAuth2 로그인 페이지로 이동합니다. 로그인 후 토큰이 JSON 형태로 표시되며, 추후 앱에서 토큰을 저장하도록 개선할 수 있습니다.
