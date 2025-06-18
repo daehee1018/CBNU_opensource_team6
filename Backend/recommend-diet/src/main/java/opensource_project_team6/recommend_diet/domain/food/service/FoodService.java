@@ -25,7 +25,7 @@ public class FoodService {
      * 음식 키워드 검색
      */
     public List<FoodSimpleDTO> searchFoods(String keyword) {
-        return foodRepository.findByNameContaining(keyword).stream()
+        return foodRepository.findByName(keyword).stream()
                 .map(food -> FoodSimpleDTO.builder()
                         .id(food.getId())
                         .name(food.getName())
@@ -79,4 +79,15 @@ public class FoodService {
                 .build();
     }
 
+    public List<FoodSimpleDTO> searchFoodsByIngredient(String ingredient) {
+        List<Food> foods = foodRepository.findBySubcategory(ingredient);
+        return foods.stream()
+                .map(food -> FoodSimpleDTO.builder()
+                        .id(food.getId())
+                        .name(food.getName())
+                        .imageUrl(food.getImageUrl())
+                        .energy(food.getEnergy())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
