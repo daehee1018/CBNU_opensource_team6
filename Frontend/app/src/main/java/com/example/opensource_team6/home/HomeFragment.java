@@ -169,7 +169,7 @@ public class HomeFragment extends Fragment {
             foodAmount.setText("");
         });
 
-        AutoCompleteTextView searchEditText = view.findViewById(R.id.searchEditText);
+        EditText searchEditText = view.findViewById(R.id.searchEditText);
         searchResults = view.findViewById(R.id.searchResults);
         searchResults.setLayoutManager(new GridLayoutManager(getContext(), 2));
         searchAdapter = new FoodAdapter(getContext(), new ArrayList<>());
@@ -209,8 +209,6 @@ public class HomeFragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, foodNames);
         foodInput.setAdapter(adapter);
-        searchEditText.setAdapter(adapter);
-        searchEditText.setThreshold(1);
 
         return view;
     }
