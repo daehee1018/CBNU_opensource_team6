@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageButton;
+import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
 
@@ -39,6 +41,11 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profile_name);
         profileTag = view.findViewById(R.id.profile_tag);
         profileDesc = view.findViewById(R.id.profile_desc);
+        ImageButton settingsBtn = view.findViewById(R.id.btn_settings);
+        settingsBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
 
         fetchProfile();
 

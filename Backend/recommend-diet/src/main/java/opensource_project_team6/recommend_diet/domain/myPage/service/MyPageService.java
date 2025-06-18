@@ -2,6 +2,7 @@ package opensource_project_team6.recommend_diet.domain.myPage.service;
 
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.MyPageResponse;
+import opensource_project_team6.recommend_diet.domain.myPage.dto.MacroRatioRequest;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,13 @@ public class MyPageService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자 없음"));
         user.setProfileImage(filename);
+        userRepository.save(user);
+    }
+
+    public void updateMacroRatio(Long userId, MacroRatioRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+        user.updateMacroRatio(request.carbRatio(), request.proteinRatio(), request.fatRatio());
         userRepository.save(user);
     }
 }

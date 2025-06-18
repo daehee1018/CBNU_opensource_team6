@@ -63,6 +63,8 @@
 
         <activity android:name=".RecommendationResultActivity" />
 
+        <activity android:name=".profile.SettingsActivity" />
+
         <activity android:name=".register.SignupStep1Activity" />
 
         <activity android:name=".register.SignupStep2Activity" />

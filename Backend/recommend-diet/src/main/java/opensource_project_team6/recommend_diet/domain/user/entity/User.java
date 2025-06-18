@@ -51,6 +51,10 @@ public class User {
 
     private String profileImage; // 구글 프로필 사진
 
+    private Double targetCarbRatio;
+    private Double targetProteinRatio;
+    private Double targetFatRatio;
+
     private boolean isProfileComplete = false;
 
     public void setIsProfileComplete(boolean isProfileComplete) {
@@ -59,6 +63,12 @@ public class User {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void updateMacroRatio(Double carbRatio, Double proteinRatio, Double fatRatio) {
+        if (carbRatio != null) this.targetCarbRatio = carbRatio;
+        if (proteinRatio != null) this.targetProteinRatio = proteinRatio;
+        if (fatRatio != null) this.targetFatRatio = fatRatio;
     }
 
     public void updateProfile(String name, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern) {
@@ -74,7 +84,8 @@ public class User {
     }
 
     @Builder
-    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern, String googleId, String profileImage) {
+    public User(String name, String email, String password, LocalDate birthDate, Double height, Double weight, Double targetWeight, String gender, String interest, String healthConcern, String googleId, String profileImage,
+                Double targetCarbRatio, Double targetProteinRatio, Double targetFatRatio) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -87,5 +98,8 @@ public class User {
         this.healthConcern = healthConcern;
         this.googleId = googleId;
         this.profileImage = profileImage;
+        this.targetCarbRatio = targetCarbRatio;
+        this.targetProteinRatio = targetProteinRatio;
+        this.targetFatRatio = targetFatRatio;
     }
 }
