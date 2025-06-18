@@ -2,6 +2,8 @@ package com.example.opensource_team6.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +26,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.opensource_team6.R;
-import com.example.opensource_team6.SearchActivity;
 import com.example.opensource_team6.data.Food;
 import com.example.opensource_team6.data.FoodDao;
+import com.example.opensource_team6.data.FoodAdapter;
 import com.example.opensource_team6.network.ApiConfig;
 import com.example.opensource_team6.util.TokenManager;
 
@@ -38,6 +42,8 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private List<Food> foodList;
+    private RecyclerView searchResults;
+    private FoodAdapter searchAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -164,10 +170,36 @@ public class HomeFragment extends Fragment {
         });
 
         AutoCompleteTextView searchEditText = view.findViewById(R.id.searchEditText);
-        searchEditText.setFocusable(false);
-        searchEditText.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), SearchActivity.class);
-            startActivity(intent);
+        searchResults = view.findViewById(R.id.searchResults);
+        searchResults.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        searchAdapter = new FoodAdapter(getContext(), new ArrayList<>());
+        searchResults.setAdapter(searchAdapter);
+        searchResults.setVisibility(View.GONE);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim();
+                if (query.isEmpty()) {
+                    searchResults.setVisibility(View.GONE);
+                    searchAdapter.updateData(new ArrayList<>());
+                    return;
+                }
+                List<Food> filtered = new ArrayList<>();
+                for (Food item : foodList) {
+                    if (item.getName().toLowerCase().contains(query.toLowerCase())) {
+                        filtered.add(item);
+                    }
+                }
+                searchAdapter.updateData(filtered);
+                searchResults.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         List<String> foodNames = new ArrayList<>();
