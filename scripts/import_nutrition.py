@@ -2,14 +2,18 @@ import sqlite3
 import pymysql
 import os
 import argparse
+from pathlib import Path
 
+base_path = Path(__file__).resolve().parent                     # 현재 디렉토리
+parent_path = base_path.parent                                  # 한 단계 위
+default_db_path = parent_path / "Frontend" / "app" / "src" / "main" / "assets" / "nutrition_data.db"
 parser = argparse.ArgumentParser(description="Import nutrition data into MySQL")
 parser.add_argument("--db-host", default=os.environ.get("MYSQL_HOST", "localhost"))
 parser.add_argument("--db-port", type=int, default=int(os.environ.get("MYSQL_PORT", "3306")))
 parser.add_argument("--db-user", default=os.environ.get("MYSQL_USER", "root"))
 parser.add_argument("--db-password", default=os.environ.get("MYSQL_PASSWORD", ""))
 parser.add_argument("--db-name", default=os.environ.get("MYSQL_DB", "opensourse_project_team6"))
-parser.add_argument("--sqlite", default=os.environ.get("NUTRITION_DB", "Frontend\app\src\main\assets\nutrition_data.db"))
+parser.add_argument("--sqlite", default=os.environ.get("NUTRITION_DB", str(default_db_path)))
 args = parser.parse_args()
 
 print(f"[INFO] SQLite 파일 경로: {args.sqlite}")
