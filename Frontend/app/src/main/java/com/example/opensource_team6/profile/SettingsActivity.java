@@ -57,8 +57,13 @@ public class SettingsActivity extends AppCompatActivity {
             String url = ApiConfig.BASE_URL + "/api/user/macro-ratio";
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, data,
                     response -> {
-                        Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
-                        finish();
+                        String status = response.optString("status", "");
+                        if ("ok".equals(status)) {
+                            Toast.makeText(this, "저장되었습니다", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, "저장 실패", Toast.LENGTH_SHORT).show();
+                        }
                     },
                     error -> Toast.makeText(this, "저장 실패", Toast.LENGTH_SHORT).show()) {
                 @Override
