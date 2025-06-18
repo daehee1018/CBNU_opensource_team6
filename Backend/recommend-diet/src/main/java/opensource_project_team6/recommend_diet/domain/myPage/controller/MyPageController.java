@@ -2,6 +2,7 @@ package opensource_project_team6.recommend_diet.domain.myPage.controller;
 
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.MyPageResponse;
+import opensource_project_team6.recommend_diet.domain.myPage.dto.MacroRatioRequest;
 import opensource_project_team6.recommend_diet.domain.myPage.service.MyPageService;
 import opensource_project_team6.recommend_diet.global.util.UserPrincipal;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +52,13 @@ public class MyPageController {
 
         // 서비스로 파일명 전달
         myPageService.uploadProfileImage(userPrincipal.getId(), fileName);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/macro-ratio")
+    public ResponseEntity<Void> updateMacroRatio(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @RequestBody MacroRatioRequest request) {
+        myPageService.updateMacroRatio(userPrincipal.getId(), request);
         return ResponseEntity.ok().build();
     }
 }

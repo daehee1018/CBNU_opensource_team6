@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="설정"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="24dp" />
+
+        <EditText
+            android:id="@+id/input_carb"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:hint="탄수화물 비율(%)"
+            android:inputType="numberDecimal"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp" />
+
+        <EditText
+            android:id="@+id/input_protein"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:hint="단백질 비율(%)"
+            android:inputType="numberDecimal"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp" />
+
+        <EditText
+            android:id="@+id/input_fat"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:hint="지방 비율(%)"
+            android:inputType="numberDecimal"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp" />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="저장"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_blue_button" />
+
+    </LinearLayout>
+</ScrollView>
