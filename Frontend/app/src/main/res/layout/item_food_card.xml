@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="음식 이름"
             android:textSize="14sp"
-            android:textColor="#000000"
+            android:textColor="@color/color_primary"
             android:layout_marginTop="4dp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="칼로리"
             android:textSize="12sp"
-            android:textColor="#666666"
+            android:textColor="@color/color_secondary"
             android:layout_marginTop="2dp" />
 
     </LinearLayout>

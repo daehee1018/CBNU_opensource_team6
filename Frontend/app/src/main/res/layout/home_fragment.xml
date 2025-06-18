@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_background"
     android:fillViewport="true">
 
     <LinearLayout
@@ -57,10 +58,10 @@
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusedMonthDateColor="#000000"
-                android:selectedWeekBackgroundColor="#E9EFEC"
-                android:unfocusedMonthDateColor="#CFCACA"
-                android:background="#F5F5F5" />
+                android:focusedMonthDateColor="@color/color_primary"
+                android:selectedWeekBackgroundColor="@color/color_calendar_selected_bg"
+                android:unfocusedMonthDateColor="@color/color_calendar_unfocused_date"
+                android:background="@color/color_surface" />
         </LinearLayout>
 
         <!-- 식사 버튼 -->
@@ -228,7 +229,7 @@
             android:padding="16dp"
             android:text="총 섭취 결과 출력됨"
             android:textSize="16sp"
-            android:textColor="#000000" />
+            android:textColor="@color/color_primary" />
 
         <!-- 음식 리스트 -->
         <LinearLayout

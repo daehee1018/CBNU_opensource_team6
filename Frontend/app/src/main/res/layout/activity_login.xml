@@ -90,7 +90,7 @@
             android:layout_gravity="end"
             android:layout_marginStart="8dp"
             android:text="비밀번호 찾기"
-            android:textColor="#999999"
+            android:textColor="@color/color_secondary"
             android:textSize="12sp" />
 
         <LinearLayout
@@ -115,8 +115,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="이메일로 로그인"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#000000"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/color_primary"
             android:layout_marginTop="24dp"
             android:background="@drawable/rounded_black_button" />
 
@@ -124,7 +124,7 @@
         <TextView
             android:id="@+id/register"
             android:text="회원가입"
-            android:textColor="#000000"
+            android:textColor="@color/color_primary"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
@@ -145,12 +145,12 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="1dp"
-                android:background="#CCCCCC" />
+                android:background="@color/color_divider" />
 
             <TextView
                 android:text="간편 로그인"
                 android:layout_marginHorizontal="8dp"
-                android:textColor="#999999"
+                android:textColor="@color/color_secondary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="1dp"
-                android:background="#CCCCCC" />
+                android:background="@color/color_divider" />
         </LinearLayout>
 
         <!-- 구글 로그인 버튼 -->

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#FFFFFF"
+    android:background="@color/color_background"
     android:padding="32dp">
 
     <!-- 앱 아이콘 -->

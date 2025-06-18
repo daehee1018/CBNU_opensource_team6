@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/color_background">
 
     <LinearLayout
         android:id="@+id/headerLayout"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="2024년 6월 1일 (토)"
             android:textSize="20sp"
-            android:textColor="#2E2E2E"
+            android:textColor="@color/color_primary"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="오늘의 식사 데이터가 존재하지 않습니다!"
-            android:textColor="#666666"
+            android:textColor="@color/color_secondary"
             android:textSize="16sp" />
     </LinearLayout>
 </FrameLayout>
