@@ -55,6 +55,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         return foodList.size();
     }
 
+    public void updateData(List<Food> newList) {
+        this.foodList = newList;
+        notifyDataSetChanged();
+    }
+
     static class FoodViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name, kcal;

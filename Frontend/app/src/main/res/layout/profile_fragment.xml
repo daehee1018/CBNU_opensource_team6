@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="식단 마스터 · 러닝 초보자"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_size_caption"
                     android:textColor="@color/color_secondary" />
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="박영현"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_size_body"
                     android:textStyle="bold"
                     android:textColor="@color/color_primary" />
 
@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="저랑 같이 운동해요!"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_body"
                     android:textColor="@color/color_secondary" />
             </LinearLayout>
         </LinearLayout>
@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:gravity="center_vertical"
             android:weightSum="2">
 
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:text="5,678\n팔로워"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_body"
                 android:textColor="@color/color_primary" />
 
             <TextView
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="9,101\n팔로잉"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_body"
                 android:textColor="@color/color_primary" />
         </LinearLayout>
 
@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="@dimen/spacing_normal">
 
             <ImageView
                 android:layout_width="32dp"
@@ -132,14 +132,14 @@
                 android:layout_height="wrap_content"
                 android:text="+100"
                 android:textColor="@color/color_primary"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_body"
                 android:layout_marginEnd="8dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="비만, 정삼, 초 고도비만 외 100명"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_size_caption"
                 android:textColor="@color/color_secondary" />
         </LinearLayout>
     </LinearLayout>
@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="종합 점수"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_title"
             android:textColor="@color/color_accent"
             android:textStyle="bold" />
 
