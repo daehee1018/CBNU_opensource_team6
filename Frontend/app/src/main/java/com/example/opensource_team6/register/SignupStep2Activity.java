@@ -14,6 +14,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.login.ui.LoginActivity;
 import com.example.opensource_team6.network.ApiConfig;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,12 +49,32 @@ public class SignupStep2Activity extends AppCompatActivity {
         createButton.setOnClickListener(v -> {
             String name = getIntent().getStringExtra("name");
             String email = getIntent().getStringExtra("email");
-            String birth = getIntent().getStringExtra("birth");
+            String birthDate = getIntent().getStringExtra("birth");
+            String formattedBirthDate = "";
+            try {
+                DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+                DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate date = LocalDate.parse(birthDate, inputFormatter);
+                formattedBirthDate = date.format(outputFormatter);
+            } catch (Exception e) {
+                Toast.makeText(this, "생년월일 형식이 잘못되었습니다 (예: 2002-03-03)", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String password = getIntent().getStringExtra("password");
 
             String height = heightInput.getText().toString().trim();
             String weight = weightInput.getText().toString().trim();
             String target = targetWeightInput.getText().toString().trim();
+            double heightVal, weightVal, targetVal;
+            try {
+                heightVal = Double.parseDouble(height);
+                weightVal = Double.parseDouble(weight);
+                targetVal = Double.parseDouble(target);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "키/몸무게/목표체중은 숫자만 입력 가능합니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String gender = genderSpinner.getSelectedItem().toString();
             String interest = interestSpinner.getSelectedItem().toString();
             String concern = concernSpinner.getSelectedItem().toString();
@@ -67,11 +89,11 @@ public class SignupStep2Activity extends AppCompatActivity {
             try {
                 requestData.put("name", name);
                 requestData.put("email", email);
-                requestData.put("birth", birth);
+                requestData.put("birthDate", formattedBirthDate);
                 requestData.put("password", password);
-                requestData.put("height", height);
-                requestData.put("weight", weight);
-                requestData.put("target_weight", target);
+                requestData.put("height", heightVal);
+                requestData.put("weight", weightVal);
+                requestData.put("targetWeight", targetVal);
                 requestData.put("gender", gender);
                 requestData.put("interest", interest);
                 requestData.put("concern", concern);
