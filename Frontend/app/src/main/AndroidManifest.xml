@@ -35,13 +35,6 @@
             android:name=".MainActivity"
             android:exported="true"/>
 
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SearchResultActivity"
-            android:exported="false" />
 
         <activity
             android:name=".FoodDetailActivity"
