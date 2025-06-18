@@ -14,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CalendarView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -55,10 +59,25 @@ public class HomeFragment extends Fragment {
         LinearLayout groupDinner = view.findViewById(R.id.groupDinner);
         LinearLayout groupSnack = view.findViewById(R.id.groupSnack);
 
+        LinearLayout listBreakfast = view.findViewById(R.id.listBreakfast);
+        LinearLayout listLunch = view.findViewById(R.id.listLunch);
+        LinearLayout listDinner = view.findViewById(R.id.listDinner);
+        LinearLayout listSnack = view.findViewById(R.id.listSnack);
+
+        long todayMillis = System.currentTimeMillis();
+        calendarView.setDate(todayMillis, false, true);
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(todayMillis));
+        fetchDietData(today, listBreakfast, listLunch, listDinner, listSnack, resultText);
+
         Button btnBreakfast = view.findViewById(R.id.btnBreakfast);
         Button btnLunch = view.findViewById(R.id.btnLunch);
         Button btnDinner = view.findViewById(R.id.btnDinner);
         Button btnSnack = view.findViewById(R.id.btnSnack);
+
+        groupBreakfast.setVisibility(View.VISIBLE);
+        groupLunch.setVisibility(View.GONE);
+        groupDinner.setVisibility(View.GONE);
+        groupSnack.setVisibility(View.GONE);
 
         btnBreakfast.setOnClickListener(v -> {
             groupBreakfast.setVisibility(View.VISIBLE);
@@ -90,7 +109,7 @@ public class HomeFragment extends Fragment {
 
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
             String date = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
-            fetchDietData(date, groupBreakfast, groupLunch, groupDinner, groupSnack, resultText);
+            fetchDietData(date, listBreakfast, listLunch, listDinner, listSnack, resultText);
         });
 
         final float[] totalKcal = {0};
@@ -164,22 +183,22 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void fetchDietData(String date, LinearLayout breakfast, LinearLayout lunch,
-                               LinearLayout dinner, LinearLayout snack, TextView result) {
+    private void fetchDietData(String date, LinearLayout breakfastList, LinearLayout lunchList,
+                               LinearLayout dinnerList, LinearLayout snackList, TextView result) {
         String token = TokenManager.getToken(requireContext());
         if (token == null) {
             Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        breakfast.removeAllViews();
-        lunch.removeAllViews();
-        dinner.removeAllViews();
-        snack.removeAllViews();
+        breakfastList.removeAllViews();
+        lunchList.removeAllViews();
+        dinnerList.removeAllViews();
+        snackList.removeAllViews();
 
         RequestQueue queue = Volley.newRequestQueue(requireContext());
         String[] meals = {"아침", "점심", "저녁", "간식"};
-        LinearLayout[] groups = {breakfast, lunch, dinner, snack};
+        LinearLayout[] groups = {breakfastList, lunchList, dinnerList, snackList};
 
         for (int i = 0; i < meals.length; i++) {
             String url = ApiConfig.BASE_URL + "/api/diet?date=" + date + "&mealTime=" + meals[i];
