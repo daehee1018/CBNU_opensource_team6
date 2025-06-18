@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="@dimen/spacing_medium">
 
             <Button
                 android:id="@+id/btnBreakfast"
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:visibility="gone">
 
             <TextView
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:visibility="gone">
 
             <TextView
@@ -152,7 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:visibility="gone">
 
             <TextView
@@ -174,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:visibility="gone">
 
             <TextView
@@ -196,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="@dimen/spacing_normal">
 
             <AutoCompleteTextView
                 android:id="@+id/foodInput"
@@ -226,9 +226,9 @@
             android:id="@+id/resultText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/spacing_medium"
             android:text="총 섭취 결과 출력됨"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_body"
             android:textColor="@color/color_primary" />
 
         <!-- 음식 리스트 -->
@@ -237,7 +237,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="@dimen/spacing_normal" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
