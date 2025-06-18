@@ -2,14 +2,14 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="10dp" />
-            <solid android:color="#CCCCCC"/>
+            <solid android:color="@color/color_divider"/>
         </shape>
     </item>
     <item android:id="@android:id/progress">
         <clip>
             <shape>
                 <corners android:radius="10dp" />
-                <solid android:color="#FF5722"/> <!-- 진행 색상 -->
+                <solid android:color="@color/color_accent"/> <!-- 진행 색상 -->
             </shape>
         </clip>
     </item>

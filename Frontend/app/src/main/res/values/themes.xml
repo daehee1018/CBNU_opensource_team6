@@ -1,8 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Opensource_team6" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 미니멀 테마 색상 설정 -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorOnPrimary">@color/color_background</item>
+        <item name="colorSecondary">@color/color_accent</item>
+        <item name="android:windowBackground">@color/color_background</item>
     </style>
 
     <style name="Theme.Opensource_team6" parent="Base.Theme.Opensource_team6" />

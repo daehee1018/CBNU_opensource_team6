@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- 다크 테마 기본 색상 정의 -->
+    <color name="color_primary">#FFFFFF</color>
+    <color name="color_secondary">#CCCCCC</color>
+    <color name="color_background">#000000</color>
+    <color name="color_surface">#121212</color>
+    <color name="color_accent">#3399FF</color>
+    <color name="color_divider">#333333</color>
+    <color name="color_calendar_selected_bg">#0A84FF</color>
+    <color name="color_calendar_unfocused_date">#555555</color>
+</resources>

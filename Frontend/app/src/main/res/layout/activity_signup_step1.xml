@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#FFFFFF">
+    android:background="@color/color_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="계정을 만들어 건강해지세요!"
             android:textSize="14sp"
-            android:textColor="#666666"
+            android:textColor="@color/color_secondary"
             android:layout_marginTop="4dp" />
 
         <!-- 이름 -->
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="다음"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:layout_marginTop="32dp"
             android:background="@drawable/rounded_blue_button" />
     </LinearLayout>

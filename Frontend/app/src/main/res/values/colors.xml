@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- 기본 색상 정의 -->
+    <color name="color_primary">#000000</color>
+    <color name="color_secondary">#666666</color>
+    <color name="color_background">#FFFFFF</color>
+    <color name="color_surface">#F5F5F5</color>
+    <color name="color_accent">#3399FF</color>
+    <color name="color_divider">#CCCCCC</color>
+    <color name="color_calendar_selected_bg">#E9EFEC</color>
+    <color name="color_calendar_unfocused_date">#CFCACA</color>
 </resources>
