@@ -12,6 +12,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CalendarView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import androidx.fragment.app.Fragment;
 
@@ -19,6 +25,8 @@ import com.example.opensource_team6.R;
 import com.example.opensource_team6.SearchActivity;
 import com.example.opensource_team6.data.Food;
 import com.example.opensource_team6.data.FoodDao;
+import com.example.opensource_team6.network.ApiConfig;
+import com.example.opensource_team6.util.TokenManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,31 +48,49 @@ public class HomeFragment extends Fragment {
         EditText foodAmount = view.findViewById(R.id.foodAmount);
         Button addFoodBtn = view.findViewById(R.id.addFoodBtn);
         TextView resultText = view.findViewById(R.id.resultText);
+        CalendarView calendarView = view.findViewById(R.id.calendar);
 
         LinearLayout groupBreakfast = view.findViewById(R.id.groupBreakfast);
         LinearLayout groupLunch = view.findViewById(R.id.groupLunch);
         LinearLayout groupDinner = view.findViewById(R.id.groupDinner);
+        LinearLayout groupSnack = view.findViewById(R.id.groupSnack);
 
         Button btnBreakfast = view.findViewById(R.id.btnBreakfast);
         Button btnLunch = view.findViewById(R.id.btnLunch);
         Button btnDinner = view.findViewById(R.id.btnDinner);
+        Button btnSnack = view.findViewById(R.id.btnSnack);
 
         btnBreakfast.setOnClickListener(v -> {
             groupBreakfast.setVisibility(View.VISIBLE);
             groupLunch.setVisibility(View.GONE);
             groupDinner.setVisibility(View.GONE);
+            groupSnack.setVisibility(View.GONE);
         });
 
         btnLunch.setOnClickListener(v -> {
             groupBreakfast.setVisibility(View.GONE);
             groupLunch.setVisibility(View.VISIBLE);
             groupDinner.setVisibility(View.GONE);
+            groupSnack.setVisibility(View.GONE);
         });
 
         btnDinner.setOnClickListener(v -> {
             groupBreakfast.setVisibility(View.GONE);
             groupLunch.setVisibility(View.GONE);
             groupDinner.setVisibility(View.VISIBLE);
+            groupSnack.setVisibility(View.GONE);
+        });
+
+        btnSnack.setOnClickListener(v -> {
+            groupBreakfast.setVisibility(View.GONE);
+            groupLunch.setVisibility(View.GONE);
+            groupDinner.setVisibility(View.GONE);
+            groupSnack.setVisibility(View.VISIBLE);
+        });
+
+        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
+            String date = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+            fetchDietData(date, groupBreakfast, groupLunch, groupDinner, groupSnack, resultText);
         });
 
         final float[] totalKcal = {0};
@@ -136,5 +162,74 @@ public class HomeFragment extends Fragment {
         searchEditText.setThreshold(1);
 
         return view;
+    }
+
+    private void fetchDietData(String date, LinearLayout breakfast, LinearLayout lunch,
+                               LinearLayout dinner, LinearLayout snack, TextView result) {
+        String token = TokenManager.getToken(requireContext());
+        if (token == null) {
+            Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        breakfast.removeAllViews();
+        lunch.removeAllViews();
+        dinner.removeAllViews();
+        snack.removeAllViews();
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String[] meals = {"아침", "점심", "저녁", "간식"};
+        LinearLayout[] groups = {breakfast, lunch, dinner, snack};
+
+        for (int i = 0; i < meals.length; i++) {
+            String url = ApiConfig.BASE_URL + "/api/diet?date=" + date + "&mealTime=" + meals[i];
+            int index = i;
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                    response -> {
+                        org.json.JSONArray data = response.optJSONArray("data");
+                        if (data == null) return;
+                        for (int j = 0; j < data.length(); j++) {
+                            org.json.JSONObject obj = data.optJSONObject(j);
+                            if (obj == null) continue;
+                            String name = obj.optString("foodName");
+                            double carbs = obj.optDouble("carbohydrate");
+                            double protein = obj.optDouble("protein");
+                            double fat = obj.optDouble("fat");
+                            double amount = obj.optDouble("amount");
+
+                            TextView tv = new TextView(getContext());
+                            tv.setText(name + "\n" +
+                                    String.format("탄 %.1fg 단 %.1fg 지 %.1fg (%.1fg)", carbs, protein, fat, amount));
+                            groups[index].addView(tv);
+                        }
+                    }, error -> {} ) {
+                @Override
+                public java.util.Map<String, String> getHeaders() {
+                    java.util.Map<String, String> headers = new java.util.HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }
+            };
+            queue.add(req);
+        }
+
+        String totalUrl = ApiConfig.BASE_URL + "/api/diet/total?date=" + date;
+        JsonObjectRequest totalReq = new JsonObjectRequest(Request.Method.GET, totalUrl, null,
+                resp -> {
+                    org.json.JSONObject data = resp.optJSONObject("data");
+                    if (data == null) return;
+                    double c = data.optDouble("totalCarbohydrate");
+                    double p = data.optDouble("totalProtein");
+                    double f = data.optDouble("totalFat");
+                    result.setText(String.format("총 탄 %.1fg 단 %.1fg 지 %.1fg", c, p, f));
+                }, error -> result.setText("데이터를 불러오지 못했습니다.")) {
+            @Override
+            public java.util.Map<String, String> getHeaders() {
+                java.util.Map<String, String> headers = new java.util.HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+        queue.add(totalReq);
     }
 }

@@ -92,6 +92,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="저녁"/>
+
+            <Button
+                android:id="@+id/btnSnack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="간식"/>
         </LinearLayout>
 
         <!-- 아침 카드 그룹 -->
@@ -115,6 +122,15 @@
         <!-- 저녁 카드 그룹 -->
         <LinearLayout
             android:id="@+id/groupDinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+        <!-- 간식 카드 그룹 -->
+        <LinearLayout
+            android:id="@+id/groupSnack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
