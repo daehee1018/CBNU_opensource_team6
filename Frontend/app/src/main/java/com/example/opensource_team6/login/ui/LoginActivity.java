@@ -14,6 +14,14 @@ import com.example.opensource_team6.MainActivity;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.register.*;
 import com.example.opensource_team6.network.ApiConfig;
+import com.example.opensource_team6.util.TokenManager;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.JsonObjectRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,10 +59,37 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            // 임시 로그인 처리 (정상 로그인 시 MainActivity로 이동)
-            Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            String url = ApiConfig.BASE_URL + "/api/auth/login";
+
+            JSONObject requestData = new JSONObject();
+            try {
+                requestData.put("email", email);
+                requestData.put("password", password);
+            } catch (JSONException e) {
+                Toast.makeText(this, "데이터 생성 오류", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    requestData,
+                    response -> {
+                        try {
+                            String token = response.optString("Token", response.optString("token"));
+                            TokenManager.saveToken(this, token);
+                            Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, MainActivity.class));
+                            finish();
+                        } catch (Exception e) {
+                            Toast.makeText(this, "응답 파싱 오류", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    error -> Toast.makeText(this, "로그인 실패: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+            );
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(request);
         });
 
         // 비밀번호 보기 토글
