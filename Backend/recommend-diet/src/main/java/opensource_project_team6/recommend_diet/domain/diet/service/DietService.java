@@ -24,8 +24,16 @@ public class DietService {
     private final FoodRepository foodRepository;
 
     public void saveDiet(DietRequestDTO dto, User user) {
-        Food food = foodRepository.findById(dto.getFoodId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 음식이 존재하지 않습니다."));
+        Food food = null;
+        if (dto.getFoodId() != null) {
+            food = foodRepository.findById(dto.getFoodId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 음식이 존재하지 않습니다."));
+        } else if (dto.getFoodName() != null) {
+            food = foodRepository.findByName(dto.getFoodName())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 음식이 존재하지 않습니다."));
+        } else {
+            throw new IllegalArgumentException("음식 정보가 필요합니다.");
+        }
 
         double ratio = dto.getAmount() / parseAmount(food.getStandardAmount());
 

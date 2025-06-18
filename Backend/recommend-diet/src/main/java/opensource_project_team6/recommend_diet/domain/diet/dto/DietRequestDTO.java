@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 public class DietRequestDTO {
     private Long foodId;
+    private String foodName;
     private Double amount;
     private MealTime mealTime;
     private LocalDate date;
