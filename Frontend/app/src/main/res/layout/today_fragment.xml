@@ -10,17 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="@dimen/spacing_large">
 
         <TextView
             android:id="@+id/todayDateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2024년 6월 1일 (토)"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_title"
             android:textColor="@color/color_primary"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="@dimen/spacing_small" />
     </LinearLayout>
 
     <!-- 콘텐츠 영역 -->
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="@dimen/spacing_large">
 
         </LinearLayout>
 
@@ -60,6 +60,6 @@
             android:layout_height="wrap_content"
             android:text="오늘의 식사 데이터가 존재하지 않습니다!"
             android:textColor="@color/color_secondary"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_size_body" />
     </LinearLayout>
 </FrameLayout>
