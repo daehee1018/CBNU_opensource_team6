@@ -35,7 +35,7 @@
                     android:src="@android:drawable/ic_menu_search"
                     android:contentDescription="검색" />
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/searchEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -46,15 +46,17 @@
                     android:inputType="text" />
             </LinearLayout>
 
+        </androidx.cardview.widget.CardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchResults"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/color_surface"
             android:visibility="gone"
             android:nestedScrollingEnabled="false"
-            android:paddingTop="8dp" />
-
-        </androidx.cardview.widget.CardView>
+            android:padding="8dp" />
 
         <!-- 달력 -->
         <LinearLayout
