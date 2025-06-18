@@ -6,9 +6,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.opensource_team6.network.ApiConfig;
+import com.example.opensource_team6.util.TokenManager;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.opensource_team6.data.Food;
 import com.example.opensource_team6.data.FoodDao;
+import org.json.JSONObject;
+import java.util.Map;
+import java.util.HashMap;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,8 +101,65 @@ public class FoodDetailActivity extends AppCompatActivity {
             editor.putString(key, value);
             editor.apply();
 
-            Toast.makeText(this, "식단에 추가되었습니다", Toast.LENGTH_SHORT).show();
-            finish();
+            sendDietToServer(amount, today);
         });
+    }
+
+    private void sendDietToServer(float amount, String date) {
+        String token = TokenManager.getToken(this);
+        if (token == null) {
+            Toast.makeText(this, "로그인이 필요합니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String meal = convertMeal(mealType);
+
+        String url = ApiConfig.BASE_URL + "/api/diet";
+        JSONObject body = new JSONObject();
+        try {
+            body.put("foodName", selectedFood.getName());
+            body.put("amount", amount);
+            body.put("mealTime", meal);
+            body.put("date", date);
+        } catch (Exception e) {
+            Toast.makeText(this, "데이터 생성 실패", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                body,
+                response -> {
+                    Toast.makeText(this, "식단에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                    finish();
+                },
+                error -> Toast.makeText(this, "서버 오류", Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
+    }
+
+    private String convertMeal(String type) {
+        switch (type) {
+            case "조식":
+                return "아침";
+            case "중식":
+                return "점심";
+            case "석식":
+            case "야식":
+                return "저녁";
+            default:
+                return "아침";
+        }
     }
 }
