@@ -56,9 +56,9 @@ public class MyPageController {
     }
 
     @PostMapping("/macro-ratio")
-    public ResponseEntity<Void> updateMacroRatio(@AuthenticationPrincipal UserPrincipal userPrincipal,
+    public ResponseEntity<java.util.Map<String, String>> updateMacroRatio(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                  @RequestBody MacroRatioRequest request) {
         myPageService.updateMacroRatio(userPrincipal.getId(), request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(java.util.Map.of("status", "ok"));
     }
 }
