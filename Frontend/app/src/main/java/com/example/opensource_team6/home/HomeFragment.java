@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment {
     private List<Food> foodList;
     private RecyclerView searchResults;
     private FoodAdapter searchAdapter;
-
     private LinearLayout calendarLayout;
     private LinearLayout mealButtonsLayout;
     private LinearLayout inputContainerLayout;
@@ -192,7 +191,6 @@ public class HomeFragment extends Fragment {
                 if (query.isEmpty()) {
                     searchResults.setVisibility(View.GONE);
                     searchAdapter.updateData(new ArrayList<>());
-
                     calendarLayout.setVisibility(View.VISIBLE);
                     mealButtonsLayout.setVisibility(View.VISIBLE);
                     inputContainerLayout.setVisibility(View.VISIBLE);
@@ -210,7 +208,6 @@ public class HomeFragment extends Fragment {
                 }
                 searchAdapter.updateData(filtered);
                 searchResults.setVisibility(View.VISIBLE);
-
                 calendarLayout.setVisibility(View.GONE);
                 mealButtonsLayout.setVisibility(View.GONE);
                 groupBreakfast.setVisibility(View.GONE);

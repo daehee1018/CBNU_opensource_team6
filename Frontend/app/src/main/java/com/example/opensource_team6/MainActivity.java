@@ -2,7 +2,6 @@ package com.example.opensource_team6;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -38,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (id == R.id.nav_scan) {
-                Toast.makeText(this, "식단 사진 클릭됨", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MealPhotoActivity.class);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.nav_profile) {
                 selected = new ProfileFragment();
