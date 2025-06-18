@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
@@ -30,6 +31,11 @@ public class ProfileFragment extends Fragment {
     private TextView profileName;
     private TextView profileTag;
     private TextView profileDesc;
+    private ProgressBar progressCarb;
+    private ProgressBar progressProtein;
+    private ProgressBar progressFat;
+    private TextView finalScoreText;
+    private TextView scoreMessage;
 
     public ProfileFragment() {}
 
@@ -41,6 +47,11 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profile_name);
         profileTag = view.findViewById(R.id.profile_tag);
         profileDesc = view.findViewById(R.id.profile_desc);
+        progressCarb = view.findViewById(R.id.progress_carb);
+        progressProtein = view.findViewById(R.id.progress_protein);
+        progressFat = view.findViewById(R.id.progress_fat);
+        finalScoreText = view.findViewById(R.id.final_score_text);
+        scoreMessage = view.findViewById(R.id.score_message);
         ImageButton settingsBtn = view.findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
@@ -48,6 +59,7 @@ public class ProfileFragment extends Fragment {
         });
 
         fetchProfile();
+        fetchScore();
 
         return view;
     }
@@ -93,5 +105,48 @@ public class ProfileFragment extends Fragment {
         } else {
             profileDesc.setText("생년월일: " + birthDate);
         }
+    }
+
+    private void fetchScore() {
+        String token = TokenManager.getToken(requireContext());
+        if (token == null) return;
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        String today = sdf.format(new java.util.Date());
+        String url = ApiConfig.BASE_URL + "/api/diet/score?date=" + today;
+
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    JSONObject data = response.optJSONObject("data");
+                    if (data != null) updateScore(data);
+                },
+                error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(req);
+    }
+
+    private void updateScore(JSONObject data) {
+        int carb = (int) Math.round(data.optDouble("carbScore", 0));
+        int protein = (int) Math.round(data.optDouble("proteinScore", 0));
+        int fat = (int) Math.round(data.optDouble("fatScore", 0));
+        int finalScore = (int) Math.round(data.optDouble("finalScore", 0));
+        String message = data.optString("message", "");
+
+        progressCarb.setProgress(carb);
+        progressProtein.setProgress(protein);
+        progressFat.setProgress(fat);
+        finalScoreText.setText("점수: " + finalScore);
+        scoreMessage.setText(message);
     }
 }

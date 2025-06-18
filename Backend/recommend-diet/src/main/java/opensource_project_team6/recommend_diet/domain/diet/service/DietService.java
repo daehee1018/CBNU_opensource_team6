@@ -9,6 +9,7 @@ import opensource_project_team6.recommend_diet.domain.diet.repository.DietReposi
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
+import opensource_project_team6.recommend_diet.domain.myPage.dto.DietScoreResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -92,6 +93,52 @@ public class DietService {
         result.put("totalSodium", round(totalSodium));
         result.put("totalEnergy", totalEnergy);
         return result;
+    }
+
+    public DietScoreResponse getDietScore(User user, LocalDate date) {
+        List<Diet> allMeals = dietRepository.findAllWithFoodByUserAndDate(user, date);
+
+        double totalCarb = 0, totalProtein = 0, totalFat = 0;
+        for (Diet d : allMeals) {
+            totalCarb += d.getCarbohydrate();
+            totalProtein += d.getProtein();
+            totalFat += d.getFat();
+        }
+
+        double total = totalCarb + totalProtein + totalFat;
+        if (total == 0) {
+            return new DietScoreResponse(0, 0, 0, 0, "데이터가 없습니다.");
+        }
+
+        double actualCarbRatio = totalCarb / total;
+        double actualProteinRatio = totalProtein / total;
+        double actualFatRatio = totalFat / total;
+
+        double targetCarbRatio = user.getTargetCarbRatio() != null ? user.getTargetCarbRatio() : 0;
+        double targetProteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
+        double targetFatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
+
+        double carbScore = calcScore(actualCarbRatio, targetCarbRatio);
+        double proteinScore = calcScore(actualProteinRatio, targetProteinRatio);
+        double fatScore = calcScore(actualFatRatio, targetFatRatio);
+
+        double finalScore = (carbScore + proteinScore + fatScore) / 3.0;
+        String message = getMessage(finalScore);
+
+        return new DietScoreResponse(round(carbScore), round(proteinScore), round(fatScore), round(finalScore), message);
+    }
+
+    private double calcScore(double actual, double target) {
+        double diff = Math.abs(actual - target);
+        double score = (1.0 - diff) * 100.0;
+        return Math.max(score, 0.0);
+    }
+
+    private String getMessage(double score) {
+        if (score >= 90) return "최고예요! 계속 유지하세요!";
+        if (score >= 70) return "좋아요! 조금만 더 노력해보세요!";
+        if (score >= 50) return "노력이 필요해요! 힘내세요!";
+        return "식단 개선이 필요합니다! 화이팅!";
     }
 
 
