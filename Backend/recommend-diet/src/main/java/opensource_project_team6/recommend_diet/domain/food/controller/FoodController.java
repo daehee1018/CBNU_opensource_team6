@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.food.dto.FoodDTO;
 import opensource_project_team6.recommend_diet.domain.food.dto.FoodSimpleDTO;
 import opensource_project_team6.recommend_diet.domain.food.service.FoodService;
+import opensource_project_team6.recommend_diet.global.util.UserPrincipal;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,5 +78,23 @@ public class FoodController {
     public ResponseEntity<?> getTodayFoods() {
         Map<String, List<FoodDTO>> meals = foodService.getTodayFoods();
         return ResponseEntity.ok(meals);
+    }
+
+    @GetMapping("/ingredient")
+    public ResponseEntity<?> searchFoodsByIngredient(@RequestParam String keyword) {
+
+        List<FoodSimpleDTO> result = foodService.searchFoodsByIngredient(keyword);
+        Map<String, Object> response = new HashMap<>();
+
+        if (result.isEmpty()) {
+            response.put("status", 404);
+            response.put("message", "해당 식재료를 이용한 음식 데이터가 없습니다.");
+            return ResponseEntity.status(404).body(response);
+        }
+
+        response.put("status", 200);
+        response.put("message", "식재료 검색 성공");
+        response.put("data", result);
+        return ResponseEntity.ok(response);
     }
 }
