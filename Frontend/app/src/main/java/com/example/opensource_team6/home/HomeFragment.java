@@ -44,6 +44,17 @@ public class HomeFragment extends Fragment {
     private List<Food> foodList;
     private RecyclerView searchResults;
     private FoodAdapter searchAdapter;
+    private LinearLayout calendarLayout;
+    private LinearLayout mealButtonsLayout;
+    private LinearLayout inputContainerLayout;
+    private LinearLayout foodListLayout;
+
+    private LinearLayout groupBreakfast;
+    private LinearLayout groupLunch;
+    private LinearLayout groupDinner;
+    private LinearLayout groupSnack;
+
+    private int currentMeal = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,13 +68,18 @@ public class HomeFragment extends Fragment {
         AutoCompleteTextView foodInput = view.findViewById(R.id.foodInput);
         EditText foodAmount = view.findViewById(R.id.foodAmount);
         Button addFoodBtn = view.findViewById(R.id.addFoodBtn);
-        TextView resultText = view.findViewById(R.id.resultText);
+        final TextView resultText = view.findViewById(R.id.resultText);
         CalendarView calendarView = view.findViewById(R.id.calendar);
 
-        LinearLayout groupBreakfast = view.findViewById(R.id.groupBreakfast);
-        LinearLayout groupLunch = view.findViewById(R.id.groupLunch);
-        LinearLayout groupDinner = view.findViewById(R.id.groupDinner);
-        LinearLayout groupSnack = view.findViewById(R.id.groupSnack);
+        calendarLayout = view.findViewById(R.id.CalenderView);
+        mealButtonsLayout = view.findViewById(R.id.mealButtons);
+        inputContainerLayout = view.findViewById(R.id.inputContainer);
+        foodListLayout = view.findViewById(R.id.foodList);
+
+        groupBreakfast = view.findViewById(R.id.groupBreakfast);
+        groupLunch = view.findViewById(R.id.groupLunch);
+        groupDinner = view.findViewById(R.id.groupDinner);
+        groupSnack = view.findViewById(R.id.groupSnack);
 
         LinearLayout listBreakfast = view.findViewById(R.id.listBreakfast);
         LinearLayout listLunch = view.findViewById(R.id.listLunch);
@@ -80,37 +96,26 @@ public class HomeFragment extends Fragment {
         Button btnDinner = view.findViewById(R.id.btnDinner);
         Button btnSnack = view.findViewById(R.id.btnSnack);
 
-        groupBreakfast.setVisibility(View.VISIBLE);
-        groupLunch.setVisibility(View.GONE);
-        groupDinner.setVisibility(View.GONE);
-        groupSnack.setVisibility(View.GONE);
+        updateMealVisibility();
 
         btnBreakfast.setOnClickListener(v -> {
-            groupBreakfast.setVisibility(View.VISIBLE);
-            groupLunch.setVisibility(View.GONE);
-            groupDinner.setVisibility(View.GONE);
-            groupSnack.setVisibility(View.GONE);
+            currentMeal = 0;
+            updateMealVisibility();
         });
 
         btnLunch.setOnClickListener(v -> {
-            groupBreakfast.setVisibility(View.GONE);
-            groupLunch.setVisibility(View.VISIBLE);
-            groupDinner.setVisibility(View.GONE);
-            groupSnack.setVisibility(View.GONE);
+            currentMeal = 1;
+            updateMealVisibility();
         });
 
         btnDinner.setOnClickListener(v -> {
-            groupBreakfast.setVisibility(View.GONE);
-            groupLunch.setVisibility(View.GONE);
-            groupDinner.setVisibility(View.VISIBLE);
-            groupSnack.setVisibility(View.GONE);
+            currentMeal = 2;
+            updateMealVisibility();
         });
 
         btnSnack.setOnClickListener(v -> {
-            groupBreakfast.setVisibility(View.GONE);
-            groupLunch.setVisibility(View.GONE);
-            groupDinner.setVisibility(View.GONE);
-            groupSnack.setVisibility(View.VISIBLE);
+            currentMeal = 3;
+            updateMealVisibility();
         });
 
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
@@ -186,8 +191,15 @@ public class HomeFragment extends Fragment {
                 if (query.isEmpty()) {
                     searchResults.setVisibility(View.GONE);
                     searchAdapter.updateData(new ArrayList<>());
+                    calendarLayout.setVisibility(View.VISIBLE);
+                    mealButtonsLayout.setVisibility(View.VISIBLE);
+                    inputContainerLayout.setVisibility(View.VISIBLE);
+                    resultText.setVisibility(View.VISIBLE);
+                    foodListLayout.setVisibility(View.VISIBLE);
+                    updateMealVisibility();
                     return;
                 }
+
                 List<Food> filtered = new ArrayList<>();
                 for (Food item : foodList) {
                     if (item.getName().toLowerCase().contains(query.toLowerCase())) {
@@ -196,6 +208,15 @@ public class HomeFragment extends Fragment {
                 }
                 searchAdapter.updateData(filtered);
                 searchResults.setVisibility(View.VISIBLE);
+                calendarLayout.setVisibility(View.GONE);
+                mealButtonsLayout.setVisibility(View.GONE);
+                groupBreakfast.setVisibility(View.GONE);
+                groupLunch.setVisibility(View.GONE);
+                groupDinner.setVisibility(View.GONE);
+                groupSnack.setVisibility(View.GONE);
+                inputContainerLayout.setVisibility(View.GONE);
+                resultText.setVisibility(View.GONE);
+                foodListLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -211,6 +232,13 @@ public class HomeFragment extends Fragment {
         foodInput.setAdapter(adapter);
 
         return view;
+    }
+
+    private void updateMealVisibility() {
+        groupBreakfast.setVisibility(currentMeal == 0 ? View.VISIBLE : View.GONE);
+        groupLunch.setVisibility(currentMeal == 1 ? View.VISIBLE : View.GONE);
+        groupDinner.setVisibility(currentMeal == 2 ? View.VISIBLE : View.GONE);
+        groupSnack.setVisibility(currentMeal == 3 ? View.VISIBLE : View.GONE);
     }
 
     private void fetchDietData(String date, LinearLayout breakfastList, LinearLayout lunchList,
