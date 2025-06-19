@@ -248,7 +248,13 @@ public class ProfileFragment extends Fragment {
         double rCarb = data.optDouble("recommendedCarbohydrate", 0);
         double rProtein = data.optDouble("recommendedProtein", 0);
         double rFat = data.optDouble("recommendedFat", 0);
+        int carbPercent = (rCarb > 0) ? (int) Math.round(tCarb / rCarb * 100) : 0;
+        int proteinPercent = (rProtein > 0) ? (int) Math.round(tProtein / rProtein * 100) : 0;
+        int fatPercent = (rFat > 0) ? (int) Math.round(tFat / rFat * 100) : 0;
 
+        progressCarb.setProgress(Math.min(carbPercent, 100));
+        progressProtein.setProgress(Math.min(proteinPercent, 100));
+        progressFat.setProgress(Math.min(fatPercent, 100));
         textCarbAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rCarb, tCarb));
         textProteinAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rProtein, tProtein));
         textFatAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rFat, tFat));
