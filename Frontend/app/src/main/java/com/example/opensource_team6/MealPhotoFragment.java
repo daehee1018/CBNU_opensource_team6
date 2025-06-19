@@ -46,6 +46,9 @@ public class MealPhotoFragment extends Fragment {
         Button btnLunchHistory = view.findViewById(R.id.btnLunchHistory);
         Button btnDinnerHistory = view.findViewById(R.id.btnDinnerHistory);
         Button btnSnackHistory = view.findViewById(R.id.btnSnackHistory);
+        Button btnBreakfastAnalyze = view.findViewById(R.id.btnBreakfastAnalyze);
+        Button btnLunchAnalyze = view.findViewById(R.id.btnLunchAnalyze);
+        Button btnDinnerAnalyze = view.findViewById(R.id.btnDinnerAnalyze);
 
         // 런처 등록
         registerLauncher("breakfast", imgBreakfast);
@@ -58,6 +61,10 @@ public class MealPhotoFragment extends Fragment {
         btnLunchHistory.setOnClickListener(v -> openHistory("lunch"));
         btnDinnerHistory.setOnClickListener(v -> openHistory("dinner"));
         btnSnackHistory.setOnClickListener(v -> openHistory("snack"));
+
+        btnBreakfastAnalyze.setOnClickListener(v -> analyzeMeal("breakfast", "아침"));
+        btnLunchAnalyze.setOnClickListener(v -> analyzeMeal("lunch", "점심"));
+        btnDinnerAnalyze.setOnClickListener(v -> analyzeMeal("dinner", "저녁"));
 
         // 오늘 사진 불러오기
         loadTodayPhotos();
@@ -116,5 +123,129 @@ public class MealPhotoFragment extends Fragment {
         } else {
             view.setImageResource(android.R.drawable.ic_menu_camera);
         }
+    }
+
+    private File getPhotoFile(String meal) {
+        File dir = new File(requireContext().getExternalFilesDir(null), "meal_photos");
+        String date = dateFormat.format(new Date());
+        return new File(dir, date + "_" + meal + ".jpg");
+    }
+
+    private void analyzeMeal(String mealKey, String mealTime) {
+        File file = getPhotoFile(mealKey);
+        if (!file.exists()) {
+            android.widget.Toast.makeText(getContext(), "사진이 없습니다", android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.RequestBody imageBody = okhttp3.RequestBody.create(file, okhttp3.MediaType.parse("image/jpeg"));
+        okhttp3.MultipartBody requestBody = new okhttp3.MultipartBody.Builder()
+                .setType(okhttp3.MultipartBody.FORM)
+                .addFormDataPart("image", file.getName(), imageBody)
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(com.example.opensource_team6.network.ApiConfig.BASE_URL + "/api/diet/image/preview")
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, java.io.IOException e) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "분석 실패", android.widget.Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws java.io.IOException {
+                if (!response.isSuccessful()) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "분석 실패", android.widget.Toast.LENGTH_SHORT).show());
+                    }
+                    return;
+                }
+                String body = response.body().string();
+                try {
+                    org.json.JSONObject obj = new org.json.JSONObject(body);
+                    org.json.JSONObject data = obj.optJSONObject("data");
+                    if (data == null) throw new Exception();
+                    String name = data.optString("name");
+                    double kcal = data.optDouble("energy");
+                    double carb = data.optDouble("carbohydrate");
+                    double protein = data.optDouble("protein");
+                    double fat = data.optDouble("fat");
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> showAnalysisDialog(name, kcal, carb, protein, fat, file, mealTime));
+                    }
+                } catch (Exception e) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "분석 실패", android.widget.Toast.LENGTH_SHORT).show());
+                    }
+                }
+            }
+        });
+    }
+
+    private void showAnalysisDialog(String name, double kcal, double carb, double protein, double fat, File file, String mealTime) {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("분석 결과")
+                .setMessage(name + "\n열량: " + kcal + "kcal\n탄수화물: " + carb + "g\n단백질: " + protein + "g\n지방: " + fat + "g")
+                .setPositiveButton("등록", (d, which) -> registerAnalyzedMeal(file, mealTime))
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+    private void registerAnalyzedMeal(File file, String mealTime) {
+        String token = com.example.opensource_team6.util.TokenManager.getToken(requireContext());
+        if (token == null) {
+            android.widget.Toast.makeText(getContext(), "로그인이 필요합니다", android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
+        okhttp3.RequestBody imageBody = okhttp3.RequestBody.create(file, okhttp3.MediaType.parse("image/jpeg"));
+        org.json.JSONObject dto = new org.json.JSONObject();
+        try {
+            dto.put("mealTime", mealTime);
+            dto.put("date", dateFormat.format(new Date()));
+        } catch (org.json.JSONException e) {
+            android.widget.Toast.makeText(getContext(), "데이터 오류", android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        okhttp3.RequestBody dataBody = okhttp3.RequestBody.create(dto.toString(), okhttp3.MediaType.parse("application/json"));
+        okhttp3.MultipartBody requestBody = new okhttp3.MultipartBody.Builder()
+                .setType(okhttp3.MultipartBody.FORM)
+                .addFormDataPart("image", file.getName(), imageBody)
+                .addFormDataPart("data", null, dataBody)
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(com.example.opensource_team6.network.ApiConfig.BASE_URL + "/api/diet/image")
+                .addHeader("Authorization", "Bearer " + token)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, java.io.IOException e) {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "업로드 실패", android.widget.Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws java.io.IOException {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        android.widget.Toast.makeText(getContext(), "등록되었습니다", android.widget.Toast.LENGTH_SHORT).show();
+                    } else {
+                        android.widget.Toast.makeText(getContext(), "업로드 실패", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }

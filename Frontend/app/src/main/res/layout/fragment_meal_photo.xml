@@ -29,6 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="아침 기록"
+            android:layout_marginBottom="4dp" />
+        <Button
+            android:id="@+id/btnBreakfastAnalyze"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView
@@ -44,6 +50,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="점심 기록"
+            android:layout_marginBottom="4dp" />
+        <Button
+            android:id="@+id/btnLunchAnalyze"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView
@@ -59,6 +71,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="저녁 기록"
+            android:layout_marginBottom="4dp" />
+        <Button
+            android:id="@+id/btnDinnerAnalyze"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView

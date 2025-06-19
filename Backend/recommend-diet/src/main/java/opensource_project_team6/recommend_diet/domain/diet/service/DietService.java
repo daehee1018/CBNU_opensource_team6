@@ -1,6 +1,7 @@
 package opensource_project_team6.recommend_diet.domain.diet.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietResponseDTO;
 import opensource_project_team6.recommend_diet.domain.diet.entity.Diet;
@@ -8,11 +9,14 @@ import opensource_project_team6.recommend_diet.domain.diet.entity.MealTime;
 import opensource_project_team6.recommend_diet.domain.diet.repository.DietRepository;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
+import opensource_project_team6.recommend_diet.domain.food.service.OpenAIService;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.DietScoreResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +24,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DietService {
     private final DietRepository dietRepository;
     private final FoodRepository foodRepository;
+    private final OpenAIService openAIService;
 
     public void saveDiet(DietRequestDTO dto, User user) {
         Food food = null;
@@ -51,6 +57,32 @@ public class DietService {
                 .build();
 
         dietRepository.save(diet);
+    }
+
+    public void saveDietByImage(MultipartFile image, MealTime mealTime, LocalDate date, User user) throws IOException {
+        log.info("[DietService] saveDietByImage 호출 - userId: {}, mealTime: {}, date: {}", user.getId(), mealTime, date);
+        Food food = openAIService.analyzeFoodImage(image);
+        log.info("[DietService] 분석된 음식: {}", food.getName());
+
+        Diet diet = Diet.builder()
+                .user(user)
+                .food(food)
+                .amount(parseAmount(food.getStandardAmount()))
+                .mealTime(mealTime)
+                .date(date)
+                .energy(food.getEnergy())
+                .protein(food.getProtein())
+                .fat(food.getFat())
+                .carbohydrate(food.getCarbohydrate())
+                .build();
+
+        dietRepository.save(diet);
+        log.info("[DietService] 식단 저장 완료. id={}", diet.getId());
+    }
+
+    public Food previewDietImage(MultipartFile image) throws IOException {
+        log.info("[DietService] previewDietImage 호출");
+        return openAIService.previewFoodImage(image);
     }
 
     public List<DietResponseDTO> getDietByDateAndMeal(User user, MealTime mealTime, java.time.LocalDate date) {
