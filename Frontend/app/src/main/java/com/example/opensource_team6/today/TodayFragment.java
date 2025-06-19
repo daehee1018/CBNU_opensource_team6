@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TodayFragment extends Fragment {
+public class  TodayFragment extends Fragment {
 
     private LinearLayout contentLayout;
     private LinearLayout emptyLayout;

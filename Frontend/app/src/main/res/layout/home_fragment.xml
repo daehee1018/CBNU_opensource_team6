@@ -200,37 +200,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
         </LinearLayout>
-
-        <!-- 음식 입력 레이아웃 -->
-        <LinearLayout
-            android:id="@+id/inputContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/spacing_normal">
-
-            <AutoCompleteTextView
-                android:id="@+id/foodInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:hint="음식 이름"
-                android:inputType="text" />
-
-            <EditText
-                android:id="@+id/foodAmount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="g"
-                android:inputType="number" />
-
             <Button
-                android:id="@+id/addFoodBtn"
-                android:layout_width="wrap_content"
+                android:id="@+id/analyzeBtn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="추가" />
-        </LinearLayout>
+                android:text="현재 식사 기반 식사 추천 " />
 
         <!-- 결과 출력 -->
         <TextView
