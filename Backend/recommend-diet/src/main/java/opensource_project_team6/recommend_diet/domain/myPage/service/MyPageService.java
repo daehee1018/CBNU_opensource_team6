@@ -36,6 +36,9 @@ public class MyPageService {
                 user.getGender(),
                 user.getBirthDate(),
                 age,
+                user.getHeight() != null ? user.getHeight().intValue() : null,
+                user.getWeight(),
+                user.getTargetWeight(),
                 imageUrl,
                 followerCount,
                 followingCount
