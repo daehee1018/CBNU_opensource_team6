@@ -47,7 +47,7 @@ public class OpenAIService {
                 "role", "user",
                 "content", List.of(
                         Map.of("type", "text", "text", """
-                                사진 속 음식의 이름과 열량(kcal), 탄수화물(g), 단백질(g), 지방(g)을 JSON 형식으로 알려줘.
+                                사진 속 음식의 이름과 열량(kcal), 탄수화물(g), 단백질(g), 지방(g), 콜레스테롤(g), 포화지방(g), 나트륨(g), 당(g)을 JSON 형식으로 알려줘.
                                 마크다운 코드블럭 없이, 아래 형식 그대로 순수 JSON으로만 응답해줘.
 
                                 {
@@ -56,6 +56,10 @@ public class OpenAIService {
                                   "carbohydrate": 숫자,
                                   "protein": 숫자,
                                   "fat": 숫자
+                                  "cholesterol": 숫자
+                                  "saturated_fat": 숫자
+                                  "sodium": 숫자
+                                  "sugar": 숫자
                                 }
                                 """),
                         Map.of("type", "image_url", "image_url", imageUrl)
