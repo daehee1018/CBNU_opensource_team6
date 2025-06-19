@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.diet.entity.MealTime;
 import opensource_project_team6.recommend_diet.domain.diet.service.DietService;
-import opensource_project_team6.recommend_diet.domain.diet.dto.ImageDietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.user.repository.UserRepository;
 import opensource_project_team6.recommend_diet.global.util.UserPrincipal;
@@ -43,20 +42,21 @@ public class DietContaroller {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<?> saveDietByImage(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                             @RequestPart("image") MultipartFile image,
-                                             @RequestPart("data") ImageDietRequestDTO dto) throws java.io.IOException {
-        User user = userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-        log.info("[DietController] /api/diet/image POST 호출 - userId: {}, mealTime: {}, date: {}",
-                user.getId(), dto.getMealTime(), dto.getDate());
-
-        dietService.saveDietByImage(image, dto.getMealTime(), dto.getDate(), user);
+    public ResponseEntity<?> saveDietByImage(@RequestPart("image") MultipartFile image) throws java.io.IOException {
+        log.info("[DietController] /api/diet/image POST 호출");
+        var food = dietService.saveDietByImage(image);
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", food.getId());
+        data.put("name", food.getName());
+        data.put("energy", food.getEnergy());
+        data.put("carbohydrate", food.getCarbohydrate());
+        data.put("protein", food.getProtein());
+        data.put("fat", food.getFat());
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", 200);
-        response.put("message", "사진 식단이 저장되었습니다.");
+        response.put("message", "사진 음식 저장 완료");
+        response.put("data", data);
         return ResponseEntity.ok(response);
     }
 

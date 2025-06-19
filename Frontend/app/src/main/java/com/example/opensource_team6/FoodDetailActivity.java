@@ -54,6 +54,18 @@ public class FoodDetailActivity extends AppCompatActivity {
                 R.array.meal_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMealType.setAdapter(adapter);
+
+        String mealExtra = getIntent().getStringExtra("meal_time");
+        if (mealExtra != null) {
+            mealType = mealExtra;
+            String spinnerValue = mealExtra;
+            if (mealExtra.equals("아침")) spinnerValue = "조식";
+            else if (mealExtra.equals("점심")) spinnerValue = "중식";
+            else if (mealExtra.equals("저녁")) spinnerValue = "석식";
+            int idx = adapter.getPosition(spinnerValue);
+            if (idx >= 0) spinnerMealType.setSelection(idx);
+        }
+
         spinnerMealType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -85,7 +97,20 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         }
 
-        // 3. UI 세팅
+        // 3. 영양 정보가 직접 전달된 경우 (AI 인식)
+        if (selectedFood == null) {
+            String foodName = getIntent().getStringExtra("food_name");
+            if (foodName != null) {
+                Food temp = new Food();
+                temp.setName(foodName);
+                temp.setEnergy(getIntent().getDoubleExtra("food_kcal", 0));
+                temp.setCarbohydrate(getIntent().getDoubleExtra("food_carbs", 0));
+                temp.setProtein(getIntent().getDoubleExtra("food_protein", 0));
+                temp.setFat(getIntent().getDoubleExtra("food_fat", 0));
+                selectedFood = temp;
+            }
+        }
+        // 4. UI 세팅
         if (selectedFood != null) {
             tvName.setText(selectedFood.getName());
             tvEnergy.setText("에너지: " + selectedFood.getEnergy() + " kcal");

@@ -63,25 +63,11 @@ public class DietService {
         dietRepository.save(diet);
     }
 
-    public void saveDietByImage(MultipartFile image, MealTime mealTime, LocalDate date, User user) throws IOException {
-        log.info("[DietService] saveDietByImage 호출 - userId: {}, mealTime: {}, date: {}", user.getId(), mealTime, date);
+    public Food saveDietByImage(MultipartFile image) throws IOException {
+        log.info("[DietService] saveDietByImage 호출");
         Food food = openAIService.analyzeFoodImage(image);
         log.info("[DietService] 분석된 음식: {}", food.getName());
-
-        Diet diet = Diet.builder()
-                .user(user)
-                .food(food)
-                .amount(parseAmount(food.getStandardAmount()))
-                .mealTime(mealTime)
-                .date(date)
-                .energy(food.getEnergy())
-                .protein(food.getProtein())
-                .fat(food.getFat())
-                .carbohydrate(food.getCarbohydrate())
-                .build();
-
-        dietRepository.save(diet);
-        log.info("[DietService] 식단 저장 완료. id={}", diet.getId());
+        return food;
     }
 
     public Food previewDietImage(MultipartFile image) throws IOException {

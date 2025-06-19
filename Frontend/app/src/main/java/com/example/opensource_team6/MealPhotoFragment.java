@@ -206,20 +206,9 @@ public class MealPhotoFragment extends Fragment {
 
         okhttp3.OkHttpClient client = new okhttp3.OkHttpClient();
         okhttp3.RequestBody imageBody = okhttp3.RequestBody.create(file, okhttp3.MediaType.parse("image/jpeg"));
-        org.json.JSONObject dto = new org.json.JSONObject();
-        try {
-            dto.put("mealTime", mealTime);
-            dto.put("date", dateFormat.format(new Date()));
-        } catch (org.json.JSONException e) {
-            android.widget.Toast.makeText(getContext(), "데이터 오류", android.widget.Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        okhttp3.RequestBody dataBody = okhttp3.RequestBody.create(dto.toString(), okhttp3.MediaType.parse("application/json"));
         okhttp3.MultipartBody requestBody = new okhttp3.MultipartBody.Builder()
                 .setType(okhttp3.MultipartBody.FORM)
                 .addFormDataPart("image", file.getName(), imageBody)
-                .addFormDataPart("data", null, dataBody)
                 .build();
 
         okhttp3.Request request = new okhttp3.Request.Builder()
@@ -238,13 +227,31 @@ public class MealPhotoFragment extends Fragment {
             @Override
             public void onResponse(okhttp3.Call call, okhttp3.Response response) throws java.io.IOException {
                 if (getActivity() == null) return;
-                getActivity().runOnUiThread(() -> {
-                    if (response.isSuccessful()) {
-                        android.widget.Toast.makeText(getContext(), "등록되었습니다", android.widget.Toast.LENGTH_SHORT).show();
-                    } else {
-                        android.widget.Toast.makeText(getContext(), "업로드 실패", android.widget.Toast.LENGTH_SHORT).show();
-                    }
-                });
+                if (!response.isSuccessful()) {
+                    getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "업로드 실패", android.widget.Toast.LENGTH_SHORT).show());
+                    return;
+                }
+
+                String body = response.body().string();
+                try {
+                    org.json.JSONObject obj = new org.json.JSONObject(body);
+                    org.json.JSONObject data = obj.optJSONObject("data");
+                    if (data == null) throw new Exception();
+
+                    com.example.opensource_team6.data.Food food = new com.example.opensource_team6.data.Food();
+                    food.setName(data.optString("name"));
+                    food.setEnergy(data.optDouble("energy"));
+                    food.setCarbohydrate(data.optDouble("carbohydrate"));
+                    food.setProtein(data.optDouble("protein"));
+                    food.setFat(data.optDouble("fat"));
+
+                    Intent intent = new Intent(getContext(), FoodDetailActivity.class);
+                    intent.putExtra("food", food);
+                    intent.putExtra("meal_time", mealTime);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    getActivity().runOnUiThread(() -> android.widget.Toast.makeText(getContext(), "업로드 실패", android.widget.Toast.LENGTH_SHORT).show());
+                }
             }
         });
     }
