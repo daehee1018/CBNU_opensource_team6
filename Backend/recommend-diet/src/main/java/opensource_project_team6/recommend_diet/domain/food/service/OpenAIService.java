@@ -28,6 +28,11 @@ public class OpenAIService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public Food analyzeFoodImage(MultipartFile file) throws IOException {
+        Food food = previewFoodImage(file);
+        return foodRepository.save(food);
+    }
+
+    public Food previewFoodImage(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         String base64 = Base64.getEncoder().encodeToString(bytes);
 
@@ -73,6 +78,6 @@ public class OpenAIService {
                 .protein(result.path("protein").asDouble())
                 .fat(result.path("fat").asDouble())
                 .build();
-        return foodRepository.save(food);
+        return food;
     }
 }

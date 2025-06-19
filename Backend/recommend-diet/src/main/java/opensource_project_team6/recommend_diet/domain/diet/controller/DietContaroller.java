@@ -53,6 +53,24 @@ public class DietContaroller {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/image/preview")
+    public ResponseEntity<?> previewDietImage(@RequestPart("image") MultipartFile image) throws java.io.IOException {
+        var food = dietService.previewDietImage(image);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", food.getName());
+        data.put("energy", food.getEnergy());
+        data.put("carbohydrate", food.getCarbohydrate());
+        data.put("protein", food.getProtein());
+        data.put("fat", food.getFat());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 200);
+        response.put("message", "분석 성공");
+        response.put("data", data);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<?> getDietByDateAndMeal(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                   @RequestParam("date") String dateStr,

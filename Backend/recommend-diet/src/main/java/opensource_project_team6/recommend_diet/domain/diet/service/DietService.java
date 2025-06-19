@@ -75,6 +75,10 @@ public class DietService {
         dietRepository.save(diet);
     }
 
+    public Food previewDietImage(MultipartFile image) throws IOException {
+        return openAIService.previewFoodImage(image);
+    }
+
     public List<DietResponseDTO> getDietByDateAndMeal(User user, MealTime mealTime, java.time.LocalDate date) {
         List<Diet> dietList = dietRepository.findWithFoodByUserAndDateAndMealTime(user, date, mealTime);
 
