@@ -46,9 +46,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             JSONObject data = new JSONObject();
             try {
-                if (carb != null) data.put("carbRatio", carb);
-                if (protein != null) data.put("proteinRatio", protein);
-                if (fat != null) data.put("fatRatio", fat);
+                if (carb != null) data.put("carbRatio", carb / 100.0);
+                if (protein != null) data.put("proteinRatio", protein / 100.0);
+                if (fat != null) data.put("fatRatio", fat / 100.0);
             } catch (JSONException e) {
                 Toast.makeText(this, "데이터 오류", Toast.LENGTH_SHORT).show();
                 return;

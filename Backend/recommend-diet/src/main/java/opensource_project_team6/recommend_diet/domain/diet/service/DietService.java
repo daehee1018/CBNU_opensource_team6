@@ -115,6 +115,10 @@ public class DietService {
         double proteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
         double fatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
 
+        if (carbRatio > 1) carbRatio /= 100.0;
+        if (proteinRatio > 1) proteinRatio /= 100.0;
+        if (fatRatio > 1) fatRatio /= 100.0;
+
         double recommendedEnergy = calculateBmr(user);
         double recCarb = recommendedEnergy * carbRatio / 4.0;
         double recProtein = recommendedEnergy * proteinRatio / 4.0;
