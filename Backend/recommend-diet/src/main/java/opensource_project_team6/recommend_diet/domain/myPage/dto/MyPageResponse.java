@@ -7,6 +7,9 @@ public record MyPageResponse(
         String gender,
         LocalDate birthDate,
         int age,
+        Integer height,
+        Double weight,
+        Double targetWeight,
         String profileImageUrl,
         long followerCount,
         long follwingCount
