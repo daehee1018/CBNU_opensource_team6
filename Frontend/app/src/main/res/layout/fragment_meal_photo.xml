@@ -24,6 +24,13 @@
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
 
+        <Button
+            android:id="@+id/btnBreakfastHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="아침 기록"
+            android:layout_marginBottom="8dp" />
+
         <ImageView
             android:id="@+id/imgLunch"
             android:layout_width="match_parent"
@@ -31,6 +38,13 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+      
+        <Button
+            android:id="@+id/btnLunchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="점심 기록"
+            android:layout_marginBottom="8dp" />
 
         <ImageView
             android:id="@+id/imgDinner"
@@ -39,6 +53,13 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/btnDinnerHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="저녁 기록"
+            android:layout_marginBottom="8dp" />
 
         <ImageView
             android:id="@+id/imgSnack"
