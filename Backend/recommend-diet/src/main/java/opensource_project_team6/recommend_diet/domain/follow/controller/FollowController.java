@@ -9,45 +9,63 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/follow")
 @RequiredArgsConstructor
+@RequestMapping("/api/follow")
 public class FollowController {
     private final FollowService followService;
 
-    @PostMapping("/{targetId}")
-    public ResponseEntity<Map<String, Object>> follow(@AuthenticationPrincipal UserPrincipal user,
-                                                      @PathVariable Long targetId) {
-        followService.follow(user.getId(), targetId);
-        return ResponseEntity.ok(Map.of("status", 200, "message", "followed"));
+    @PostMapping("/{targetUserId}")
+    public ResponseEntity<?> follow(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                    @PathVariable Long targetUserId) {
+        followService.follow(userPrincipal.getId(), targetUserId);
+
+        // 대상 유저 이름 조회
+        String targetUserName = followService.getUserName(targetUserId);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "팔로우 성공",
+                "targetUser", targetUserName
+        ));
     }
 
-    @DeleteMapping("/{targetId}")
-    public ResponseEntity<Map<String, Object>> unfollow(@AuthenticationPrincipal UserPrincipal user,
-                                                        @PathVariable Long targetId) {
-        followService.unfollow(user.getId(), targetId);
-        return ResponseEntity.ok(Map.of("status", 200, "message", "unfollowed"));
+    @DeleteMapping("/{targetUserId}")
+    public ResponseEntity<?> unfollow(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                      @PathVariable Long targetUserId) {
+        followService.unfollow(userPrincipal.getId(), targetUserId);
+
+        String targetUserName = followService.getUserName(targetUserId);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "언팔로우 성공",
+                "targetUser", targetUserName
+        ));
+    }
+
+    @GetMapping("/followers")
+    public ResponseEntity<Map<String, Object>> followers(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<UserSimpleResponse> followers = followService.getFollowerList(userPrincipal.getId());
+        return ResponseEntity.ok(Map.of("data", followers));
+    }
+
+    @GetMapping("/followings")
+    public ResponseEntity<Map<String, Object>> followings(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        List<UserSimpleResponse> followings = followService.getFollowingList(userPrincipal.getId());
+        return ResponseEntity.ok(Map.of("data", followings));
     }
 
     @GetMapping("/followers/{userId}")
-    public ResponseEntity<Map<String, Object>> followers(@PathVariable Long userId) {
-        List<UserSimpleResponse> list = followService.getFollowers(userId);
-        Map<String, Object> res = new HashMap<>();
-        res.put("status", 200);
-        res.put("data", list);
-        return ResponseEntity.ok(res);
+    public ResponseEntity<Map<String, Object>> followersById(@PathVariable Long userId) {
+        List<UserSimpleResponse> followers = followService.getFollowerList(userId);
+        return ResponseEntity.ok(Map.of("data", followers));
     }
 
     @GetMapping("/followings/{userId}")
-    public ResponseEntity<Map<String, Object>> followings(@PathVariable Long userId) {
-        List<UserSimpleResponse> list = followService.getFollowings(userId);
-        Map<String, Object> res = new HashMap<>();
-        res.put("status", 200);
-        res.put("data", list);
-        return ResponseEntity.ok(res);
+    public ResponseEntity<Map<String, Object>> followingsById(@PathVariable Long userId) {
+        List<UserSimpleResponse> followings = followService.getFollowingList(userId);
+        return ResponseEntity.ok(Map.of("data", followings));
     }
 }

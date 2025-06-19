@@ -41,6 +41,9 @@ public class ProfileFragment extends Fragment {
     private ProgressBar progressCarb;
     private ProgressBar progressProtein;
     private ProgressBar progressFat;
+    private TextView textCarbAmount;
+    private TextView textProteinAmount;
+    private TextView textFatAmount;
     private TextView finalScoreText;
     private TextView scoreMessage;
     private TextView followerText;
@@ -70,6 +73,9 @@ public class ProfileFragment extends Fragment {
         progressCarb = view.findViewById(R.id.progress_carb);
         progressProtein = view.findViewById(R.id.progress_protein);
         progressFat = view.findViewById(R.id.progress_fat);
+        textCarbAmount = view.findViewById(R.id.text_carb_amount);
+        textProteinAmount = view.findViewById(R.id.text_protein_amount);
+        textFatAmount = view.findViewById(R.id.text_fat_amount);
         finalScoreText = view.findViewById(R.id.final_score_text);
         scoreMessage = view.findViewById(R.id.score_message);
         followerText = view.findViewById(R.id.follower);
@@ -102,6 +108,7 @@ public class ProfileFragment extends Fragment {
 
         fetchProfile();
         fetchScore();
+        fetchNutrients();
 
         return view;
     }
@@ -209,6 +216,42 @@ public class ProfileFragment extends Fragment {
         progressFat.setProgress(fat);
         finalScoreText.setText("점수: " + finalScore);
         scoreMessage.setText(message);
+    }
+
+    private void fetchNutrients() {
+        String token = TokenManager.getToken(requireContext());
+        if (token == null) return;
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        String today = sdf.format(new java.util.Date());
+        String url = ApiConfig.BASE_URL + "/api/diet/total?date=" + today;
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    JSONObject data = response.optJSONObject("data");
+                    if (data != null) updateNutrients(data);
+                }, error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> h = new HashMap<>();
+                h.put("Authorization", "Bearer " + token);
+                return h;
+            }
+        };
+        Volley.newRequestQueue(requireContext()).add(req);
+    }
+
+    private void updateNutrients(JSONObject data) {
+        double tCarb = data.optDouble("totalCarbohydrate", 0);
+        double tProtein = data.optDouble("totalProtein", 0);
+        double tFat = data.optDouble("totalFat", 0);
+        double rCarb = data.optDouble("recommendedCarbohydrate", 0);
+        double rProtein = data.optDouble("recommendedProtein", 0);
+        double rFat = data.optDouble("recommendedFat", 0);
+
+        textCarbAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rCarb, tCarb));
+        textProteinAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rProtein, tProtein));
+        textFatAmount.setText(String.format("권장 %.0fg / 현재 %.0fg", rFat, tFat));
     }
 
     private void updateFollowInfo() {
