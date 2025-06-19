@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.diet.entity.MealTime;
 import opensource_project_team6.recommend_diet.domain.diet.service.DietService;
+import opensource_project_team6.recommend_diet.domain.diet.dto.ImageDietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.user.repository.UserRepository;
 import opensource_project_team6.recommend_diet.global.util.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -33,6 +35,21 @@ public class DietContaroller {
         Map<String, Object> response = new HashMap<>();
         response.put("status", 200);
         response.put("message", "식단이 성공적으로 저장되었습니다.");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<?> saveDietByImage(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                             @RequestPart("image") MultipartFile image,
+                                             @RequestPart("data") ImageDietRequestDTO dto) throws java.io.IOException {
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        dietService.saveDietByImage(image, dto.getMealTime(), dto.getDate(), user);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", 200);
+        response.put("message", "사진 식단이 저장되었습니다.");
         return ResponseEntity.ok(response);
     }
 

@@ -8,11 +8,14 @@ import opensource_project_team6.recommend_diet.domain.diet.entity.MealTime;
 import opensource_project_team6.recommend_diet.domain.diet.repository.DietRepository;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
+import opensource_project_team6.recommend_diet.domain.food.service.OpenAIService;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.DietScoreResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 public class DietService {
     private final DietRepository dietRepository;
     private final FoodRepository foodRepository;
+    private final OpenAIService openAIService;
 
     public void saveDiet(DietRequestDTO dto, User user) {
         Food food = null;
@@ -48,6 +52,24 @@ public class DietService {
                 .protein(food.getProtein() * ratio)
                 .fat(food.getFat() * ratio)
                 .carbohydrate(food.getCarbohydrate() * ratio)
+                .build();
+
+        dietRepository.save(diet);
+    }
+
+    public void saveDietByImage(MultipartFile image, MealTime mealTime, LocalDate date, User user) throws IOException {
+        Food food = openAIService.analyzeFoodImage(image);
+
+        Diet diet = Diet.builder()
+                .user(user)
+                .food(food)
+                .amount(parseAmount(food.getStandardAmount()))
+                .mealTime(mealTime)
+                .date(date)
+                .energy(food.getEnergy())
+                .protein(food.getProtein())
+                .fat(food.getFat())
+                .carbohydrate(food.getCarbohydrate())
                 .build();
 
         dietRepository.save(diet);
