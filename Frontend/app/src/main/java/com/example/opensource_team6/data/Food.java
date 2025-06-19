@@ -1,6 +1,8 @@
 package com.example.opensource_team6.data;
 
-public class Food {
+import java.io.Serializable;
+
+public class Food implements Serializable {
     private String name;
     private String category;
     private String rep_name;

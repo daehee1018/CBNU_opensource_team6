@@ -65,18 +65,37 @@ public class FoodDetailActivity extends AppCompatActivity {
             }
         });
 
-        // 음식 정보 받기
-        String foodName = getIntent().getStringExtra("food_name");
-        if (foodName != null) {
-            FoodDao dao = new FoodDao(this);
-            selectedFood = dao.getFoodByName(foodName);
-            if (selectedFood != null) {
-                tvName.setText(selectedFood.getName());
-                tvEnergy.setText("에너지: " + selectedFood.getEnergy() + " kcal");
-                tvCarbs.setText("탄수화물: " + selectedFood.getCarbohydrate() + " g");
-                tvProtein.setText("단백질: " + selectedFood.getProtein() + " g");
-                tvFat.setText("지방: " + selectedFood.getFat() + " g");
+        // ============================
+        // 🔄 추천/검색 방식 둘 다 처리
+        // ============================
+        selectedFood = null;
+
+        // 1. Serializable 객체로 전달된 경우 (추천 결과)
+        Food foodFromIntent = (Food) getIntent().getSerializableExtra("food");
+        if (foodFromIntent != null) {
+            selectedFood = foodFromIntent;
+        }
+
+        // 2. 이름으로 전달된 경우 (검색 결과)
+        if (selectedFood == null) {
+            String foodName = getIntent().getStringExtra("food_name");
+            if (foodName != null) {
+                FoodDao dao = new FoodDao(this);
+                selectedFood = dao.getFoodByName(foodName);
             }
+        }
+
+        // 3. UI 세팅
+        if (selectedFood != null) {
+            tvName.setText(selectedFood.getName());
+            tvEnergy.setText("에너지: " + selectedFood.getEnergy() + " kcal");
+            tvCarbs.setText("탄수화물: " + selectedFood.getCarbohydrate() + " g");
+            tvProtein.setText("단백질: " + selectedFood.getProtein() + " g");
+            tvFat.setText("지방: " + selectedFood.getFat() + " g");
+        } else {
+            Toast.makeText(this, "음식 정보를 불러올 수 없습니다", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
         btnAddToMeal.setOnClickListener(v -> {
