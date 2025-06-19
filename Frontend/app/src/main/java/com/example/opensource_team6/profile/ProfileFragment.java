@@ -9,6 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
@@ -20,11 +23,15 @@ import com.android.volley.toolbox.Volley;
 import com.example.opensource_team6.R;
 import com.example.opensource_team6.network.ApiConfig;
 import com.example.opensource_team6.util.TokenManager;
+import com.example.opensource_team6.user.User;
+import com.example.opensource_team6.user.UserRepository;
+import com.example.opensource_team6.user.FollowManager;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -36,6 +43,13 @@ public class ProfileFragment extends Fragment {
     private ProgressBar progressFat;
     private TextView finalScoreText;
     private TextView scoreMessage;
+    private TextView followerText;
+    private TextView followingText;
+    private Button followButton;
+    private AutoCompleteTextView userSearch;
+    private TextView followerPlus;
+    private TextView followerNames;
+    private int userId = 1; // default current user
 
     public ProfileFragment() {}
 
@@ -52,6 +66,31 @@ public class ProfileFragment extends Fragment {
         progressFat = view.findViewById(R.id.progress_fat);
         finalScoreText = view.findViewById(R.id.final_score_text);
         scoreMessage = view.findViewById(R.id.score_message);
+        followerText = view.findViewById(R.id.follower);
+        followingText = view.findViewById(R.id.following);
+        followButton = view.findViewById(R.id.btn_follow);
+        userSearch = view.findViewById(R.id.user_search);
+        followerPlus = view.findViewById(R.id.follower_plus);
+        followerNames = view.findViewById(R.id.follower_names);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line);
+        for (User u : UserRepository.getUsers()) adapter.add(u.getName());
+        userSearch.setAdapter(adapter);
+        userSearch.setOnItemClickListener((parent, v, position, id) -> {
+            String name = adapter.getItem(position);
+            User target = UserRepository.getUserByName(name);
+            if (target != null) openProfile(target.getId());
+        });
+        Bundle args = getArguments();
+        if (args != null) userId = args.getInt("userId", 1);
+        if (userId == 1) {
+            followButton.setVisibility(View.GONE);
+        } else {
+            followButton.setVisibility(View.VISIBLE);
+            updateFollowButton();
+            followButton.setOnClickListener(v -> toggleFollow());
+        }
+        updateFollowInfo();
         ImageButton settingsBtn = view.findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
@@ -65,6 +104,18 @@ public class ProfileFragment extends Fragment {
     }
 
     private void fetchProfile() {
+        if (userId != 1) {
+            User u = UserRepository.getUserById(userId);
+            if (u != null) {
+                profileName.setText(u.getName());
+                profileTag.setText("");
+                profileDesc.setText("");
+            }
+            updateFollowInfo();
+            updateFollowButton();
+            return;
+        }
+
         String token = TokenManager.getToken(requireContext());
         if (token == null) {
             Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
@@ -105,6 +156,7 @@ public class ProfileFragment extends Fragment {
         } else {
             profileDesc.setText("생년월일: " + birthDate);
         }
+        updateFollowInfo();
     }
 
     private void fetchScore() {
@@ -148,5 +200,60 @@ public class ProfileFragment extends Fragment {
         progressFat.setProgress(fat);
         finalScoreText.setText("점수: " + finalScore);
         scoreMessage.setText(message);
+    }
+
+    private void updateFollowInfo() {
+        Set<Integer> followers = FollowManager.getFollowers(requireContext(), userId);
+        Set<Integer> followings = FollowManager.getFollowings(requireContext(), userId);
+        followerText.setText(followers.size() + "\n팔로워");
+        followingText.setText(followings.size() + "\n팔로잉");
+
+        StringBuilder names = new StringBuilder();
+        int count = 0;
+        for (int id : followers) {
+            User u = UserRepository.getUserById(id);
+            if (u == null) continue;
+            if (count < 3) {
+                if (names.length() > 0) names.append(", ");
+                names.append(u.getName());
+            }
+            count++;
+        }
+        followerNames.setText(names.toString());
+        int extra = count - 3;
+        if (extra > 0) {
+            followerPlus.setText("+" + extra);
+            followerPlus.setVisibility(View.VISIBLE);
+        } else {
+            followerPlus.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateFollowButton() {
+        boolean following = FollowManager.isFollowing(requireContext(), 1, userId);
+        followButton.setText(following ? "팔로잉" : "팔로우");
+    }
+
+    private void toggleFollow() {
+        boolean following = FollowManager.isFollowing(requireContext(), 1, userId);
+        if (following) {
+            FollowManager.unfollow(requireContext(), 1, userId);
+        } else {
+            FollowManager.follow(requireContext(), 1, userId);
+        }
+        updateFollowButton();
+        updateFollowInfo();
+    }
+
+    private void openProfile(int id) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle b = new Bundle();
+        b.putInt("userId", id);
+        fragment.setArguments(b);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

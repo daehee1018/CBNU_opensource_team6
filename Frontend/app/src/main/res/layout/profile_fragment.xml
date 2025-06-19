@@ -15,6 +15,15 @@
         android:src="@drawable/ic_settings"
         android:contentDescription="설정" />
 
+    <AutoCompleteTextView
+        android:id="@+id/user_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@id/btn_settings"
+        android:hint="사용자 검색" />
+
     <!-- 프로필 섹션 -->
     <LinearLayout
         android:id="@+id/profile_section"
@@ -102,6 +111,15 @@
                 android:textColor="@color/color_primary" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/color_accent"
+            android:textColor="@android:color/white"
+            android:text="팔로우" />
+
         <!-- 팔로우 목록 요약 -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,35 +128,40 @@
             android:layout_marginTop="@dimen/spacing_normal">
 
             <ImageView
+                android:id="@+id/follower_img1"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_user1"
                 android:layout_marginEnd="8dp" />
 
             <ImageView
+                android:id="@+id/follower_img2"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_user1"
                 android:layout_marginEnd="8dp" />
 
             <ImageView
+                android:id="@+id/follower_img3"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_user1"
                 android:layout_marginEnd="8dp" />
 
             <TextView
+                android:id="@+id/follower_plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+100"
+                android:text="+0"
                 android:textColor="@color/color_primary"
                 android:textSize="@dimen/text_size_body"
                 android:layout_marginEnd="8dp" />
 
             <TextView
+                android:id="@+id/follower_names"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="비만, 정삼, 초 고도비만 외 100명"
+                android:text=""
                 android:textSize="@dimen/text_size_caption"
                 android:textColor="@color/color_secondary" />
         </LinearLayout>
