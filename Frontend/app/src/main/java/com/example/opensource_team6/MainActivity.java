@@ -1,6 +1,5 @@
 package com.example.opensource_team6;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +8,8 @@ import androidx.fragment.app.Fragment;
 import com.example.opensource_team6.home.HomeFragment;
 import com.example.opensource_team6.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.opensource_team6.today.TodayFragment;
 import com.example.opensource_team6.MealPhotoFragment;
+import com.example.opensource_team6.diet.DietCalcFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,10 +32,7 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 selected = new HomeFragment();
             } else if (id == R.id.nav_diary) {
-                //selected = new TodayFragment();
-                Intent intent = new Intent(this, TodayMealActivity.class);
-                startActivity(intent);
-                return true;
+                selected = new DietCalcFragment();
             } else if (id == R.id.nav_scan) {
                 selected = new MealPhotoFragment();
             } else if (id == R.id.nav_profile) {
