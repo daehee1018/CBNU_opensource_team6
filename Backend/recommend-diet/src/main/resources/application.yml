@@ -32,4 +32,5 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug # jpa나 hibernate가 생성하는 로그가 보임 (로그를 통해서 보임)
+    root: DEBUG
+    org.hibernate.SQL: DEBUG # jpa나 hibernate가 생성하는 로그가 보임

@@ -1,6 +1,7 @@
 package opensource_project_team6.recommend_diet.domain.diet.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietResponseDTO;
 import opensource_project_team6.recommend_diet.domain.diet.entity.Diet;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DietService {
     private final DietRepository dietRepository;
     private final FoodRepository foodRepository;
@@ -58,7 +60,9 @@ public class DietService {
     }
 
     public void saveDietByImage(MultipartFile image, MealTime mealTime, LocalDate date, User user) throws IOException {
+        log.info("[DietService] saveDietByImage 호출 - userId: {}, mealTime: {}, date: {}", user.getId(), mealTime, date);
         Food food = openAIService.analyzeFoodImage(image);
+        log.info("[DietService] 분석된 음식: {}", food.getName());
 
         Diet diet = Diet.builder()
                 .user(user)
@@ -73,9 +77,11 @@ public class DietService {
                 .build();
 
         dietRepository.save(diet);
+        log.info("[DietService] 식단 저장 완료. id={}", diet.getId());
     }
 
     public Food previewDietImage(MultipartFile image) throws IOException {
+        log.info("[DietService] previewDietImage 호출");
         return openAIService.previewFoodImage(image);
     }
 
