@@ -1,6 +1,7 @@
 package opensource_project_team6.recommend_diet.domain.myPage.service;
 
 import lombok.RequiredArgsConstructor;
+import opensource_project_team6.recommend_diet.domain.follow.repository.FollowRepository;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.MyPageResponse;
 import opensource_project_team6.recommend_diet.domain.myPage.dto.MacroRatioRequest;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
@@ -14,6 +15,7 @@ import java.time.Period;
 @RequiredArgsConstructor
 public class MyPageService {
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     public MyPageResponse getMyPage(Long userId){
         User user = userRepository.findById(userId)
@@ -26,12 +28,17 @@ public class MyPageService {
             imageUrl = "/images/" + imageUrl; // 로컬 이미지라면 prefix 추가
         }
 
+        long followerCount = followRepository.countByFollowing(user);
+        long followingCount = followRepository.countByFollower(user);
+
         return new MyPageResponse(
                 user.getName(),
                 user.getGender(),
                 user.getBirthDate(),
                 age,
-                imageUrl
+                imageUrl,
+                followerCount,
+                followingCount
         );
     }
 
