@@ -16,37 +16,46 @@
             android:textStyle="bold"
             android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/imgBreakfast"
+        <androidx.gridlayout.widget.GridLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
             android:layout_marginTop="12dp"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:useDefaultMargins="true">
 
-        <ImageView
-            android:id="@+id/imgLunch"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_camera" />
+            <ImageView
+                android:id="@+id/imgBreakfast"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_camera" />
 
-        <ImageView
-            android:id="@+id/imgDinner"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_camera" />
+            <ImageView
+                android:id="@+id/imgLunch"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_camera" />
 
-        <ImageView
-            android:id="@+id/imgSnack"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="12dp"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_camera" />
+            <ImageView
+                android:id="@+id/imgDinner"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <ImageView
+                android:id="@+id/imgSnack"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_camera" />
+
+        </androidx.gridlayout.widget.GridLayout>
 
         <Button
             android:id="@+id/btnHistory"
