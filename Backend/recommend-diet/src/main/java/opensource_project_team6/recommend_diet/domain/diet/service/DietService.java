@@ -85,6 +85,15 @@ public class DietService {
             totalEnergy += d.getEnergy();
         }
 
+        double carbRatio = user.getTargetCarbRatio() != null ? user.getTargetCarbRatio() : 0;
+        double proteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
+        double fatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
+
+        double recommendedEnergy = user.getTargetWeight() * 30.0;
+        double recCarb = recommendedEnergy * carbRatio / 4.0;
+        double recProtein = recommendedEnergy * proteinRatio / 4.0;
+        double recFat = recommendedEnergy * fatRatio / 9.0;
+
         Map<String, Object> result = new HashMap<>();
         result.put("date", date);
         result.put("totalCarbohydrate", round(totalCarb));
@@ -92,6 +101,9 @@ public class DietService {
         result.put("totalFat", round(totalFat));
         result.put("totalSodium", round(totalSodium));
         result.put("totalEnergy", totalEnergy);
+        result.put("recommendedCarbohydrate", round(recCarb));
+        result.put("recommendedProtein", round(recProtein));
+        result.put("recommendedFat", round(recFat));
         return result;
     }
 

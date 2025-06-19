@@ -217,6 +217,11 @@
                 android:max="100"
                 android:progress="0"
                 android:progressDrawable="@drawable/custom_progress_bar" />
+            <TextView
+                android:id="@+id/text_carb_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -231,6 +236,11 @@
                 android:max="100"
                 android:progress="0"
                 android:progressDrawable="@drawable/custom_progress_bar" />
+            <TextView
+                android:id="@+id/text_protein_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -245,6 +255,11 @@
                 android:max="100"
                 android:progress="0"
                 android:progressDrawable="@drawable/custom_progress_bar" />
+            <TextView
+                android:id="@+id/text_fat_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
         </LinearLayout>
 
         <TextView
