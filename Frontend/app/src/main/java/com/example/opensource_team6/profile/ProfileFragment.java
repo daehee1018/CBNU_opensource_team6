@@ -25,14 +25,13 @@ import com.example.opensource_team6.R;
 import com.example.opensource_team6.network.ApiConfig;
 import com.example.opensource_team6.util.TokenManager;
 import com.example.opensource_team6.user.User;
-import com.example.opensource_team6.user.UserRepository;
-import com.example.opensource_team6.user.FollowManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -55,6 +54,8 @@ public class ProfileFragment extends Fragment {
     private TextView followerPlus;
     private TextView followerNames;
     private int userId = 1; // default current user
+    private List<User> followerList = new ArrayList<>();
+    private List<User> followingList = new ArrayList<>();
 
     public ProfileFragment() {}
 
@@ -82,31 +83,7 @@ public class ProfileFragment extends Fragment {
         followerPlus = view.findViewById(R.id.follower_plus);
         followerNames = view.findViewById(R.id.follower_names);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line);
-        for (User u : UserRepository.getUsers()) adapter.add(u.getName());
-        userSearch.setAdapter(adapter);
-        userSearch.setOnItemClickListener((parent, v, position, id) -> {
-            String name = adapter.getItem(position);
-            User target = UserRepository.getUserByName(name);
-            if (target != null) openProfile(target.getId());
-        });
-        searchButton.setOnClickListener(v -> {
-            String query = userSearch.getText().toString();
-            java.util.List<User> matches = new java.util.ArrayList<>();
-            for (User u : UserRepository.getUsers()) {
-                if (u.getName().contains(query)) matches.add(u);
-            }
-            if (matches.isEmpty()) {
-                Toast.makeText(getContext(), "검색 결과가 없습니다", Toast.LENGTH_SHORT).show();
-            } else {
-                CharSequence[] items = new CharSequence[matches.size()];
-                for (int i = 0; i < matches.size(); i++) items[i] = matches.get(i).getName();
-                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                        .setTitle("검색 결과")
-                        .setItems(items, (d, which) -> openProfile(matches.get(which).getId()))
-                        .show();
-            }
-        });
+        searchButton.setOnClickListener(v -> searchUsers());
         Bundle args = getArguments();
         if (args != null) userId = args.getInt("userId", 1);
         if (userId == 1) {
@@ -116,7 +93,7 @@ public class ProfileFragment extends Fragment {
             updateFollowButton();
             followButton.setOnClickListener(v -> toggleFollow());
         }
-        updateFollowInfo();
+        fetchFollowInfo();
         ImageButton settingsBtn = view.findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
@@ -131,14 +108,20 @@ public class ProfileFragment extends Fragment {
 
     private void fetchProfile() {
         if (userId != 1) {
-            User u = UserRepository.getUserById(userId);
-            if (u != null) {
-                profileName.setText(u.getName());
-                profileTag.setText("");
-                profileDesc.setText("");
-            }
-            updateFollowInfo();
-            updateFollowButton();
+            String url = ApiConfig.BASE_URL + "/api/user/" + userId;
+            JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                    res -> {
+                        JSONObject data = res.optJSONObject("data");
+                        if (data != null) {
+                            profileName.setText(data.optString("name"));
+                            profileTag.setText("");
+                            profileDesc.setText("");
+                        }
+                        fetchFollowInfo();
+                        updateFollowButton();
+                    },
+                    e -> {}) ;
+            Volley.newRequestQueue(requireContext()).add(req);
             return;
         }
 
@@ -229,18 +212,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateFollowInfo() {
-        Set<Integer> followers = FollowManager.getFollowers(requireContext(), userId);
-        Set<Integer> followings = FollowManager.getFollowings(requireContext(), userId);
-        followerText.setText(followers.size() + "\n팔로워");
-        followingText.setText(followings.size() + "\n팔로잉");
+        followerText.setText(followerList.size() + "\n팔로워");
+        followingText.setText(followingList.size() + "\n팔로잉");
 
         StringBuilder names = new StringBuilder();
         int count = 0;
         ImageView[] imgs = {followerImg1, followerImg2, followerImg3};
         for (ImageView img : imgs) img.setVisibility(View.GONE);
-        for (int id : followers) {
-            User u = UserRepository.getUserById(id);
-            if (u == null) continue;
+        for (User u : followerList) {
             if (count < 3) {
                 if (names.length() > 0) names.append(", ");
                 names.append(u.getName());
@@ -259,19 +238,131 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateFollowButton() {
-        boolean following = FollowManager.isFollowing(requireContext(), 1, userId);
-        followButton.setText(following ? "팔로잉" : "팔로우");
+        String token = TokenManager.getToken(requireContext());
+        if (token == null) return;
+        String url = ApiConfig.BASE_URL + "/api/follow/followings/" + 1; // 내 팔로잉
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                res -> {
+                    boolean following = false;
+                    for (int i = 0; i < res.optJSONArray("data").length(); i++) {
+                        if (res.optJSONArray("data").optJSONObject(i).optLong("id") == userId) {
+                            following = true;
+                            break;
+                        }
+                    }
+                    followButton.setText(following ? "팔로잉" : "팔로우");
+                },
+                error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> h = new HashMap<>();
+                h.put("Authorization", "Bearer " + token);
+                return h;
+            }
+        };
+        Volley.newRequestQueue(requireContext()).add(req);
     }
 
     private void toggleFollow() {
-        boolean following = FollowManager.isFollowing(requireContext(), 1, userId);
-        if (following) {
-            FollowManager.unfollow(requireContext(), 1, userId);
+        String token = TokenManager.getToken(requireContext());
+        if (token == null) return;
+        int method;
+        String url = ApiConfig.BASE_URL + "/api/follow/" + userId;
+        boolean currentlyFollowing = followButton.getText().toString().equals("팔로잉");
+        if (currentlyFollowing) {
+            method = Request.Method.DELETE;
         } else {
-            FollowManager.follow(requireContext(), 1, userId);
+            method = Request.Method.POST;
         }
-        updateFollowButton();
-        updateFollowInfo();
+        JsonObjectRequest req = new JsonObjectRequest(method, url, null,
+                r -> {
+                    fetchFollowInfo();
+                    updateFollowButton();
+                },
+                e -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> h = new HashMap<>();
+                h.put("Authorization", "Bearer " + token);
+                return h;
+            }
+        };
+        Volley.newRequestQueue(requireContext()).add(req);
+    }
+
+    private void fetchFollowInfo() {
+        String urlF = ApiConfig.BASE_URL + "/api/follow/followers/" + userId;
+        String urlG = ApiConfig.BASE_URL + "/api/follow/followings/" + userId;
+        RequestQueue q = Volley.newRequestQueue(requireContext());
+
+        JsonObjectRequest req1 = new JsonObjectRequest(Request.Method.GET, urlF, null,
+                r -> {
+                    followerList.clear();
+                    var arr = r.optJSONArray("data");
+                    if (arr != null) {
+                        for (int i = 0; i < arr.length(); i++) {
+                            var o = arr.optJSONObject(i);
+                            followerList.add(new User(o.optInt("id"), o.optString("name")));
+                        }
+                    }
+                    updateFollowInfo();
+                },
+                e -> {});
+        JsonObjectRequest req2 = new JsonObjectRequest(Request.Method.GET, urlG, null,
+                r -> {
+                    followingList.clear();
+                    var arr = r.optJSONArray("data");
+                    if (arr != null) {
+                        for (int i = 0; i < arr.length(); i++) {
+                            var o = arr.optJSONObject(i);
+                            followingList.add(new User(o.optInt("id"), o.optString("name")));
+                        }
+                    }
+                    updateFollowInfo();
+                },
+                e -> {});
+        q.add(req1);
+        q.add(req2);
+
+        followerText.setOnClickListener(v -> showUserList(followerList));
+        followingText.setOnClickListener(v -> showUserList(followingList));
+    }
+
+    private void showUserList(List<User> list) {
+        if (list.isEmpty()) return;
+        CharSequence[] items = new CharSequence[list.size()];
+        for (int i = 0; i < list.size(); i++) items[i] = list.get(i).getName();
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setItems(items, (d, which) -> openProfile(list.get(which).getId()))
+                .show();
+    }
+
+    private void searchUsers() {
+        String query = userSearch.getText().toString();
+        String url = ApiConfig.BASE_URL + "/api/user/search?name=" + query;
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null,
+                r -> {
+                    List<User> result = new ArrayList<>();
+                    var arr = r.optJSONArray("data");
+                    if (arr != null) {
+                        for (int i = 0; i < arr.length(); i++) {
+                            var o = arr.optJSONObject(i);
+                            result.add(new User(o.optInt("id"), o.optString("name")));
+                        }
+                    }
+                    if (result.isEmpty()) {
+                        Toast.makeText(getContext(), "검색 결과가 없습니다", Toast.LENGTH_SHORT).show();
+                    } else {
+                        CharSequence[] items = new CharSequence[result.size()];
+                        for (int i = 0; i < result.size(); i++) items[i] = result.get(i).getName();
+                        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                .setTitle("검색 결과")
+                                .setItems(items, (d, which) -> openProfile(result.get(which).getId()))
+                                .show();
+                    }
+                },
+                e -> Toast.makeText(getContext(), "검색 실패", Toast.LENGTH_SHORT).show());
+        Volley.newRequestQueue(requireContext()).add(req);
     }
 
     private void openProfile(int id) {
