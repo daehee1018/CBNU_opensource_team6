@@ -59,6 +59,7 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("androidx.fragment:fragment-ktx:1.5.7")
 
 
 }

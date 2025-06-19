@@ -75,9 +75,7 @@ public class DietService {
         return openAIService.previewFoodImage(image);
     }
 
-    public List<DietResponseDTO> getDietByDateAndMeal(User user, MealTime mealTime, java.time.LocalDate date) {
-        List<Diet> dietList = dietRepository.findWithFoodByUserAndDateAndMealTime(user, date, mealTime);
-
+    public List<DietResponseDTO> getDietByDateAndMeal(User user, MealTime mealTime, LocalDate date) {
         return dietRepository.findWithFoodByUserAndDateAndMealTime(user, date, mealTime).stream()
                 .map(d -> DietResponseDTO.builder()
                         .foodName(d.getFood().getName())
@@ -147,36 +145,41 @@ public class DietService {
             totalFat += d.getFat();
         }
 
-        double total = totalCarb + totalProtein + totalFat;
-        if (total == 0) {
+        if (totalCarb + totalProtein + totalFat == 0) {
             return new DietScoreResponse(0, 0, 0, 0, "데이터가 없습니다.");
         }
 
-        double actualCarbRatio = totalCarb / total;
-        double actualProteinRatio = totalProtein / total;
-        double actualFatRatio = totalFat / total;
+        double carbRatio = user.getTargetCarbRatio() != null ? user.getTargetCarbRatio() : 0;
+        double proteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
+        double fatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
 
-        double targetCarbRatio = user.getTargetCarbRatio() != null ? user.getTargetCarbRatio() : 0;
-        double targetProteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
-        double targetFatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
+        if (carbRatio > 1) carbRatio /= 100.0;
+        if (proteinRatio > 1) proteinRatio /= 100.0;
+        if (fatRatio > 1) fatRatio /= 100.0;
 
-        double carbScore = calcScore(actualCarbRatio, targetCarbRatio);
-        double proteinScore = calcScore(actualProteinRatio, targetProteinRatio);
-        double fatScore = calcScore(actualFatRatio, targetFatRatio);
+        double bmr = calculateBmr(user);
+        double recCarb = bmr * carbRatio / 4.0;
+        double recProtein = bmr * proteinRatio / 4.0;
+        double recFat = bmr * fatRatio / 9.0;
 
-        double finalScore = (carbScore + proteinScore + fatScore) / 3.0;
+        int carbScore = calcScoreByRatio(totalCarb, recCarb);
+        int proteinScore = calcScoreByRatio(totalProtein, recProtein);
+        int fatScore = calcScoreByRatio(totalFat, recFat);
+
+        int finalScore = (carbScore + proteinScore + fatScore) / 3;
         String message = getMessage(finalScore);
 
-        return new DietScoreResponse(round(carbScore), round(proteinScore), round(fatScore), round(finalScore), message);
+        return new DietScoreResponse(carbScore, proteinScore, fatScore, finalScore, message);
     }
 
-    private double calcScore(double actual, double target) {
-        double diff = Math.abs(actual - target);
-        double score = (1.0 - diff) * 100.0;
-        return Math.max(score, 0.0);
+    private int calcScoreByRatio(double actual, double recommended) {
+        if (recommended == 0) return 0;
+        double ratio = actual / recommended;
+        double score = 100 - Math.abs(ratio - 1) * 100;
+        return (int) Math.max(0, Math.round(score));
     }
 
-    private String getMessage(double score) {
+    private String getMessage(int score) {
         if (score >= 90) return "최고예요! 계속 유지하세요!";
         if (score >= 70) return "좋아요! 조금만 더 노력해보세요!";
         if (score >= 50) return "노력이 필요해요! 힘내세요!";
@@ -186,12 +189,11 @@ public class DietService {
     private double calculateBmr(User user) {
         double weight = user.getWeight() != null ? user.getWeight() : 0.0;
         double height = user.getHeight() != null ? user.getHeight() : 0.0;
-        int age = java.time.Period.between(user.getBirthDate(), java.time.LocalDate.now()).getYears();
+        int age = java.time.Period.between(user.getBirthDate(), LocalDate.now()).getYears();
         boolean male = user.getGender() != null && user.getGender().contains("남");
         double genderConst = male ? 5.0 : -161.0;
         return 10 * weight + 6.25 * height - 5 * age + genderConst;
     }
-
 
     private double parseAmount(String standardAmount) {
         return Double.parseDouble(standardAmount.replaceAll("[^\\d.]", ""));
