@@ -31,7 +31,6 @@ public class FollowService {
     public void unfollow(Long followerId, Long followingId) {
         User follower = userRepository.findById(followerId).orElseThrow();
         User following = userRepository.findById(followingId).orElseThrow();
-
         Follow follow = followRepository.findByFollowerAndFollowing(follower, following)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 중이 아닙니다."));
         followRepository.delete(follow);

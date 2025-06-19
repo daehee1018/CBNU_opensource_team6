@@ -13,6 +13,7 @@ import opensource_project_team6.recommend_diet.domain.user.entity.User;
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
     @ManyToOne

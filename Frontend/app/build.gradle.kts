@@ -53,5 +53,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("com.android.volley:volley:1.2.1")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
 }
