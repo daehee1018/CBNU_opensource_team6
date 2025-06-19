@@ -519,24 +519,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void finalizeAnalysis(float[] total) {
-        float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2f, 0.3f, 20f};
-        float[] deficit = new float[8];
-        float[] normalized = new float[8];
+            float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2f, 0.3f, 20f};
+            float[] deficit = new float[8];
+            float[] normalized = new float[8];
 
-        for (int i = 0; i < 8; i++) {
-            deficit[i] = Math.max(0, recommended[i] - total[i]);
-            normalized[i] = recommended[i] == 0 ? 0 : deficit[i] / recommended[i];
+            // ✅ 모델 학습 시 사용된 정규화 max 기준
+            float[] maxVals = {595f, 104f, 41.55f, 60.25f, 70f, 7.402f, 0.68662f, 25.6f};
+
+            for (int i = 0; i < 8; i++) {
+                deficit[i] = Math.max(0f, recommended[i] - total[i]);
+                normalized[i] = deficit[i] / maxVals[i];
+                normalized[i] = Math.max(0f, Math.min(1f, normalized[i]));  // [0, 1] 클리핑
+            }
         }
 
-        Intent intent = new Intent(getContext(), RecommendationResultActivity.class);
-        intent.putExtra("recommendationVector", Arrays.toString(normalized));
-        intent.putExtra("totalVector", Arrays.toString(total));
-        intent.putExtra("deficitVector", Arrays.toString(deficit));
-        intent.putExtra("currentMeal", "분석");
-        startActivity(intent);
-
-        Log.d("deficitVector", Arrays.toString(deficit));
-        Log.d("totalVector", Arrays.toString(total));
-        Log.d("recommendationVector", Arrays.toString(normalized));
-    }
 }
