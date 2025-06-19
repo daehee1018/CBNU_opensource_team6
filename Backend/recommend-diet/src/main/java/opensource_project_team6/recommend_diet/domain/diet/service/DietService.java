@@ -129,7 +129,7 @@ public class DietService {
         double proteinRatio = user.getTargetProteinRatio() != null ? user.getTargetProteinRatio() : 0;
         double fatRatio = user.getTargetFatRatio() != null ? user.getTargetFatRatio() : 0;
 
-        double recommendedEnergy = user.getTargetWeight() * 30.0;
+        double recommendedEnergy = calculateBmr(user);
         double recCarb = recommendedEnergy * carbRatio / 4.0;
         double recProtein = recommendedEnergy * proteinRatio / 4.0;
         double recFat = recommendedEnergy * fatRatio / 9.0;
@@ -191,6 +191,15 @@ public class DietService {
         if (score >= 70) return "좋아요! 조금만 더 노력해보세요!";
         if (score >= 50) return "노력이 필요해요! 힘내세요!";
         return "식단 개선이 필요합니다! 화이팅!";
+    }
+
+    private double calculateBmr(User user) {
+        double weight = user.getWeight() != null ? user.getWeight() : 0.0;
+        double height = user.getHeight() != null ? user.getHeight() : 0.0;
+        int age = java.time.Period.between(user.getBirthDate(), java.time.LocalDate.now()).getYears();
+        boolean male = user.getGender() != null && user.getGender().contains("남");
+        double genderConst = male ? 5.0 : -161.0;
+        return 10 * weight + 6.25 * height - 5 * age + genderConst;
     }
 
 
