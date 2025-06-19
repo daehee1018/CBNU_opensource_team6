@@ -117,6 +117,10 @@ public class OpenAIService {
                 .carbohydrate(result.path("carbohydrate").asDouble())
                 .protein(result.path("protein").asDouble())
                 .fat(result.path("fat").asDouble())
+                .cholesterol(result.path("cholesterol").asDouble())
+                .saturatedFat(result.path("saturated_fat").asDouble())
+                .sodium(result.path("sodium").asDouble())
+                .sugar(result.path("sugar").asDouble())
                 .build();
 
         return food;

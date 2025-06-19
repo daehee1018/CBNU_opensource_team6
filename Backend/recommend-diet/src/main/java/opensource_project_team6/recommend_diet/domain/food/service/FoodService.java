@@ -35,7 +35,10 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
-    public Food addRecognizedFood(String name, double energy, double carbohydrate, double protein, double fat) {
+    public Food addRecognizedFood(String name, double energy, double carbohydrate,
+                                  double protein, double fat,
+                                  double sugar, double sodium,
+                                  double cholesterol, double saturatedFat) {
         String newName = name + "_사진";
 
         if (foodRepository.findByName(newName).isPresent()) {
@@ -53,10 +56,10 @@ public class FoodService {
                 .carbohydrate(carbohydrate)
                 .protein(protein)
                 .fat(fat)
-                .sugar(0.0)
-                .sodium(0.0)
-                .cholesterol(0.0)
-                .saturatedFat(0.0)
+                .sugar(sugar)
+                .sodium(sodium)
+                .cholesterol(cholesterol)
+                .saturatedFat(saturatedFat)
                 .build();
 
         return foodRepository.save(food);
