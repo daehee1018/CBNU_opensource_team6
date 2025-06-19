@@ -48,8 +48,13 @@ public class FoodController {
             double carbohydrate = Double.parseDouble(payload.get("carbohydrate").toString());
             double protein = Double.parseDouble(payload.get("protein").toString());
             double fat = Double.parseDouble(payload.get("fat").toString());
+            double sugar = Double.parseDouble(payload.get("sugar").toString());
+            double sodium = Double.parseDouble(payload.get("sodium").toString());
+            double cholesterol = Double.parseDouble(payload.get("cholesterol").toString());
+            double saturatedFat = Double.parseDouble(payload.get("saturatedFat").toString());
 
-            FoodDTO dto = foodService.addRecognizedFood(name, energy, carbohydrate, protein, fat);
+            FoodDTO dto = foodService.addRecognizedFood(name, energy, carbohydrate, protein, fat,
+                    sugar, sodium, cholesterol, saturatedFat);
             return ResponseEntity.ok(Map.of(
                     "message", "AI 인식 음식 추가 완료",
                     "data", dto

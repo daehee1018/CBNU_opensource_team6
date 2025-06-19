@@ -20,8 +20,13 @@ public class DietAiService {
     private final UserRepository userRepository;
     private final DietRepository dietRepository;
 
-    public void addDietFromAi(Long userId, String name, double energy, double carbohydrate, double protein, double fat, double sugar, double sodium, double cholesterol, double saturatedFat, MealTime mealTime, double amount, LocalDate date) {
-        Food food = foodService.addRecognizedFood(name, energy, carbohydrate, protein, fat);
+    public void addDietFromAi(Long userId, String name, double energy,
+                              double carbohydrate, double protein, double fat,
+                              double sugar, double sodium,
+                              double cholesterol, double saturatedFat,
+                              MealTime mealTime, double amount, LocalDate date) {
+        Food food = foodService.addRecognizedFood(name, energy, carbohydrate, protein, fat,
+                sugar, sodium, cholesterol, saturatedFat);
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
 
         // amount 기준으로 실제 섭취량 계산
