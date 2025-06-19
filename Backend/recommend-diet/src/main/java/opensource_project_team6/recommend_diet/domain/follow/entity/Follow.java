@@ -5,7 +5,7 @@ import lombok.*;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 
 @Entity
-@Table(name = "follow", uniqueConstraints = @UniqueConstraint(columnNames = {"follower_id", "following_id"}))
+@Table(name = "follow")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -13,14 +13,14 @@ import opensource_project_team6.recommend_diet.domain.user.entity.User;
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "follow_id")
+
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "follower_id")
     private User follower;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "following_id")
     private User following;
 }
