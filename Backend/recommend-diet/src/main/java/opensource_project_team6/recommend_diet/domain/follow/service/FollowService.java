@@ -3,6 +3,7 @@ package opensource_project_team6.recommend_diet.domain.follow.service;
 import lombok.RequiredArgsConstructor;
 import opensource_project_team6.recommend_diet.domain.follow.entity.Follow;
 import opensource_project_team6.recommend_diet.domain.follow.repository.FollowRepository;
+import opensource_project_team6.recommend_diet.domain.follow.dto.UserSimpleResponse;
 import opensource_project_team6.recommend_diet.domain.user.entity.User;
 import opensource_project_team6.recommend_diet.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -46,16 +47,20 @@ public class FollowService {
         return followRepository.countByFollower(user);
     }
 
-    public List<String> getFollowerList(Long userId) {
+    public List<UserSimpleResponse> getFollowerList(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         return followRepository.findByFollowing(user)
-                .stream().map(f -> f.getFollower().getName()).collect(Collectors.toList());
+                .stream()
+                .map(f -> new UserSimpleResponse(f.getFollower().getId(), f.getFollower().getName()))
+                .collect(Collectors.toList());
     }
 
-    public List<String> getFollowingList(Long userId) {
+    public List<UserSimpleResponse> getFollowingList(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         return followRepository.findByFollower(user)
-                .stream().map(f -> f.getFollowing().getName()).collect(Collectors.toList());
+                .stream()
+                .map(f -> new UserSimpleResponse(f.getFollowing().getId(), f.getFollowing().getName()))
+                .collect(Collectors.toList());
     }
 
     public String getUserName(Long userId) {
