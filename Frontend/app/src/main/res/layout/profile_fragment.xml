@@ -15,14 +15,28 @@
         android:src="@drawable/ic_settings"
         android:contentDescription="설정" />
 
-    <AutoCompleteTextView
-        android:id="@+id/user_search"
+    <LinearLayout
+        android:id="@+id/search_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_below="@id/btn_settings"
-        android:hint="사용자 검색" />
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/user_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="사용자 검색" />
+
+        <Button
+            android:id="@+id/user_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색" />
+    </LinearLayout>
 
     <!-- 프로필 섹션 -->
     <LinearLayout
@@ -30,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_below="@id/search_container"
         android:padding="24dp">
 
         <!-- 프로필 이미지 및 텍스트 -->

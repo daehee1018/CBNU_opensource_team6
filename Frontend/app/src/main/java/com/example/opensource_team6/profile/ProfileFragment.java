@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
@@ -47,6 +48,10 @@ public class ProfileFragment extends Fragment {
     private TextView followingText;
     private Button followButton;
     private AutoCompleteTextView userSearch;
+    private Button searchButton;
+    private ImageView followerImg1;
+    private ImageView followerImg2;
+    private ImageView followerImg3;
     private TextView followerPlus;
     private TextView followerNames;
     private int userId = 1; // default current user
@@ -70,6 +75,10 @@ public class ProfileFragment extends Fragment {
         followingText = view.findViewById(R.id.following);
         followButton = view.findViewById(R.id.btn_follow);
         userSearch = view.findViewById(R.id.user_search);
+        searchButton = view.findViewById(R.id.user_search_button);
+        followerImg1 = view.findViewById(R.id.follower_img1);
+        followerImg2 = view.findViewById(R.id.follower_img2);
+        followerImg3 = view.findViewById(R.id.follower_img3);
         followerPlus = view.findViewById(R.id.follower_plus);
         followerNames = view.findViewById(R.id.follower_names);
 
@@ -80,6 +89,23 @@ public class ProfileFragment extends Fragment {
             String name = adapter.getItem(position);
             User target = UserRepository.getUserByName(name);
             if (target != null) openProfile(target.getId());
+        });
+        searchButton.setOnClickListener(v -> {
+            String query = userSearch.getText().toString();
+            java.util.List<User> matches = new java.util.ArrayList<>();
+            for (User u : UserRepository.getUsers()) {
+                if (u.getName().contains(query)) matches.add(u);
+            }
+            if (matches.isEmpty()) {
+                Toast.makeText(getContext(), "검색 결과가 없습니다", Toast.LENGTH_SHORT).show();
+            } else {
+                CharSequence[] items = new CharSequence[matches.size()];
+                for (int i = 0; i < matches.size(); i++) items[i] = matches.get(i).getName();
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("검색 결과")
+                        .setItems(items, (d, which) -> openProfile(matches.get(which).getId()))
+                        .show();
+            }
         });
         Bundle args = getArguments();
         if (args != null) userId = args.getInt("userId", 1);
@@ -210,12 +236,15 @@ public class ProfileFragment extends Fragment {
 
         StringBuilder names = new StringBuilder();
         int count = 0;
+        ImageView[] imgs = {followerImg1, followerImg2, followerImg3};
+        for (ImageView img : imgs) img.setVisibility(View.GONE);
         for (int id : followers) {
             User u = UserRepository.getUserById(id);
             if (u == null) continue;
             if (count < 3) {
                 if (names.length() > 0) names.append(", ");
                 names.append(u.getName());
+                imgs[count].setVisibility(View.VISIBLE);
             }
             count++;
         }
