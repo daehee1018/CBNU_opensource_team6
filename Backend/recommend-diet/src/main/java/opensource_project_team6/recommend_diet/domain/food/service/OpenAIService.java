@@ -3,6 +3,7 @@ package opensource_project_team6.recommend_diet.domain.food.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import opensource_project_team6.recommend_diet.domain.food.entity.Food;
 import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OpenAIService {
     private final FoodRepository foodRepository;
 
@@ -28,11 +30,15 @@ public class OpenAIService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public Food analyzeFoodImage(MultipartFile file) throws IOException {
+        log.info("[OpenAIService] analyzeFoodImage 호출");
         Food food = previewFoodImage(file);
-        return foodRepository.save(food);
+        Food saved = foodRepository.save(food);
+        log.info("[OpenAIService] 음식 저장 완료. id={}", saved.getId());
+        return saved;
     }
 
     public Food previewFoodImage(MultipartFile file) throws IOException {
+        log.info("[OpenAIService] previewFoodImage 호출");
         byte[] bytes = file.getBytes();
         String base64 = Base64.getEncoder().encodeToString(bytes);
 
@@ -55,11 +61,20 @@ public class OpenAIService {
         headers.setBearerAuth(apiKey);
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
-        String response = restTemplate.postForObject(
-                "https://api.openai.com/v1/chat/completions",
-                request,
-                String.class
-        );
+        log.debug("[OpenAIService] 요청 바디: {}", body);
+        String response;
+        try {
+            response = restTemplate.postForObject(
+                    "https://api.openai.com/v1/chat/completions",
+                    request,
+                    String.class
+            );
+        } catch (Exception e) {
+            log.error("[OpenAIService] OpenAI API 호출 실패", e);
+            throw e;
+        }
+
+        log.debug("[OpenAIService] 응답: {}", response);
 
         if (response == null) {
             throw new IOException("OpenAI response is null");
@@ -70,6 +85,7 @@ public class OpenAIService {
         String content = root.path("choices").get(0).path("message").path("content").asText();
 
         JsonNode result = mapper.readTree(content);
+        log.debug("[OpenAIService] 파싱 결과: {}", result.toString());
         Food food = Food.builder()
                 .name(result.path("name").asText())
                 .standardAmount("1 serving")

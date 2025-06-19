@@ -1,6 +1,7 @@
 package opensource_project_team6.recommend_diet.domain.diet.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import opensource_project_team6.recommend_diet.domain.diet.dto.DietRequestDTO;
 import opensource_project_team6.recommend_diet.domain.diet.entity.MealTime;
 import opensource_project_team6.recommend_diet.domain.diet.service.DietService;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/diet")
+@Slf4j
 public class DietContaroller {
     private final DietService dietService;
     private final UserRepository userRepository;
@@ -29,6 +31,8 @@ public class DietContaroller {
                                       @RequestBody DietRequestDTO dto) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        log.info("[DietController] /api/diet POST 호출 - userId: {}", user.getId());
 
         dietService.saveDiet(dto, user);
 
@@ -45,6 +49,9 @@ public class DietContaroller {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        log.info("[DietController] /api/diet/image POST 호출 - userId: {}, mealTime: {}, date: {}",
+                user.getId(), dto.getMealTime(), dto.getDate());
+
         dietService.saveDietByImage(image, dto.getMealTime(), dto.getDate(), user);
 
         Map<String, Object> response = new HashMap<>();
@@ -55,7 +62,9 @@ public class DietContaroller {
 
     @PostMapping("/image/preview")
     public ResponseEntity<?> previewDietImage(@RequestPart("image") MultipartFile image) throws java.io.IOException {
+        log.info("[DietController] /api/diet/image/preview POST 호출");
         var food = dietService.previewDietImage(image);
+        log.info("[DietController] 미리보기 결과: {}", food.getName());
 
         Map<String, Object> data = new HashMap<>();
         data.put("name", food.getName());
@@ -79,6 +88,9 @@ public class DietContaroller {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        log.info("[DietController] /api/diet GET 호출 - userId: {}, date: {}, mealTime: {}",
+                user.getId(), dateStr, mealTime);
+
         LocalDate date = LocalDate.parse(dateStr);
         var result = dietService.getDietByDateAndMeal(user, mealTime, date);
 
@@ -101,6 +113,8 @@ public class DietContaroller {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        log.info("[DietController] /api/diet/total GET 호출 - userId: {}, date: {}", user.getId(), dateStr);
+
         LocalDate date = LocalDate.parse(dateStr);
         Map<String, Object> result = dietService.getTotalNutrientsByDate(user, date);
 
@@ -116,6 +130,8 @@ public class DietContaroller {
                                           @RequestParam("date") String dateStr) {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        log.info("[DietController] /api/diet/score GET 호출 - userId: {}, date: {}", user.getId(), dateStr);
 
         LocalDate date = LocalDate.parse(dateStr);
         var result = dietService.getDietScore(user, date);
