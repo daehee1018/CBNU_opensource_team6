@@ -10,6 +10,7 @@ import com.example.opensource_team6.home.HomeFragment;
 import com.example.opensource_team6.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.opensource_team6.today.TodayFragment;
+import com.example.opensource_team6.MealPhotoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (id == R.id.nav_scan) {
-                Intent intent = new Intent(this, MealPhotoActivity.class);
-                startActivity(intent);
-                return true;
+                selected = new MealPhotoFragment();
             } else if (id == R.id.nav_profile) {
                 selected = new ProfileFragment();
             }
