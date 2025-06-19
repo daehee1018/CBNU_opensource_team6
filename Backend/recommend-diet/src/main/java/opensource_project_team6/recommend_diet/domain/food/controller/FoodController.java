@@ -8,10 +8,7 @@ import opensource_project_team6.recommend_diet.global.util.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +39,25 @@ public class FoodController {
         response.put("data", result);
         return ResponseEntity.ok(response);
     }
+
+    /*@PostMapping("/ai-recognized")
+    public ResponseEntity<?> addRecognizedFood(@RequestBody Map<String, Object> payload) {
+        try {
+            String name = (String) payload.get("name");
+            double energy = Double.parseDouble(payload.get("energy").toString());
+            double carbohydrate = Double.parseDouble(payload.get("carbohydrate").toString());
+            double protein = Double.parseDouble(payload.get("protein").toString());
+            double fat = Double.parseDouble(payload.get("fat").toString());
+
+            FoodDTO dto = foodService.addRecognizedFood(name, energy, carbohydrate, protein, fat);
+            return ResponseEntity.ok(Map.of(
+                    "message", "AI 인식 음식 추가 완료",
+                    "data", dto
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(Map.of("message", "요청 파라미터 오류", "error", e.getMessage()));
+        }
+    }*/
 
     /**
      * 음식 상세 정보 조회 (food_id로)

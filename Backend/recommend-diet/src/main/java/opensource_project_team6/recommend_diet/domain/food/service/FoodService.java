@@ -35,6 +35,33 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
+    public Food addRecognizedFood(String name, double energy, double carbohydrate, double protein, double fat) {
+        String newName = name + "_사진";
+
+        if (foodRepository.findByName(newName).isPresent()) {
+            throw new IllegalArgumentException("이미 동일한 인식 음식이 등록되어 있습니다.");
+        }
+
+        Food food = Food.builder()
+                .name(newName)
+                .category("AI인식")
+                .subcategory("AI인식")
+                .repName(null)
+                .standardAmount("1회 제공량")
+                .imageUrl(null)
+                .energy((int) Math.round(energy))
+                .carbohydrate(carbohydrate)
+                .protein(protein)
+                .fat(fat)
+                .sugar(0.0)
+                .sodium(0.0)
+                .cholesterol(0.0)
+                .saturatedFat(0.0)
+                .build();
+
+        return foodRepository.save(food);
+    }
+
     /**
      * 음식 상세 정보 조회
      */
