@@ -34,7 +34,7 @@
             android:id="@+id/btnBreakfastAnalyze"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI 음식 인식"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView
@@ -55,7 +55,7 @@
             android:id="@+id/btnLunchAnalyze"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI 음식 인식"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView
@@ -76,7 +76,7 @@
             android:id="@+id/btnDinnerAnalyze"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AI 음식 인식"
+            android:text="AI 영상성분 인식"
             android:layout_marginBottom="8dp" />
 
         <ImageView

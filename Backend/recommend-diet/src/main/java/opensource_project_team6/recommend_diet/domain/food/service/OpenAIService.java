@@ -46,7 +46,18 @@ public class OpenAIService {
         Map<String, Object> userContent = Map.of(
                 "role", "user",
                 "content", List.of(
-                        Map.of("type", "text", "text", "사진 속 음식의 이름과 열량(kcal), 탄수화물(g), 단백질(g), 지방(g)을 JSON으로 답하세요. 키는 name, energy, carbohydrate, protein, fat 입니다."),
+                        Map.of("type", "text", "text", """
+                                사진 속 음식의 이름과 열량(kcal), 탄수화물(g), 단백질(g), 지방(g)을 JSON 형식으로 알려줘.
+                                마크다운 코드블럭 없이, 아래 형식 그대로 순수 JSON으로만 응답해줘.
+
+                                {
+                                  "name": "음식 이름",
+                                  "energy": 숫자,
+                                  "carbohydrate": 숫자,
+                                  "protein": 숫자,
+                                  "fat": 숫자
+                                }
+                                """),
                         Map.of("type", "image_url", "image_url", imageUrl)
                 )
         );
@@ -84,6 +95,7 @@ public class OpenAIService {
         JsonNode root = mapper.readTree(response);
         String content = root.path("choices").get(0).path("message").path("content").asText();
 
+        // 혹시 마크다운(```json\n...\n```) 형식으로 왔을 경우 제거
         if (content.startsWith("```")) {
             int first = content.indexOf('\n');
             if (first != -1) content = content.substring(first + 1);
@@ -91,8 +103,9 @@ public class OpenAIService {
             if (last != -1) content = content.substring(0, last);
         }
 
-        JsonNode result = mapper.readTree(content);
+        JsonNode result = mapper.readTree(content.trim());
         log.debug("[OpenAIService] 파싱 결과: {}", result.toString());
+
         Food food = Food.builder()
                 .name(result.path("name").asText())
                 .standardAmount("1 serving")
@@ -101,6 +114,7 @@ public class OpenAIService {
                 .protein(result.path("protein").asDouble())
                 .fat(result.path("fat").asDouble())
                 .build();
+
         return food;
     }
 }
