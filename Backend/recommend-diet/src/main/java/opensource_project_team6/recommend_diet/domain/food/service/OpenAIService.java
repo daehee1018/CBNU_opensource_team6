@@ -84,6 +84,13 @@ public class OpenAIService {
         JsonNode root = mapper.readTree(response);
         String content = root.path("choices").get(0).path("message").path("content").asText();
 
+        if (content.startsWith("```")) {
+            int first = content.indexOf('\n');
+            if (first != -1) content = content.substring(first + 1);
+            int last = content.lastIndexOf("```");
+            if (last != -1) content = content.substring(0, last);
+        }
+
         JsonNode result = mapper.readTree(content);
         log.debug("[OpenAIService] 파싱 결과: {}", result.toString());
         Food food = Food.builder()
