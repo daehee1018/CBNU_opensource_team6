@@ -1,4 +1,3 @@
-// RecommendationResultActivity.java
 package com.example.opensource_team6;
 
 import android.os.Bundle;
@@ -8,6 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,8 +32,12 @@ public class RecommendationResultActivity extends AppCompatActivity {
 
     private TextView resultText;
     private NutritionDBHelper dbHelper;
+    private BarChart deficitChart;
 
     private String mealType, totalVector, deficitVector, vector;
+
+    private final float[] recommended = {2500f, 310f, 55f, 70f, 100f, 2f, 0.3f, 20f};
+    private final String[] labels = {"에너지", "탄수화물", "단백질", "지방", "당류", "나트륨(g)", "콜레스테롤(g)", "포화지방"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,7 @@ public class RecommendationResultActivity extends AppCompatActivity {
         resultText = findViewById(R.id.recommendationText);
         categorySpinner = findViewById(R.id.categorySpinner);
         subcategorySpinner = findViewById(R.id.subcategorySpinner);
+        deficitChart = findViewById(R.id.deficitChart);
         dbHelper = new NutritionDBHelper(this);
 
         vector = getIntent().getStringExtra("recommendationVector");
@@ -47,16 +58,13 @@ public class RecommendationResultActivity extends AppCompatActivity {
         if (vector == null || totalVector == null || deficitVector == null ||
                 vector.isEmpty() || totalVector.isEmpty() || deficitVector.isEmpty()) {
             Toast.makeText(this, "추천 결과 데이터가 부족합니다", Toast.LENGTH_LONG).show();
-            resultText.setText("추천 결과 데이터를 불러올 수 없습니다.\n\n" +
-                    "recommendationVector: " + vector + "\n" +
-                    "totalVector: " + totalVector + "\n" +
-                    "deficitVector: " + deficitVector);
+            resultText.setText("추천 결과 데이터를 불러올 수 없습니다.");
             return;
         }
 
-
         allRecommendations = getRecommendations(vector, deficitVector);
         updateTop10();
+        setupChart(parseVector(totalVector));
 
         List<String> categories = dbHelper.getAllCategories();
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
@@ -69,10 +77,8 @@ public class RecommendationResultActivity extends AppCompatActivity {
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCategory = categories.get(position);
-                List<String> subcategories = dbHelper.getSubcategoriesByCategory(selectedCategory);
                 subcategoryAdapter.clear();
-                subcategoryAdapter.addAll(subcategories);
+                subcategoryAdapter.addAll(dbHelper.getSubcategoriesByCategory(categories.get(position)));
                 subcategoryAdapter.notifyDataSetChanged();
                 updateFilteredRecommendations();
             }
@@ -87,6 +93,31 @@ public class RecommendationResultActivity extends AppCompatActivity {
         });
 
         showDefaultRecommendations();
+    }
+
+    private void setupChart(float[] current) {
+        List<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < current.length; i++) {
+            float percent = Math.min(current[i] / recommended[i] * 100f, 100f);
+            entries.add(new BarEntry(i, percent));
+        }
+
+        BarDataSet dataSet = new BarDataSet(entries, "섭취 비율 (%)");
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.9f);
+
+        deficitChart.setData(barData);
+        deficitChart.setFitBars(true);
+        deficitChart.getDescription().setEnabled(false);
+
+        XAxis xAxis = deficitChart.getXAxis();
+        xAxis.setGranularity(1f);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+
+        deficitChart.getAxisRight().setEnabled(false);
+        deficitChart.invalidate();
     }
 
     private void updateTop10() {
@@ -104,53 +135,37 @@ public class RecommendationResultActivity extends AppCompatActivity {
         sb.append("🔹 총합 벡터:\n").append(totalVector).append("\n\n");
         sb.append("🔸 결핍 벡터:\n").append(deficitVector).append("\n\n");
         sb.append("✅ 출력 벡터:\n").append(vector).append("\n\n");
-
         sb.append("👉 기본 추천 음식 (상위 10개):\n");
         for (String food : top10Foods) sb.append("- ").append(food).append("\n");
-
         resultText.setText(sb.toString());
     }
 
     private void updateFilteredRecommendations() {
-        String selectedCategory = (String) categorySpinner.getSelectedItem();
-        String selectedSubcategory = (String) subcategorySpinner.getSelectedItem();
-
-        if (selectedCategory == null || selectedSubcategory == null) return;
+        String cat = (String) categorySpinner.getSelectedItem();
+        String sub = (String) subcategorySpinner.getSelectedItem();
+        if (cat == null || sub == null) return;
 
         List<String> filtered = new ArrayList<>();
         for (FoodDistance fd : allRecommendations) {
             Food food = fd.food;
-            if (food.getCategory().equals(selectedCategory) &&
-                    food.getSubcategory().equals(selectedSubcategory)) {
+            if (food.getCategory().equals(cat) && food.getSubcategory().equals(sub)) {
                 filtered.add(fd.name + " (" + fd.gram + "g, 추천점수: " + String.format("%.2f", fd.similarity) + ")");
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("[").append(mealType).append(" 외 추천 식사]\n\n");
-        sb.append("🔹 총합 벡터:\n").append(totalVector).append("\n\n");
-        sb.append("🔸 결핍 벡터:\n").append(deficitVector).append("\n\n");
-        sb.append("✅ 출력 벡터:\n").append(vector).append("\n\n");
-
-        sb.append("👉 기본 추천 음식 (상위 10개):\n");
-        for (String food : top10Foods) sb.append("- ").append(food).append("\n");
-
-        sb.append("\n🔍 필터링된 추천 음식:\n");
+        sb.append("🔍 필터링된 추천 음식:\n");
         if (filtered.isEmpty()) {
             sb.append("해당 범위에 음식이 없습니다.\n");
         } else {
-            for (String line : filtered) {
-                sb.append("- ").append(line).append("\n");
-            }
+            for (String line : filtered) sb.append("- ").append(line).append("\n");
         }
-
         resultText.setText(sb.toString());
     }
 
     private List<FoodDistance> getRecommendations(String vectorString, String deficitString) {
         float[] min = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
         float[] max = new float[]{595f, 104f, 41.55f, 60.25f, 70f, 7.402f, 0.68662f, 25.6f};
-
         float[] target = parseVector(vectorString);
         float[] weight = parseVector(deficitString);
 
@@ -162,33 +177,18 @@ public class RecommendationResultActivity extends AppCompatActivity {
         for (Food food : allFoods) {
             if (seen.contains(food.getName())) continue;
             seen.add(food.getName());
-
             float[] vec = new float[]{
-                    (float) food.getEnergy(),
-                    (float) food.getCarbohydrate(),
-                    (float) food.getProtein(),
-                    (float) food.getFat(),
-                    (float) food.getSugar(),
-                    (float) food.getSodium() / 1000f,
-                    (float) food.getCholesterol() / 1000f,
-                    (float) food.getSaturated_fat()
+                    (float) food.getEnergy(), (float) food.getCarbohydrate(), (float) food.getProtein(), (float) food.getFat(),
+                    (float) food.getSugar(), (float) food.getSodium() / 1000f, (float) food.getCholesterol() / 1000f, (float) food.getSaturated_fat()
             };
-
-            double weightRatio = food.getWeight() <= 0 ? 1.0 : food.getWeight() / 100.0;
-            for (int i = 0; i < vec.length; i++) vec[i] *= weightRatio;
-
+            double ratio = food.getWeight() <= 0 ? 1.0 : food.getWeight() / 100.0;
+            for (int i = 0; i < vec.length; i++) vec[i] *= ratio;
             float[] norm = new float[vec.length];
-            for (int i = 0; i < vec.length; i++) {
-                norm[i] = (max[i] - min[i] == 0) ? 0 : (vec[i] - min[i]) / (max[i] - min[i]);
-            }
-
+            for (int i = 0; i < vec.length; i++) norm[i] = (max[i] - min[i] == 0) ? 0 : (vec[i] - min[i]) / (max[i] - min[i]);
             float satisfaction = getSatisfactionScore(norm, weight);
             float cosine = cosineSimilarityWithWeight(norm, target, weight);
-            float finalScore = (satisfaction + cosine) / 2f;
-
-            list.add(new FoodDistance(food.getName(), (int) food.getWeight(), finalScore, food));
+            list.add(new FoodDistance(food.getName(), (int) food.getWeight(), (satisfaction + cosine) / 2f, food));
         }
-
         list.sort(Collections.reverseOrder());
         return list;
     }
@@ -219,8 +219,7 @@ public class RecommendationResultActivity extends AppCompatActivity {
             normA += w[i] * a[i] * a[i];
             normB += w[i] * b[i] * b[i];
         }
-        if (normA == 0 || normB == 0) return 0f;
-        return dot / ((float) Math.sqrt(normA) * (float) Math.sqrt(normB));
+        return (normA == 0 || normB == 0) ? 0f : dot / ((float) Math.sqrt(normA) * (float) Math.sqrt(normB));
     }
 
     private static class FoodDistance implements Comparable<FoodDistance> {
@@ -228,16 +227,10 @@ public class RecommendationResultActivity extends AppCompatActivity {
         int gram;
         float similarity;
         Food food;
-
         FoodDistance(String name, int gram, float similarity, Food food) {
-            this.name = name;
-            this.gram = gram;
-            this.similarity = similarity;
-            this.food = food;
+            this.name = name; this.gram = gram; this.similarity = similarity; this.food = food;
         }
-
-        @Override
-        public int compareTo(FoodDistance o) {
+        @Override public int compareTo(FoodDistance o) {
             return Float.compare(this.similarity, o.similarity);
         }
     }
