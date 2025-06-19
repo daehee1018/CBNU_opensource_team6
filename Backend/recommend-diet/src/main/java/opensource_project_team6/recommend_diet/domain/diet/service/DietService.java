@@ -54,6 +54,10 @@ public class DietService {
                 .protein(food.getProtein() * ratio)
                 .fat(food.getFat() * ratio)
                 .carbohydrate(food.getCarbohydrate() * ratio)
+                .sugar(food.getSugar() * ratio)
+                .sodium(food.getSodium() * ratio)
+                .cholesterol(food.getCholesterol() * ratio)
+                .saturatedFat(food.getSaturatedFat() * ratio)
                 .build();
 
         dietRepository.save(diet);
@@ -99,6 +103,10 @@ public class DietService {
                         .protein(round(d.getProtein()))
                         .fat(round(d.getFat()))
                         .carbohydrate(round(d.getCarbohydrate()))
+                        .sugar(round(d.getSugar()))
+                        .sodium(round(d.getSodium()))
+                        .cholesterol(round(d.getCholesterol()))
+                        .saturatedFat(round(d.getSaturatedFat()))
                         .build())
                 .collect(Collectors.toList());
     }
