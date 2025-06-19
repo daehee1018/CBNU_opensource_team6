@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                                 .requestMatchers("/","/oauth2/**","/api/food/**").permitAll() // 회원가입, 로그인은 인증 불필요
+                                .requestMatchers(HttpMethod.GET, "/api/user/**").permitAll()
                                 .anyRequest().authenticated() // 나머지 요청은 인증 필요
                         //.anyRequest().permitAll() 모든 요청 허용
                 )
