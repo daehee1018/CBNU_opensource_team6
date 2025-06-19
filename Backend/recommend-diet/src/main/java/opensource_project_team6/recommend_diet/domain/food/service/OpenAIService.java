@@ -1,11 +1,12 @@
 package opensource_project_team6.recommend_diet.domain.food.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import opensource_project_team6.recommend_diet.domain.food.entity.Food;
-import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,9 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Base64;
-import java.util.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import opensource_project_team6.recommend_diet.domain.food.entity.Food;
+import opensource_project_team6.recommend_diet.domain.food.repository.FoodRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +52,7 @@ public class OpenAIService {
                 "role", "user",
                 "content", List.of(
                         Map.of("type", "text", "text", """
-                                사진 속 음식의 이름과 열량(kcal), 탄수화물(g), 단백질(g), 지방(g), 콜레스테롤(g), 포화지방(g), 나트륨(g), 당(g)을 JSON 형식으로 알려줘.
+                                사진 속 음식의 이름과 해당 음식의 1g 당 열량(kcal), 탄수화물(g), 단백질(g), 지방(g), 콜레스테롤(g), 포화지방(g), 나트륨(g), 당(g)을 JSON 형식으로 알려줘.
                                 마크다운 코드블럭 없이, 아래 형식 그대로 순수 JSON으로만 응답해줘.
 
                                 {
