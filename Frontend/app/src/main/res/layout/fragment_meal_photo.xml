@@ -23,6 +23,7 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+
         <Button
             android:id="@+id/btnBreakfastHistory"
             android:layout_width="match_parent"
@@ -37,6 +38,7 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+      
         <Button
             android:id="@+id/btnLunchHistory"
             android:layout_width="match_parent"
@@ -51,6 +53,7 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+
         <Button
             android:id="@+id/btnDinnerHistory"
             android:layout_width="match_parent"
@@ -65,6 +68,20 @@
             android:layout_marginTop="12dp"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이전 사진 보기"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnSnackHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="간식 사진 조회"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 </ScrollView>
