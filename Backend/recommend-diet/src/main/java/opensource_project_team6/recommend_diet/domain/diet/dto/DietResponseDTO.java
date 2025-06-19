@@ -19,4 +19,8 @@ public class DietResponseDTO {
     private Double protein;
     private Double fat;
     private Double carbohydrate;
+    private Double sugar;
+    private Double sodium;
+    private Double cholesterol;
+    private Double saturatedFat;
 }
