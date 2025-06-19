@@ -40,4 +40,12 @@
         <item>소화 문제</item>
         <item>없음</item>
     </string-array>
+
+    <string-array name="activity_level_options">
+        <item>거의 활동 없음 (1.2)</item>
+        <item>가벼운 활동 (주 1~3회) (1.375)</item>
+        <item>중간 활동 (주 3~5회) (1.55)</item>
+        <item>격렬한 활동 (주 6~7회) (1.725)</item>
+        <item>매우 격렬한 활동 (1.9)</item>
+    </string-array>
 </resources>
